@@ -42,4 +42,5 @@
     <string name="str_delete_title">Bu chekni o’chirishga aminmisiz?</string>
     <string name="str_no">Yo\'q</string>
     <string name="str_yes">Ha</string>
+    <string name="str_total">Jami</string>
 </resources>

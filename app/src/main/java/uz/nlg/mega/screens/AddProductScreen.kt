@@ -27,11 +27,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Product
+import uz.nlg.mega.screens.destinations.EnterQuantityScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ProductSearchType
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.AddingProductItem
 import uz.nlg.mega.views.CategoryItem
 import uz.nlg.mega.views.CategoryTopItem
@@ -162,7 +164,7 @@ fun AddProductScreen(
                                     price = 10_000
                                 )
                             ) {
-
+                                navigator.screenNavigate(EnterQuantityScreenDestination(it))
                             }
                         }
                     }

@@ -1,6 +1,7 @@
 package uz.nlg.mega.model
 
 import uz.nlg.mega.utils.ChequeType
+import java.io.Serializable
 
 data class Cheque(
     val type: ChequeType,
@@ -10,6 +11,6 @@ data class Cheque(
     val time: String,
     val products: ArrayList<Product>,
     val totalPrice: Long
-)
+): Serializable
 
 

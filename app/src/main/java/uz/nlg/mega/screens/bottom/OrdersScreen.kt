@@ -46,10 +46,12 @@ import uz.nlg.mega.R
 import uz.nlg.mega.screens.destinations.AddProductScreenDestination
 import uz.nlg.mega.screens.destinations.HomeScreenDestination
 import uz.nlg.mega.screens.destinations.LoginScreenDestination
+import uz.nlg.mega.screens.destinations.PaymentScreenDestination
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.RedTextColor
+import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.screenNavigate
@@ -293,7 +295,7 @@ fun OrdersScreen(
                                     .clip(CircleShape)
                                     .background(Color.White)
                                     .clickable {
-
+                                        navigator.screenNavigate(PaymentScreenDestination(Cheques.first()))
                                     },
                                 contentAlignment = Alignment.Center
                             ) {

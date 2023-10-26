@@ -28,11 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -142,7 +144,10 @@ fun AmountTextField(
                 color = strokeColor,
                 shape = RoundedCornerShape(8.dp)
             ),
-        value = textState,
+        value = TextFieldValue(
+            text = textState,
+            selection = TextRange(textState.length)
+        ),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = backgroundColor,
             cursorColor = textColor,
@@ -158,8 +163,8 @@ fun AmountTextField(
             fontWeight = FontWeight.Normal
         ),
         onValueChange = {
-            if (textLimit >= it.length) {
-                textState = it.replace(" ", "").moneyType()
+            if (textLimit >= it.text.length) {
+                textState = it.text.replace(" ", "").moneyType()
                 onChangeListener.invoke(
                     if (textState.isNotEmpty())
                         textState.replace(" ", "").toLong()
