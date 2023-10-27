@@ -175,9 +175,9 @@ var Cheques = arrayListOf<Cheque>(
         totalPrice = 2000000,
         customer = Customer(
             id = 1,
-            name = "Ogabek Matyakubov",
-            phoneNumber = "+998 93 203 73 13",
-            priceDiff = 125000000
+            name = "Bogibek Matyaqubov",
+            phoneNumber = "+998942344432",
+            priceDiff = 0
         )
     ),
     Cheque(

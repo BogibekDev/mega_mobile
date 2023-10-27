@@ -44,10 +44,19 @@
     <string name="str_yes">Ha</string>
     <string name="str_total">Jami</string>
     <string name="str_about_cheque">Chek ma’lumotlari</string>
+    <string name="str_cheque_seria_number">Chek seriya raqami</string>
+    <string name="str_date_time">Sanasi va vaqti</string>
+    <string name="str_customer">Mijoz</string>
     <string name="str_customers_list">Mijozlar ro\'yxati</string>
     <string name="str_cash">Naqd</string>
     <string name="str_terminal">Terminal</string>
     <string name="str_online_payment">Online to\'lov</string>
     <string name="str_credit">Qarzga</string>
     <string name="str_payment_type">To\'lov turi</string>
+    <string name="str_seller">Sotuvchi</string>
+    <string name="str_cheque_status">Chek statusi</string>
+    <string name="str_products_list">Mahsulotlar ro‘yxati</string>
+    <string name="str_see_more">Ko‘proq ko‘rish</string>
+    <string name="str_all">Jami</string>
+    <string name="str_card">Plastik</string>
 </resources>

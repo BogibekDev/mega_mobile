@@ -40,6 +40,7 @@ import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.typeColor
 
 @Composable
 fun ChequeItem(
@@ -178,12 +179,4 @@ fun ChequeItemPreview() {
             totalPrice = 2_000_000
         ),
     )
-}
-
-fun typeColor(type: ChequeType): Color {
-    return when (type) {
-        ChequeType.Saved -> DarkBlueMainColor
-        ChequeType.Paid -> GreenColor
-        else -> RedTextColor
-    }
 }

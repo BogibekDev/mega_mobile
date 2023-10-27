@@ -1,14 +1,17 @@
 package uz.nlg.mega.utils
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
-import uz.nlg.mega.screens.destinations.LoginScreenDestination
+import uz.nlg.mega.ui.theme.DarkBlueMainColor
+import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
+import uz.nlg.mega.ui.theme.RedTextColor
 import java.util.Locale
 
 
@@ -83,5 +86,15 @@ fun String.forSearchText(search: String): AnnotatedString {
                 count--
             }
         }
+    }
+}
+
+
+
+fun typeColor(type: ChequeType): Color {
+    return when (type) {
+        ChequeType.Saved -> DarkBlueMainColor
+        ChequeType.Paid -> GreenColor
+        else -> RedTextColor
     }
 }

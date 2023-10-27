@@ -101,6 +101,8 @@ fun SecondaryButton(
         contentAlignment = Alignment.Center
     ) {
         Text(
+            modifier = Modifier
+                .padding(PADDING_VALUE),
             text = text,
             fontFamily = MainFont,
             color = MainColor,
@@ -200,12 +202,11 @@ fun NextButton(
 @Preview(showBackground = true)
 @Composable
 fun ButtonPreview() {
-    SecondaryButtonWithIcon(
+    SecondaryButton(
         modifier = Modifier,
         text = stringResource(id = R.string.str_customers_list),
-        icon = painterResource(id = R.drawable.customers),
-        true
+        textSize = 16.sp
     ) {
-        
+
     }
 }
