@@ -25,7 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
@@ -34,6 +36,7 @@ import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.ChequeItem
 import uz.nlg.mega.views.DeleteDialog
 import uz.nlg.mega.views.MainButton
@@ -43,7 +46,9 @@ var chequesType: ChequeType = ChequeType.None
 var isShowDialog = mutableStateOf(false)
 
 @Composable
-fun ChequesScreen() {
+fun ChequesScreen(
+    navigator: DestinationsNavigator
+) {
     val context = LocalContext.current
     val showDialog = remember { mutableStateOf(false) }
     if (showDialog.value) {
@@ -168,12 +173,11 @@ fun ChequesScreen() {
                                 showDialog.value = true
                             },
                             onItemClick = {
-                                Toast.makeText(
-                                    context,
-                                    "open detail of ${Cheques[position]} ",
-                                    Toast.LENGTH_SHORT
+                                navigator.screenNavigate(
+                                    ChequeDetailsScreenDestination(
+                                        cheque = it
+                                    )
                                 )
-                                    .show()
                             }
                         )
 
@@ -184,11 +188,4 @@ fun ChequesScreen() {
         }
 
     }
-}
-
-
-@Preview
-@Composable
-fun ChequesScreenPreview() {
-    ChequesScreen()
 }

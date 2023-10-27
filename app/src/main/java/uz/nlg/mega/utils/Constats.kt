@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import uz.nlg.mega.R
 import uz.nlg.mega.model.BottomNav
+import java.io.Serializable
 
 val MainFont = FontFamily(
     Font(R.font.regular, FontWeight.Normal),
@@ -71,7 +72,7 @@ enum class ProductSearchType {
     None
 }
 
-sealed class ChequeType(val title: Int?) {
+sealed class ChequeType(val title: Int?): Serializable {
     data object Saved: ChequeType(title = R.string.str_saved)
     data object Paid: ChequeType(title = R.string.str_paid)
     data object Returned: ChequeType(title = R.string.str_returned)

@@ -86,7 +86,9 @@ fun HomeScreen(
 
             when(screenID) {
                 ScreenID.ChequesScreen -> {
-                    ChequesScreen()
+                    ChequesScreen(
+                        navigator = navigator!!
+                    )
                 }
 
                 ScreenID.OrdersScreen -> {

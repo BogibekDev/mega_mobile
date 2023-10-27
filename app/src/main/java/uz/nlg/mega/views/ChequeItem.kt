@@ -48,7 +48,7 @@ import uz.nlg.mega.utils.moneyType
 fun ChequeItem(
     cheque: Cheque,
     onDeleteClick: (() -> Unit)? = null,
-    onItemClick: (() -> Unit)? = null,
+    onItemClick: ((cheque: Cheque) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -60,7 +60,7 @@ fun ChequeItem(
                 shape = RoundedCornerShape(13.dp)
             )
             .background(Color.White)
-            .clickable { onItemClick?.invoke() }
+            .clickable { onItemClick?.invoke(cheque) }
     ) {
         Row(
             modifier = Modifier

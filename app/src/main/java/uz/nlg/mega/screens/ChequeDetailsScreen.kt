@@ -17,6 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.utils.Cheques
@@ -24,8 +26,10 @@ import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.moneyType
 import uz.nlg.mega.views.BackTopSection
 
+@Destination
 @Composable
 fun ChequeDetailsScreen(
+    navigator:DestinationsNavigator? = null,
     cheque: Cheque
 ) {
     val context = LocalContext.current
@@ -38,7 +42,7 @@ fun ChequeDetailsScreen(
             BackTopSection(
                 title = stringResource(R.string.str_about_cheque)
             ) {
-
+                navigator!!.navigateUp()
             }
 
             Spacer(modifier = Modifier.height(20.dp))

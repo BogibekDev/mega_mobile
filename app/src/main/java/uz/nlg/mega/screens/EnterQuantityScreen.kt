@@ -93,7 +93,7 @@ fun EnterQuantityScreen(
             DoneTopSection(onBackClick = {
                 navigator!!.navigateUp()
             }) {
-
+                navigator!!.navigateUp()
             }
 
             Column(
