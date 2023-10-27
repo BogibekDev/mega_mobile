@@ -43,4 +43,5 @@
     <string name="str_no">Yo\'q</string>
     <string name="str_yes">Ha</string>
     <string name="str_total">Jami</string>
+    <string name="str_about_cheque">Chek ma’lumotlari</string>
 </resources>
