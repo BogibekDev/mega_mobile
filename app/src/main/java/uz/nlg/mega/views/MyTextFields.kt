@@ -64,6 +64,7 @@ fun SimpleTextField(
     strokeColor: Color,
     textColor: Color,
     textSize: TextUnit = 16.sp,
+    readOnly: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     onChangeListener: (text: String) -> Unit
@@ -97,6 +98,7 @@ fun SimpleTextField(
             textState = it
             onChangeListener.invoke(textState)
         },
+        readOnly = readOnly,
         shape = RoundedCornerShape(8.dp),
         singleLine = true,
         placeholder = {
@@ -351,7 +353,8 @@ fun PriceTextField(
     backgroundColor: Color,
     strokeColor: Color,
     textColor: Color,
-    onChangeListener: (text: String) -> Unit
+    textLimit: Int = 9,
+    onChangeListener: (text: Long) -> Unit
 ) {
     var textState by remember {
         mutableStateOf(text)
@@ -372,7 +375,10 @@ fun PriceTextField(
         TextField(
             modifier = modifier
                 .weight(1f),
-            value = textState,
+            value = TextFieldValue(
+                text = textState,
+                selection = TextRange(textState.length)
+            ),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = backgroundColor,
                 cursorColor = textColor,
@@ -386,8 +392,14 @@ fun PriceTextField(
                 fontWeight = FontWeight.Normal
             ),
             onValueChange = {
-                textState = it
-                onChangeListener.invoke(textState)
+                if (textLimit >= it.text.length) {
+                    textState = it.text.replace(" ", "").moneyType()
+                    onChangeListener.invoke(
+                        if (textState.isNotEmpty())
+                            textState.replace(" ", "").toLong()
+                        else 0
+                    )
+                }
             },
             singleLine = true,
             placeholder = {

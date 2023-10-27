@@ -1,6 +1,7 @@
 package uz.nlg.mega.utils
 
 import uz.nlg.mega.model.Cheque
+import uz.nlg.mega.model.Customer
 import uz.nlg.mega.model.Product
 
 
@@ -171,7 +172,13 @@ var Cheques = arrayListOf<Cheque>(
         date = "12.12.2023",
         time = "15:00",
         products = OrderProducts,
-        totalPrice = 2000000
+        totalPrice = 2000000,
+        customer = Customer(
+            id = 1,
+            name = "Ogabek Matyakubov",
+            phoneNumber = "",
+            priceDIff = 0
+        )
     ),
     Cheque(
         type = ChequeType.Saved,

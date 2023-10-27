@@ -13,7 +13,7 @@ import java.util.Locale
 
 
 fun Long.moneyType(): String {
-    return this.toString().moneyType()
+    return this.toString().moneyType() + " so'm"
 }
 
 fun String.moneyType(): String {

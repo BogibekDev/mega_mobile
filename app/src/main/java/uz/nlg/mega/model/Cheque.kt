@@ -10,7 +10,8 @@ data class Cheque(
     val date: String,
     val time: String,
     val products: ArrayList<Product>,
-    val totalPrice: Long
+    val totalPrice: Long,
+    val customer: Customer? = null
 ): Serializable
 
 

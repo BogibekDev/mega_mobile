@@ -78,3 +78,10 @@ sealed class ChequeType(val title: Int?): Serializable {
     data object Returned: ChequeType(title = R.string.str_returned)
     data object None: ChequeType(title = null)
 }
+
+sealed class PaymentType(val title: Int): Serializable {
+    data object Cash: PaymentType(title = R.string.str_cash)
+    data object Terminal: PaymentType(title = R.string.str_terminal)
+    data object OnlinePayment: PaymentType(title = R.string.str_online_payment)
+    data object Credit: PaymentType(title = R.string.str_credit)
+}
