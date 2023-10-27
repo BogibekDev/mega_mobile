@@ -6,5 +6,5 @@ data class Customer(
     val id: Int,
     val name: String,
     val phoneNumber: String,
-    val priceDIff: Long
+    val priceDiff: Long
 ): Serializable

@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,28 +36,30 @@ import uz.nlg.mega.R
 import uz.nlg.mega.ui.theme.CheckColor
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.RedTextColor
-import uz.nlg.mega.utils.Filter
+import uz.nlg.mega.utils.FilterType
 import uz.nlg.mega.utils.MainFont
 
 @Composable
-fun MinusPlusFilterView(
-    filter: Filter,
-    onSelectedFilter: (Filter) -> Unit
+fun MoneyFilterView(
+    filterType: FilterType,
+    onSelectedFilter: (FilterType) -> Unit
 ) {
 
     var filterState by remember {
-        mutableStateOf(filter)
+        mutableStateOf(filterType)
     }
 
     Box(
         modifier = Modifier
             .width(130.dp)
+            .clip(RoundedCornerShape(9.dp))
             .border(
                 width = 1.dp,
                 color = Color_E8,
                 shape = RoundedCornerShape(9.dp)
             )
             .background(Color.White)
+            .clip(RoundedCornerShape(9.dp))
             .padding(vertical = 16.dp)
 
     ) {
@@ -68,7 +71,7 @@ fun MinusPlusFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.Qarzdorlar
+                        filterState = FilterType.Qarzdorlar
                         onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -77,14 +80,14 @@ fun MinusPlusFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(id = Filter.Qarzdorlar.title!!),
+                    text = stringResource(id = FilterType.Qarzdorlar.title!!),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Color.Black
                 )
 
-                if (filterState == Filter.Qarzdorlar) Icon(
+                if (filterState == FilterType.Qarzdorlar) Icon(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(12.dp, 12.dp),
@@ -111,7 +114,7 @@ fun MinusPlusFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.Haqdorlar
+                        filterState = FilterType.Haqdorlar
                         onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -120,14 +123,14 @@ fun MinusPlusFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(Filter.Haqdorlar.title!!),
+                    text = stringResource(FilterType.Haqdorlar.title!!),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Color.Black
                 )
 
-                if (filterState == Filter.Haqdorlar) Icon(
+                if (filterState == FilterType.Haqdorlar) Icon(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(12.dp, 12.dp),
@@ -154,7 +157,7 @@ fun MinusPlusFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.None
+                        filterState = FilterType.None
                         onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -179,18 +182,19 @@ fun MinusPlusFilterView(
 }
 
 @Composable
-fun AscDescFilterView(
-    filter: Filter,
-    onSelectedFilter: (Filter) -> Unit
+fun CustomerFilterView(
+    filterType: FilterType,
+    onSelectedFilter: (FilterType) -> Unit
 ) {
 
     var filterState by remember {
-        mutableStateOf(filter)
+        mutableStateOf(filterType)
     }
 
     Box(
         modifier = Modifier
             .width(190.dp)
+            .clip(RoundedCornerShape(9.dp))
             .border(
                 width = 1.dp,
                 color = Color_E8,
@@ -208,8 +212,8 @@ fun AscDescFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.InAscendingOrder
-                        onSelectedFilter.invoke(filter)
+                        filterState = FilterType.InAscendingOrder
+                        onSelectedFilter.invoke(filterType)
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -217,14 +221,14 @@ fun AscDescFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(Filter.InAscendingOrder.title!!),
+                    text = stringResource(FilterType.InAscendingOrder.title!!),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Color.Black
                 )
 
-                if (filterState == Filter.InAscendingOrder) Icon(
+                if (filterState == FilterType.InAscendingOrder) Icon(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(12.dp, 12.dp),
@@ -251,7 +255,7 @@ fun AscDescFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.InDescendingOrder
+                        filterState = FilterType.InDescendingOrder
                         onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -260,14 +264,14 @@ fun AscDescFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(Filter.InDescendingOrder.title!!),
+                    text = stringResource(FilterType.InDescendingOrder.title!!),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Color.Black
                 )
 
-                if (filterState == Filter.InDescendingOrder) Icon(
+                if (filterState == FilterType.InDescendingOrder) Icon(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(12.dp, 12.dp),
@@ -294,7 +298,7 @@ fun AscDescFilterView(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        filterState = Filter.None
+                        filterState = FilterType.None
                         onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -321,17 +325,20 @@ fun AscDescFilterView(
 @Preview
 @Composable
 fun FilterViewPreview() {
-    Column {
-        MinusPlusFilterView(
-            filter = Filter.Haqdorlar
+    Column (
+        modifier = Modifier
+            .background(Color.Black)
+    ) {
+        MoneyFilterView(
+            filterType = FilterType.Haqdorlar
         ) {
 
         }
 
         Spacer(Modifier.height(100.dp))
 
-        AscDescFilterView(
-            filter = Filter.InAscendingOrder
+        CustomerFilterView(
+            filterType = FilterType.InAscendingOrder
         ) {
 
         }

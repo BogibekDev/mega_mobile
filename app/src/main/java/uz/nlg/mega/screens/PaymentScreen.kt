@@ -1,6 +1,5 @@
 package uz.nlg.mega.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,9 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +31,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.Customer
+import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E6
 import uz.nlg.mega.ui.theme.Color_E8
@@ -45,11 +43,11 @@ import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.PaymentType
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.BackTopSection
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.PaymentItem
 import uz.nlg.mega.views.PriceTextField
-import uz.nlg.mega.views.SecondaryButton
 import uz.nlg.mega.views.SecondaryButtonWithIcon
 import uz.nlg.mega.views.SimpleTextField
 
@@ -109,7 +107,7 @@ fun PaymentScreen(
                             icon = painterResource(id = R.drawable.customers),
                             isCustomerHave = cheque.customer != null
                         ) {
-
+                            navigator!!.screenNavigate(AddCustomerScreenDestination)
                         }
 
                     }
@@ -420,7 +418,7 @@ fun PaymentScreenPreview() {
                 id = 1,
                 name = "Ogabek Matyakubov",
                 phoneNumber = "93 203 73 13",
-                priceDIff = -1234456
+                priceDiff = -1234456
             )
         )
     )

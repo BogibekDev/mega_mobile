@@ -176,8 +176,8 @@ var Cheques = arrayListOf<Cheque>(
         customer = Customer(
             id = 1,
             name = "Ogabek Matyakubov",
-            phoneNumber = "",
-            priceDIff = 0
+            phoneNumber = "+998 93 203 73 13",
+            priceDiff = 125000000
         )
     ),
     Cheque(
@@ -370,4 +370,85 @@ var Cheques = arrayListOf<Cheque>(
         totalPrice = 2000000
     ),
 
+)
+
+val Customers = arrayListOf(
+    Customer(
+        id = 1,
+        name = "Ogabek Matyakubov",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 125000000
+    ),
+    Customer(
+        id = 2,
+        name = "Bogibek Matyakubov",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 0
+    ),
+    Customer(
+        id = 3,
+        name = "Donimman umuman",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 354500
+    ),
+    Customer(
+        id = 4,
+        name = "Ullatmi jo'rasi",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = -200000
+    ),
+    Customer(
+        id = 5,
+        name = "Anasini qizi",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 0
+    ),
+    Customer(
+        id = 6,
+        name = "Ammami axtiqi",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 0
+    ),
+    Customer(
+        id = 7,
+        name = "Maqsud shopir",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 232400
+    ),
+    Customer(
+        id = 8,
+        name = "Zerip qiziqchi",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = -45300
+    ),
+    Customer(
+        id = 9,
+        name = "Sappi sanach",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = -3545000
+    ),
+    Customer(
+        id = 10,
+        name = "Ravil aka",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = -3545000
+    ),
+    Customer(
+        id = 11,
+        name = "Qummi dalbayop",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = -123000
+    ),
+    Customer(
+        id = 12,
+        name = "Atamagagan Boztopraq",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 400000
+    ),
+    Customer(
+        id = 13,
+        name = "Bogibek Matyakubov",
+        phoneNumber = "+998 93 203 73 13",
+        priceDiff = 12500
+    )
 )

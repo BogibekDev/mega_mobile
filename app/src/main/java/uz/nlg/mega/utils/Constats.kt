@@ -57,13 +57,13 @@ var ScreensList = listOf(
     )
 )
 
-sealed class Filter(val title: Int?) {
-    data object Qarzdorlar: Filter(title = R.string.str_debtors)
-    data object Haqdorlar: Filter(title = R.string.str_loaners)
-    data object InAscendingOrder: Filter(title = R.string.str_ascending)
-    data object InDescendingOrder: Filter(title = R.string.str_descending)
+sealed class FilterType(val title: Int?) {
+    data object Qarzdorlar: FilterType(title = R.string.str_debtors)
+    data object Haqdorlar: FilterType(title = R.string.str_loaners)
+    data object InAscendingOrder: FilterType(title = R.string.str_ascending)
+    data object InDescendingOrder: FilterType(title = R.string.str_descending)
 
-    object None : Filter(title = null)
+    object None : FilterType(title = null)
 }
 
 enum class ProductSearchType {
