@@ -72,4 +72,15 @@
     <string name="str_credit_in_a_day">Bir kunlik qarzlar</string>
     <string name="str_credit_in_a_month">Bir oylik qarzlar</string>
     <string name="str_credit_history">Qarzlar tarixi</string>
+    <string name="str_private_info">Shaxsiy ma’lumotlar</string>
+    <string name="str_add_customer">Mijoz qo‘shish</string>
+    <string name="str_name">Ism</string>
+    <string name="str_surname">Familiya</string>
+    <string name="str_phone_number">Tel.</string>
+    <string name="str_more_information">Qo\'shimcha ma\'lumot</string>
+    <string name="str_save">Saqlash</string>
+    <string name="str_cancel">Bekor qilish</string>
+    <string name="str_total_credit">Jami qardorligi</string>
+    <string name="str_total_invest">Jami haqdorligi</string>
+    <string name="str_to_see_credit_history">Qarzlar tarixini ko\'rish</string>
 </resources>

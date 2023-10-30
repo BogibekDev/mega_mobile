@@ -455,6 +455,8 @@ fun CustomerInfoTextField(
     backgroundColor: Color,
     strokeColor: Color,
     textColor: Color,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Next,
     onChangeListener: (text: String) -> Unit
 ) {
     var textState by remember {
@@ -519,8 +521,8 @@ fun CustomerInfoTextField(
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
+                keyboardType = keyboardType,
+                imeAction = imeAction
             )
         )
     }

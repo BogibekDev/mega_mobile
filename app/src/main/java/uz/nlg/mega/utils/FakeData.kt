@@ -177,7 +177,8 @@ var Cheques = arrayListOf<Cheque>(
             id = 1,
             name = "Bogibek Matyaqubov",
             phoneNumber = "+998942344432",
-            priceDiff = 0
+            priceDiff = 0,
+            surname = "Bogibek Matyaqubov"
         )
     ),
     Cheque(
@@ -377,78 +378,91 @@ val Customers = arrayListOf(
         id = 1,
         name = "Ogabek Matyakubov",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 125000000
+        priceDiff = 125000000,
+        surname = "Matyakubov"
     ),
     Customer(
         id = 2,
         name = "Bogibek Matyakubov",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 0
+        priceDiff = 0,
+        surname = "Matyakubov"
     ),
     Customer(
         id = 3,
         name = "Donimman umuman",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 354500
+        priceDiff = 354500,
+        surname = "umuman"
     ),
     Customer(
         id = 4,
-        name = "Ullatmi jo'rasi",
+        name = "Ullatmi",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = -200000
+        priceDiff = -200000,
+        surname = "jo'rasi"
     ),
     Customer(
         id = 5,
         name = "Anasini qizi",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 0
+        priceDiff = 0,
+        surname = "qizi"
     ),
     Customer(
         id = 6,
         name = "Ammami axtiqi",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 0
+        priceDiff = 0,
+        surname = "axtiqi"
     ),
     Customer(
         id = 7,
         name = "Maqsud shopir",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 232400
+        priceDiff = 232400,
+        surname = "shopir"
     ),
     Customer(
         id = 8,
         name = "Zerip qiziqchi",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = -45300
+        priceDiff = -45300,
+        surname = "qiziqchi"
     ),
     Customer(
         id = 9,
         name = "Sappi sanach",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = -3545000
+        priceDiff = -3545000,
+        surname = "sanach"
     ),
     Customer(
         id = 10,
         name = "Ravil aka",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = -3545000
+        priceDiff = -3545000,
+        surname = "aka"
     ),
     Customer(
         id = 11,
         name = "Qummi dalbayop",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = -123000
+        priceDiff = -123000,
+        surname = "dalbayop"
     ),
     Customer(
         id = 12,
         name = "Atamagagan Boztopraq",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 400000
+        priceDiff = 400000,
+        surname = "Boztopraq"
     ),
     Customer(
         id = 13,
         name = "Bogibek Matyakubov",
         phoneNumber = "+998 93 203 73 13",
-        priceDiff = 12500
+        priceDiff = 12500,
+        surname = "Matyakubov"
     )
 )

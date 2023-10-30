@@ -384,6 +384,7 @@ fun PaymentScreen(
 
                 MainButton(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = PADDING_VALUE)
                         .padding(bottom = PADDING_VALUE),
                     text = stringResource(id = R.string.str_pay),
@@ -418,7 +419,8 @@ fun PaymentScreenPreview() {
                 id = 1,
                 name = "Ogabek Matyakubov",
                 phoneNumber = "93 203 73 13",
-                priceDiff = -1234456
+                priceDiff = -1234456,
+                surname = "Matyakubov"
             )
         )
     )
