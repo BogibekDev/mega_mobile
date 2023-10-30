@@ -71,4 +71,5 @@
     <string name="str_orders_list">Mahsulotlar ro‘yxati</string>
     <string name="str_credit_in_a_day">Bir kunlik qarzlar</string>
     <string name="str_credit_in_a_month">Bir oylik qarzlar</string>
+    <string name="str_credit_history">Qarzlar tarixi</string>
 </resources>
