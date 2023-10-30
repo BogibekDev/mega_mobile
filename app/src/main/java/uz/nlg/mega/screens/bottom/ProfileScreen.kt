@@ -30,7 +30,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.Customer
+import uz.nlg.mega.screens.CreditInformationScreen
 import uz.nlg.mega.screens.ReturnCreditsScreen
+import uz.nlg.mega.screens.destinations.CreditInformationScreenDestination
 import uz.nlg.mega.screens.destinations.ReturnCreditsScreenDestination
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
@@ -38,6 +40,7 @@ import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.OrangeColor
 import uz.nlg.mega.ui.theme.RedTextColor
 import uz.nlg.mega.utils.ChequeType
+import uz.nlg.mega.utils.CreditType
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
@@ -351,7 +354,7 @@ fun ProfileScreen(
                                 modifier = Modifier
                                     .padding(end = PADDING_VALUE)
                             ) {
-
+                                navigator!!.screenNavigate(CreditInformationScreenDestination(type = CreditType.Daily))
                             }
 
                         }
@@ -400,7 +403,7 @@ fun ProfileScreen(
                                 modifier = Modifier
                                     .padding(end = PADDING_VALUE)
                             ) {
-
+                                navigator!!.screenNavigate(CreditInformationScreenDestination(type = CreditType.Monthly))
                             }
 
                         }

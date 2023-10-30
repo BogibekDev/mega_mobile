@@ -69,4 +69,6 @@
     <string name="str_given_credits_in_a_month">Bir oylik qarz bergan summasi</string>
     <string name="str_return_credits">Qarzlarni to\'lash</string>
     <string name="str_orders_list">Mahsulotlar ro‘yxati</string>
+    <string name="str_credit_in_a_day">Bir kunlik qarzlar</string>
+    <string name="str_credit_in_a_month">Bir oylik qarzlar</string>
 </resources>

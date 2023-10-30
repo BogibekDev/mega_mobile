@@ -3,12 +3,10 @@ package uz.nlg.mega.views
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -40,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import uz.nlg.mega.R
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_BD
@@ -50,7 +49,6 @@ import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.TextColorTextField
 import uz.nlg.mega.ui.theme.TextFieldFillColor
 import uz.nlg.mega.ui.theme.TextFieldHintColor
-import uz.nlg.mega.ui.theme.TextFieldStrokeColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.moneyType
 
@@ -166,12 +164,14 @@ fun AmountTextField(
         ),
         onValueChange = {
             if (textLimit >= it.text.length) {
-                textState = it.text.replace(" ", "").moneyType()
-                onChangeListener.invoke(
-                    if (textState.isNotEmpty())
-                        textState.replace(" ", "").toLong()
-                    else 0
-                )
+                if (it.text.replace(" ", "").isDigitsOnly()) {
+                    textState = it.text.replace(" ", "").moneyType()
+                    onChangeListener.invoke(
+                        if (textState.isNotEmpty())
+                            textState.replace(" ", "").toLong()
+                        else 0
+                    )
+                }
             }
         },
         shape = RoundedCornerShape(8.dp),
@@ -393,12 +393,14 @@ fun PriceTextField(
             ),
             onValueChange = {
                 if (textLimit >= it.text.length) {
-                    textState = it.text.replace(" ", "").moneyType()
-                    onChangeListener.invoke(
-                        if (textState.isNotEmpty())
-                            textState.replace(" ", "").toLong()
-                        else 0
-                    )
+                    if (it.text.replace(" ", "").isDigitsOnly()) {
+                        textState = it.text.replace(" ", "").moneyType()
+                        onChangeListener.invoke(
+                            if (textState.isNotEmpty())
+                                textState.replace(" ", "").toLong()
+                            else 0
+                        )
+                    }
                 }
             },
             singleLine = true,

@@ -85,3 +85,8 @@ sealed class PaymentType(val title: Int): Serializable {
     data object OnlinePayment: PaymentType(title = R.string.str_online_payment)
     data object Credit: PaymentType(title = R.string.str_credit)
 }
+
+enum class CreditType: Serializable {
+    Daily,
+    Monthly
+}
