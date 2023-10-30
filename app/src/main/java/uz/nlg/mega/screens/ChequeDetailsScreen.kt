@@ -30,6 +30,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
+import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
+import uz.nlg.mega.screens.destinations.ChequeItemListScreenDestination
 import uz.nlg.mega.ui.theme.Color_11
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_BD
@@ -39,6 +41,7 @@ import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.utils.typeColor
 import uz.nlg.mega.views.BackTopSection
 import uz.nlg.mega.views.ChequeProductsItem
@@ -306,7 +309,7 @@ fun ChequeDetailsScreen(
                         text = stringResource(R.string.str_see_more),
                         textSize = 14.sp
                     ) {
-                        //navigate more
+                        navigator!!.screenNavigate(ChequeItemListScreenDestination(cheque.products))
                     }
 
                     Spacer(modifier = Modifier.height(PADDING_VALUE))
