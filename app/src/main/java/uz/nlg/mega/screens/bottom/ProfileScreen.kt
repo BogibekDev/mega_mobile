@@ -28,14 +28,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.model.Cheque
+import uz.nlg.mega.model.Customer
+import uz.nlg.mega.screens.ReturnCreditsScreen
+import uz.nlg.mega.screens.destinations.ReturnCreditsScreenDestination
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.OrangeColor
 import uz.nlg.mega.ui.theme.RedTextColor
+import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.MainFont
+import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.NextButton
 import uz.nlg.mega.views.ProfileTopSection
 import uz.nlg.mega.views.SecondaryButton
@@ -406,7 +413,9 @@ fun ProfileScreen(
                         text = stringResource(id = R.string.str_return_credits),
                         textSize = 15.sp
                     ) {
-
+                        navigator!!.screenNavigate(
+                            ReturnCreditsScreenDestination()
+                        )
                     }
                 }
             }

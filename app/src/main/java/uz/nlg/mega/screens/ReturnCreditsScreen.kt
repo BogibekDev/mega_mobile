@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,13 +56,27 @@ import uz.nlg.mega.views.SimpleTextField
 
 @Destination
 @Composable
-fun PaymentScreen(
-    navigator: DestinationsNavigator? = null,
-    cheque: Cheque
+fun ReturnCreditsScreen(
+    navigator: DestinationsNavigator? = null
 ) {
-
     val paymentMethods = remember {
         mutableStateListOf<PaymentType>(PaymentType.Cash)
+    }
+
+    val customer by remember {
+        mutableStateOf<Customer?>(null)
+    }
+
+    var priceCash by remember {
+        mutableStateOf(0L)
+    }
+
+    var priceTerminal by remember {
+        mutableStateOf(0L)
+    }
+
+    var priceOnlinePayment by remember {
+        mutableStateOf(0L)
     }
 
     Box(
@@ -85,15 +102,15 @@ fun PaymentScreen(
                     Row (
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = if (cheque.customer == null) Arrangement.End else Arrangement.Center,
+                        horizontalArrangement = if (customer == null) Arrangement.End else Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        if (cheque.customer != null) SimpleTextField(
+                        if (customer != null) SimpleTextField(
                             modifier = Modifier
                                 .weight(1f),
                             hint = "",
-                            text = cheque.customer.name,
+                            text = customer!!.name,
                             backgroundColor = Color.White,
                             strokeColor = Color_E8,
                             textColor = ItemTextColor,
@@ -105,7 +122,7 @@ fun PaymentScreen(
                                 .padding(start = 16.dp),
                             text = stringResource(id = R.string.str_customers_list),
                             icon = painterResource(id = R.drawable.customers),
-                            isCustomerHave = cheque.customer != null
+                            isCustomerHave = customer != null
                         ) {
                             navigator!!.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
                         }
@@ -190,23 +207,7 @@ fun PaymentScreen(
                             }
 
                             Spacer(modifier = Modifier.width(10.dp))
-
-                            PaymentItem(
-                                modifier = Modifier
-                                    .weight(.1f),
-                                title = stringResource(id = PaymentType.Credit.title),
-                                isSelected = paymentMethods.contains(PaymentType.Credit)
-                            ) {
-                                val type = PaymentType.Credit
-                                if (paymentMethods.contains(type)) {
-                                    if (paymentMethods.size <= 1)
-                                        return@PaymentItem false
-                                    paymentMethods.remove(type)
-                                } else
-                                    paymentMethods.add(type)
-
-                                return@PaymentItem true
-                            }
+                            Spacer(modifier = Modifier.weight(.1f))
 
                         }
                     }
@@ -240,7 +241,7 @@ fun PaymentScreen(
                                     textColor = ItemTextColor,
                                     textLimit = 25
                                 ) {
-
+                                    priceCash = it
                                 }
                             }
                         }
@@ -269,7 +270,7 @@ fun PaymentScreen(
                                     textColor = ItemTextColor,
                                     textLimit = 25
                                 ) {
-
+                                    priceTerminal = it
                                 }
                             }
                         }
@@ -298,36 +299,7 @@ fun PaymentScreen(
                                     textColor = ItemTextColor,
                                     textLimit = 25
                                 ) {
-
-                                }
-                            }
-                        }
-
-                        AnimatedVisibility(paymentMethods.contains(PaymentType.Credit)) {
-                            Column (
-                                modifier = Modifier
-                                    .padding(vertical = PADDING_VALUE)
-                            ) {
-                                Text(
-                                    text = stringResource(id = PaymentType.Credit.title),
-                                    fontFamily = MainFont,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 14.sp,
-                                    color = Color_66
-                                )
-
-                                Spacer(Modifier.height(10.dp))
-
-                                PriceTextField(
-                                    modifier = Modifier,
-                                    hint = "0",
-                                    text = "",
-                                    backgroundColor = Color.White,
-                                    strokeColor = Color_E8,
-                                    textColor = ItemTextColor,
-                                    textLimit = 25
-                                ) {
-
+                                    priceOnlinePayment = it
                                 }
                             }
                         }
@@ -372,7 +344,7 @@ fun PaymentScreen(
                     )
 
                     Text(
-                        text = cheque.totalPrice.moneyType(),
+                        text = (priceCash + priceTerminal + priceOnlinePayment).moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -398,28 +370,10 @@ fun PaymentScreen(
         }
 
     }
-
-
 }
 
 @Preview
 @Composable
-fun PaymentScreenPreview() {
-    PaymentScreen(
-        cheque = Cheque(
-            type = ChequeType.Paid,
-            serialNumber = 12345,
-            clientName = "Ogabek Matyakubov",
-            date = "15.10.2023",
-            time = "15:23",
-            products = OrderProducts,
-            totalPrice = 1_500_000,
-            customer = Customer(
-                id = 1,
-                name = "Ogabek Matyakubov",
-                phoneNumber = "93 203 73 13",
-                priceDiff = -1234456
-            )
-        )
-    )
+fun ReturnCreditsScreenPreview() {
+    ReturnCreditsScreen()
 }

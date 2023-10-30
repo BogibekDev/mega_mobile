@@ -213,7 +213,7 @@ fun CustomerFilterView(
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
                         filterState = FilterType.InAscendingOrder
-                        onSelectedFilter.invoke(filterType)
+                        onSelectedFilter.invoke(filterState)
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
