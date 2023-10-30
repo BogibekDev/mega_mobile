@@ -32,6 +32,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Customer
+import uz.nlg.mega.screens.destinations.CreditsHistoryScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.GreenColor
@@ -42,6 +43,7 @@ import uz.nlg.mega.ui.theme.TextFieldFillColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.BackTopSection
 import uz.nlg.mega.views.CustomerInfoTextField
 import uz.nlg.mega.views.MainButton
@@ -257,7 +259,7 @@ fun CustomerInformationScreen(
                                 backgroundColor = Color.White,
                                 strokeColor = MainColor
                             ) {
-
+                                navigator!!.screenNavigate(CreditsHistoryScreenDestination)
                             }
                         }
                     }

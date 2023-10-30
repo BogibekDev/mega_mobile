@@ -14,8 +14,10 @@ import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.screens.destinations.CustomerInformationScreenDestination
 import uz.nlg.mega.utils.CreditType
 import uz.nlg.mega.utils.Customers
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
@@ -60,7 +62,7 @@ fun CreditInformationScreen(
                             searchText = searchText,
                             customer = i
                         ) {
-
+                            navigator!!.screenNavigate(CustomerInformationScreenDestination(customer = it))
                         }
                     }
                 }
