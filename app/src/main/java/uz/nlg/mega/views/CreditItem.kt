@@ -31,14 +31,11 @@ import uz.nlg.mega.utils.moneyType
 fun CreditItem(
     cheque: Cheque
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Column(
-
-        ) {
+        Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
