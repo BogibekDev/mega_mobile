@@ -159,6 +159,47 @@ fun DoneTopSection(
 }
 
 @Composable
+fun ProfileTopSection(
+    onLogOutClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(75.dp)
+            .background(MainColor),
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = stringResource(id = R.string.sre_profile),
+                fontFamily = MainFont,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+
+            Icon(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp, 24.dp)
+                    .clickable {
+                        onLogOutClick.invoke()
+                    },
+                painter = painterResource(id = R.drawable.ic_log_out),
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+    }
+}
+
+@Composable
 fun SearchAndFilterTopSection(
     isBack: Boolean,
     isFilter: Boolean = false,
@@ -312,5 +353,12 @@ fun TopSectionPreview() {
         }) {
 
         }
+
+        Spacer(Modifier.height(100.dp))
+
+        ProfileTopSection {
+            
+        }
+
     }
 }

@@ -95,6 +95,7 @@ fun SecondaryButton(
                 color = MainColor,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clip(RoundedCornerShape(8.dp))
             .clickable {
                 onClick.invoke()
             },
@@ -184,6 +185,7 @@ fun NextButton(
                 color = MainColor,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clip(RoundedCornerShape(8.dp))
             .clickable {
                 onClick.invoke()
             },

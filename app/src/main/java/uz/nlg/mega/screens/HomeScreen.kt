@@ -106,7 +106,9 @@ fun HomeScreen(
                 }
 
                 ScreenID.ProfileScreen -> {
-                    ProfileScreen()
+                    ProfileScreen(
+                        navigator = navigator!!
+                    )
                 }
             }
         }
