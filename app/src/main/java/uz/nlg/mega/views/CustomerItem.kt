@@ -1,6 +1,7 @@
 package uz.nlg.mega.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,13 +32,17 @@ import uz.nlg.mega.utils.forSearchText
 import uz.nlg.mega.utils.moneyType
 
 @Composable
-fun ItemCustomer(
+fun CustomerItem(
     searchText: String = "",
-    customer: Customer
+    customer: Customer,
+    onItemClick: (customer: Customer) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onItemClick.invoke(customer)
+            }
     ) {
         Column {
             Row(
@@ -99,9 +104,9 @@ fun ItemCustomerPreview() {
     LazyColumn {
         for (i in 0..10) {
             item {
-                ItemCustomer(
+                CustomerItem(
                     customer = Cheques.first().customer!!
-                )
+                ){}
             }
         }
     }

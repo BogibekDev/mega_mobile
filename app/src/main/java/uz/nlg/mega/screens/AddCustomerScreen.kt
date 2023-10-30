@@ -19,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -29,15 +28,12 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.screens.destinations.AddProductScreenDestination
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.Customers
 import uz.nlg.mega.utils.FilterType
-import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
-import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.CustomerFilterView
-import uz.nlg.mega.views.ItemCustomer
+import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Destination
@@ -84,10 +80,12 @@ fun AddCustomerScreen(
             LazyColumn {
                 Customers.forEach {
                     item {
-                        ItemCustomer(
+                        CustomerItem(
                             searchText = searchText,
                             customer = it
-                        )
+                        ) {
+
+                        }
                     }
                 }
             }

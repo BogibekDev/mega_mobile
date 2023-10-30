@@ -16,7 +16,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.utils.CreditType
 import uz.nlg.mega.utils.Customers
-import uz.nlg.mega.views.ItemCustomer
+import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Destination
@@ -56,10 +56,12 @@ fun CreditInformationScreen(
             LazyColumn {
                 for (i in Customers) {
                     item {
-                        ItemCustomer(
+                        CustomerItem(
                             searchText = searchText,
                             customer = i
-                        )
+                        ) {
+
+                        }
                     }
                 }
             }

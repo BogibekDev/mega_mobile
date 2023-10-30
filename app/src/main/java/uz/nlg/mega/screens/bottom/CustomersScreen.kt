@@ -25,17 +25,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.screens.destinations.CustomerInformationScreenDestination
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.Customers
 import uz.nlg.mega.utils.FilterType
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.CustomerFilterView
-import uz.nlg.mega.views.ItemCustomer
+import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Composable
-fun CustomersScreen() {
+fun CustomersScreen(
+    navigator: DestinationsNavigator? = null
+) {
 
     var searchText by remember {
         mutableStateOf("")
@@ -75,10 +80,12 @@ fun CustomersScreen() {
             LazyColumn {
                 Customers.forEach {
                     item {
-                        ItemCustomer(
+                        CustomerItem(
                             searchText = searchText,
                             customer = it
-                        )
+                        ) {
+                            navigator!!.screenNavigate(CustomerInformationScreenDestination(customer = it))
+                        }
                     }
                 }
             }
@@ -122,7 +129,7 @@ fun CustomersScreen() {
                 .clip(CircleShape)
                 .background(MainColor)
                 .clickable {
-
+                    navigator!!.screenNavigate(CustomerInformationScreenDestination(customer = null))
                 },
             contentAlignment = Alignment.Center
         ) {

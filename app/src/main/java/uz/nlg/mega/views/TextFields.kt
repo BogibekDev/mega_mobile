@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -50,6 +51,7 @@ import uz.nlg.mega.ui.theme.TextColorTextField
 import uz.nlg.mega.ui.theme.TextFieldFillColor
 import uz.nlg.mega.ui.theme.TextFieldHintColor
 import uz.nlg.mega.utils.MainFont
+import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +65,7 @@ fun SimpleTextField(
     textColor: Color,
     textSize: TextUnit = 16.sp,
     readOnly: Boolean = false,
+    singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     onChangeListener: (text: String) -> Unit
@@ -98,7 +101,7 @@ fun SimpleTextField(
         },
         readOnly = readOnly,
         shape = RoundedCornerShape(8.dp),
-        singleLine = true,
+        singleLine = singleLine,
         placeholder = {
             Text(
                 text = hint,
@@ -443,21 +446,98 @@ fun PriceTextField(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomerInfoTextField(
+    modifier: Modifier,
+    hint: String,
+    text: String,
+    backgroundColor: Color,
+    strokeColor: Color,
+    textColor: Color,
+    onChangeListener: (text: String) -> Unit
+) {
+    var textState by remember {
+        mutableStateOf(text)
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = strokeColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .height(height = 55.dp)
+            .background(backgroundColor),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .width(100.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(start = PADDING_VALUE),
+                text = hint,
+                fontFamily = MainFont,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                color = Color_66
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(1.dp)
+                .background(Color_E8)
+        )
+
+        TextField(
+            modifier = modifier
+                .weight(1f),
+            value = textState,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = backgroundColor,
+                cursorColor = textColor,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            textStyle = TextStyle(
+                color = textColor,
+                fontSize = 14.sp,
+                fontFamily = MainFont,
+                fontWeight = FontWeight.SemiBold
+            ),
+            onValueChange = {
+                textState = it
+                onChangeListener.invoke(textState)
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            )
+        )
+    }
+}
+
 @Preview
 @Composable
 fun TextFieldPreview() {
-    AmountTextField(
+    SimpleTextField(
         modifier = Modifier
-            .height(50.dp),
-        hint = "0",
+            .height(100.dp),
+        hint = "",
         text = "",
         backgroundColor = TextFieldFillColor,
         strokeColor = Color_E8,
         textColor = ItemTextColor,
-        textSize = 14.sp,
-        textLimit = 9,
-        keyboardType = KeyboardType.Number,
-        imeAction = ImeAction.Next
+        singleLine = false
     ) {
 
     }

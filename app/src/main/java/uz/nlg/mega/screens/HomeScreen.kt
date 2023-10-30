@@ -102,7 +102,9 @@ fun HomeScreen(
                 }
 
                 ScreenID.CustomersScreen -> {
-                    CustomersScreen()
+                    CustomersScreen(
+                        navigator = navigator!!
+                    )
                 }
 
                 ScreenID.ProfileScreen -> {

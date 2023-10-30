@@ -61,9 +61,9 @@
     <string name="str_card">Plastik</string>
     <string name="sre_profile">Profil</string>
     <string name="str_daily_trade">Kunlik savdo</string>
-    <string name="str_total_trade_price">Umumiy sotgan summasi:</string>
-    <string name="str_total_lose_price">Umumiy zarar ko\'rgan summasi</string>
-    <string name="str_total_returned_price">Qaytarib berilgan summasi</string>
+    <string name="str_total_trade_price">Umumiy sotgan summasi: </string>
+    <string name="str_total_lose_price">Umumiy zarar ko\'rgan summasi: </string>
+    <string name="str_total_returned_price">Qaytarib berilgan summasi: </string>
     <string name="str_monthly_trade">Oylik savdo</string>
     <string name="str_given_credits_in_a_day">Bir kunlik qarz bergan summasi</string>
     <string name="str_given_credits_in_a_month">Bir oylik qarz bergan summasi</string>
