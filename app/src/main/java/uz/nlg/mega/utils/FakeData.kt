@@ -172,7 +172,7 @@ var Cheques = arrayListOf<Cheque>(
         date = "12.12.2023",
         time = "15:00",
         products = OrderProducts,
-        totalPrice = -2000000,
+        totalPrice = 2000000,
         customer = Customer(
             id = 1,
             name = "Bogibek Matyaqubov",
@@ -188,7 +188,7 @@ var Cheques = arrayListOf<Cheque>(
         date = "12.12.2023",
         time = "15:00",
         products = OrderProducts,
-        totalPrice = 2000000
+        totalPrice = -2000000
     ),
     Cheque(
         type = ChequeType.Saved,

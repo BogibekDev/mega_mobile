@@ -1,6 +1,5 @@
 package uz.nlg.mega.screens.bottom
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,10 +42,9 @@ import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import uz.nlg.mega.R
 import uz.nlg.mega.screens.destinations.AddProductScreenDestination
-import uz.nlg.mega.screens.destinations.HomeScreenDestination
-import uz.nlg.mega.screens.destinations.LoginScreenDestination
 import uz.nlg.mega.screens.destinations.PaymentScreenDestination
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
+import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.RedTextColor
@@ -58,6 +55,8 @@ import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.OrderProductItem
 import uz.nlg.mega.views.SimpleTopSection
 
+val isMoreShow = mutableStateOf(false)
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OrdersScreen(
@@ -65,10 +64,8 @@ fun OrdersScreen(
 ) {
 
     var isMoreOpen by remember {
-        mutableStateOf(false)
+        mutableStateOf(isMoreShow.value)
     }
-
-//    OrderProducts.clear()
 
     Box(
         modifier = Modifier
@@ -94,7 +91,7 @@ fun OrdersScreen(
                             key = { item ->
                                 item.id
                             }
-                        ) {item ->
+                        ) { item ->
                             RevealSwipe(
                                 modifier = Modifier,
                                 directions = setOf(
@@ -163,6 +160,14 @@ fun OrdersScreen(
             }
         }
 
+        if (isMoreShow.value) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(DialogMoreBackgroundColor)
+            )
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -209,7 +214,8 @@ fun OrdersScreen(
                                     .clip(CircleShape)
                                     .background(Color.White)
                                     .clickable {
-
+                                        isMoreOpen = !isMoreOpen
+                                        isMoreShow.value = isMoreOpen
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -252,7 +258,8 @@ fun OrdersScreen(
                                     .clip(CircleShape)
                                     .background(Color.White)
                                     .clickable {
-
+                                        isMoreOpen = !isMoreOpen
+                                        isMoreShow.value = isMoreOpen
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -296,6 +303,8 @@ fun OrdersScreen(
                                     .background(Color.White)
                                     .clickable {
                                         navigator.screenNavigate(PaymentScreenDestination(Cheques.first()))
+                                        isMoreOpen = !isMoreOpen
+                                        isMoreShow.value = isMoreOpen
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -339,6 +348,8 @@ fun OrdersScreen(
                                     .background(Color.White)
                                     .clickable {
                                         navigator.screenNavigate(AddProductScreenDestination)
+                                        isMoreOpen = !isMoreOpen
+                                        isMoreShow.value = isMoreOpen
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -371,6 +382,7 @@ fun OrdersScreen(
                         .clickable {
                             if (OrderProducts.isNotEmpty()) {
                                 isMoreOpen = !isMoreOpen
+                                isMoreShow.value = isMoreOpen
                             } else {
                                 navigator.screenNavigate(AddProductScreenDestination)
                             }

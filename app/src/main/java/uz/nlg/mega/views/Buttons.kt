@@ -61,8 +61,7 @@ fun MainButton(
     ) {
         Text(
             modifier = Modifier
-                .padding(vertical = 10.dp)
-                .padding(horizontal = PADDING_VALUE),
+                .padding(10.dp),
             text = text,
             fontFamily = MainFont,
             color = textColor,

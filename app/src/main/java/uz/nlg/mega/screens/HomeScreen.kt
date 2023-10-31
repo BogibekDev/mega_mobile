@@ -25,8 +25,10 @@ import uz.nlg.mega.screens.bottom.CustomersScreen
 import uz.nlg.mega.screens.bottom.OrdersScreen
 import uz.nlg.mega.screens.bottom.ProductsScreen
 import uz.nlg.mega.screens.bottom.ProfileScreen
+import uz.nlg.mega.screens.bottom.isMoreShow
 import uz.nlg.mega.screens.bottom.isShowDialog
 import uz.nlg.mega.ui.theme.DialogBackgroundColor
+import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.utils.ScreenID
 import uz.nlg.mega.utils.ScreensList
 import uz.nlg.mega.views.BottomNavItem
@@ -57,6 +59,7 @@ fun HomeScreen(
                 .fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
         ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,6 +78,14 @@ fun HomeScreen(
                         screenID = i.id
                     }
                 }
+            }
+
+            if (isMoreShow.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(DialogMoreBackgroundColor)
+                )
             }
         }
 

@@ -1,6 +1,5 @@
 package uz.nlg.mega.screens.bottom
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,9 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -31,7 +28,6 @@ import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
-import uz.nlg.mega.ui.theme.DialogBackgroundColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.Cheques
@@ -49,7 +45,6 @@ var isShowDialog = mutableStateOf(false)
 fun ChequesScreen(
     navigator: DestinationsNavigator
 ) {
-    val context = LocalContext.current
     val showDialog = remember { mutableStateOf(false) }
     if (showDialog.value) {
         DeleteDialog(
@@ -151,7 +146,8 @@ fun ChequesScreen(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+
+            Spacer(modifier = Modifier.height(PADDING_VALUE))
 
             LazyColumn(
                 modifier = Modifier
