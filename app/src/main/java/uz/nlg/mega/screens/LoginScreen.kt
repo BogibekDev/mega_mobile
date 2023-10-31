@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,10 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.mvvm.LoginViewModel
 import uz.nlg.mega.ui.theme.Color_66
+import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.TextColorTextField
 import uz.nlg.mega.ui.theme.TextFieldFillColor
@@ -42,13 +46,15 @@ import uz.nlg.mega.views.PasswordTextField
 import uz.nlg.mega.views.SimpleTextField
 import java.util.Locale
 
-@Destination
+@Destination(start = true)
+//@Destination
 @Composable
 fun LoginScreen(
-    navigator: DestinationsNavigator?
+    navigator: DestinationsNavigator?,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
 
-    var login by remember {
+    var username by remember {
         mutableStateOf("")
     }
 
@@ -96,7 +102,7 @@ fun LoginScreen(
                 strokeColor = TextFieldStrokeColor,
                 textColor = TextColorTextField,
                 onChangeListener = {
-                    login = it
+                    username = it
                 }
             )
 
@@ -110,7 +116,7 @@ fun LoginScreen(
                 strokeColor = TextFieldStrokeColor,
                 textColor = TextColorTextField,
                 onChangeListener = {
-                    login = it
+                    password = it
                 }
             )
 
@@ -125,7 +131,7 @@ fun LoginScreen(
                 backgroundColor = MainColor,
                 strokeColor = MainColor
             ) {
-
+                viewModel.userLogin(username, password)
             }
 
         }
@@ -143,6 +149,15 @@ fun LoginScreen(
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight
             )
+        }
+
+        if (viewModel.isLoading.value) Box (
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DialogMoreBackgroundColor),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
 
     }

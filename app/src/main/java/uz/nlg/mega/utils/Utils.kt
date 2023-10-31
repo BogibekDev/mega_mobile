@@ -1,5 +1,6 @@
 package uz.nlg.mega.utils
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -7,12 +8,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
+import retrofit2.HttpException
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.RedTextColor
-import java.util.Locale
 
 
 fun Long.moneyType(): String {
@@ -97,4 +98,19 @@ fun typeColor(type: ChequeType): Color {
         ChequeType.Paid -> GreenColor
         else -> RedTextColor
     }
+}
+
+fun printError(e: HttpException) {
+
+    val TAG = "->->->->-> ERROR HAPPENED <-<-<-<-<-"
+
+    Log.w(TAG, "->->->->->->->->->->->->->->-> ERROR HAPPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+    Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR OPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+
+    Log.i(TAG, "->->->->-> ERROR CODE:  ${e.code()} <-<-<-<-<-")
+    Log.i(TAG, "->->->->-> ERROR MESSAGE:  ${e.message()} <-<-<-<-<-")
+    Log.i(TAG, "->->->->-> ERROR RESPONSE\n${e.response()}\n<-<-<-<-<-")
+
+    Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+
 }

@@ -36,7 +36,8 @@ import uz.nlg.mega.views.BottomNavItem
 
 var homeScreenState = ScreenID.ChequesScreen
 
-@Destination(start = true)
+@Destination
+//@Destination(start = true)
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator? = null
