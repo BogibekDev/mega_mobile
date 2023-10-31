@@ -85,7 +85,7 @@ fun DeleteDialog(
                     MainButton(
                         modifier = Modifier
                             .weight(1f)
-                            .height(34.dp),
+                            .height(40.dp),
                         text = stringResource(R.string.str_no),
                         textColor = Color_66,
                         textSize = 15.sp,
@@ -99,7 +99,7 @@ fun DeleteDialog(
                     MainButton(
                         modifier = Modifier
                             .weight(1f)
-                            .height(34.dp),
+                            .height(40.dp),
                         text = stringResource(R.string.str_yes),
                         textColor = Color.White,
                         textSize = 15.sp,
