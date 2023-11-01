@@ -8,6 +8,7 @@ class LoginRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun userLogin(username: String, password: String) = apiService.userLogin(Login(username, password))
+    suspend fun userLogin(username: String, password: String) =
+        apiService.userLogin(Login(username, password))
 
 }
