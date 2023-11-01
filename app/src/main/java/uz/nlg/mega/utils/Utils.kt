@@ -1,5 +1,8 @@
 package uz.nlg.mega.utils
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -9,6 +12,7 @@ import androidx.compose.ui.text.withStyle
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 import retrofit2.HttpException
+import uz.nlg.mega.activity.LoginActivity
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.ItemTextColor
@@ -91,7 +95,6 @@ fun String.forSearchText(search: String): AnnotatedString {
 }
 
 
-
 fun typeColor(type: ChequeType): Color {
     return when (type) {
         ChequeType.Saved -> DarkBlueMainColor
@@ -128,4 +131,13 @@ fun printError(e: Exception) {
 
     Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
 
+}
+
+fun navigateToLoginScreen(context: Context) {
+    val activity = context as? Activity
+
+    Intent(context, LoginActivity::class.java).apply {
+        activity?.startActivity(this)
+    }
+    activity?.finish()
 }

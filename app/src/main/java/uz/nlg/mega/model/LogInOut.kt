@@ -4,3 +4,7 @@ data class Login(
     val username: String,
     val password: String
 )
+
+data class LogOut(
+    val refresh: String
+)

@@ -44,13 +44,14 @@ class LoginViewModel @Inject constructor(
             if (response.isSuccessful) {
                 securePrefs.saveString(AccessToken, response.body()?.access!!)
                 securePrefs.saveString(RefreshToken, response.body()?.refresh!!)
+
                 SharedPrefs(context).saveBoolean(IsSignedIn, true)
 
                 isSuccess.value = true
             } else {
                 val errorResponse =
                     Gson().fromJson(response.errorBody()!!.string(), ErrorResponse::class.java)
-                _error.value = errorResponse.message ?: "Something went wrong 😢"
+                _error.value = errorResponse.message ?: "No Connection"
                 isSuccess.value = false
             }
             _loading.value = false
