@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.nlg.mega.model.Cheque
@@ -23,8 +22,8 @@ import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.RedTextColor
-import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.MainFont
+import uz.nlg.mega.utils.dateToString
 import uz.nlg.mega.utils.moneyType
 
 @Composable
@@ -52,7 +51,7 @@ fun CreditItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = cheque.clientName,
+                        text = cheque.client.firstName,
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
@@ -63,15 +62,15 @@ fun CreditItem(
                     horizontalAlignment = Alignment.End
                 ) {
                     Text(
-                        text = cheque.totalPrice.moneyType(),
+                        text = cheque.chequeSum.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
-                        color = if (cheque.totalPrice > 0L) GreenColor else RedTextColor
+                        color = if (cheque.chequeSum > 0L) GreenColor else RedTextColor
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = cheque.date,
+                        text = dateToString(cheque.createdAt),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
@@ -89,10 +88,4 @@ fun CreditItem(
         }
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CreditItemPreview() {
-    CreditItem(cheque = Cheques[0])
 }

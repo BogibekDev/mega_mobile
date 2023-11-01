@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,19 +24,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
+import uz.nlg.mega.mvvm.ChequeViewModel
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
-import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.PADDING_VALUE
-import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.ChequeItem
 import uz.nlg.mega.views.DialogMessage
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.SimpleTopSection
 
@@ -44,9 +45,15 @@ var isShowDialog = mutableStateOf(false)
 
 @Composable
 fun ChequesScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: ChequeViewModel = hiltViewModel()
 ) {
     val showDialog = remember { mutableStateOf(false) }
+    val page by remember {
+        mutableStateOf(1)
+    }
+
+
     if (showDialog.value) {
         DialogMessage(
             value = stringResource(id = R.string.str_delete_title),
@@ -66,6 +73,12 @@ fun ChequesScreen(
     var chequeType by remember {
         mutableStateOf(chequesType)
     }
+
+    LaunchedEffect(chequeType) {
+        viewModel.getCheques(chequeType.status)
+    }
+
+    val data = viewModel.data.value
 
 
     Box(
@@ -90,19 +103,19 @@ fun ChequesScreen(
             ) {
                 MainButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(ChequeType.Saved.title!!),
-                    textColor = if (chequeType == ChequeType.Saved) Color.White else Color_66,
+                    text = stringResource(R.string.str_saved),
+                    textColor = if (chequeType == ChequeType.Pending) Color.White else Color_66,
                     textSize = 13.sp,
                     isTextBold = false,
-                    backgroundColor = if (chequeType == ChequeType.Saved) MainColor else Color.White,
-                    strokeColor = if (chequeType == ChequeType.Saved) MainColor else Color_E8
+                    backgroundColor = if (chequeType == ChequeType.Pending) MainColor else Color.White,
+                    strokeColor = if (chequeType == ChequeType.Pending) MainColor else Color_E8
                 ) {
-                    if (chequeType == ChequeType.Saved) {
+                    if (chequeType == ChequeType.Pending) {
                         chequeType = ChequeType.None
                         chequesType = ChequeType.None
                     } else {
-                        chequeType = ChequeType.Saved
-                        chequesType = ChequeType.Saved
+                        chequeType = ChequeType.Pending
+                        chequesType = ChequeType.Pending
                     }
                 }
 
@@ -110,19 +123,19 @@ fun ChequesScreen(
 
                 MainButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(ChequeType.Paid.title!!),
-                    textColor = if (chequeType == ChequeType.Paid) Color.White else Color_66,
+                    text = stringResource(R.string.str_paid),
+                    textColor = if (chequeType == ChequeType.Done) Color.White else Color_66,
                     textSize = 13.sp,
                     isTextBold = false,
-                    backgroundColor = if (chequeType == ChequeType.Paid) MainColor else Color.White,
-                    strokeColor = if (chequeType == ChequeType.Paid) MainColor else Color_E8
+                    backgroundColor = if (chequeType == ChequeType.Done) MainColor else Color.White,
+                    strokeColor = if (chequeType == ChequeType.Done) MainColor else Color_E8
                 ) {
-                    if (chequeType == ChequeType.Paid) {
+                    if (chequeType == ChequeType.Done) {
                         chequeType = ChequeType.None
                         chequesType = ChequeType.None
                     } else {
-                        chequeType = ChequeType.Paid
-                        chequesType = ChequeType.Paid
+                        chequeType = ChequeType.Done
+                        chequesType = ChequeType.Done
                     }
                 }
 
@@ -130,7 +143,7 @@ fun ChequesScreen(
 
                 MainButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(ChequeType.Returned.title!!),
+                    text = stringResource(R.string.str_returned),
                     textColor = if (chequeType == ChequeType.Returned) Color.White else Color_66,
                     textSize = 13.sp,
                     isTextBold = false,
@@ -149,38 +162,37 @@ fun ChequesScreen(
 
             Spacer(modifier = Modifier.height(PADDING_VALUE))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
+            if (viewModel.isLoading.value)
+                LoadingView()
+            else if (data?.results != null)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
 
-                ) {
-                items(Cheques.size) { position ->
-                    Box(
-                        modifier = Modifier.padding(
-                            top = 5.dp,
-                            bottom = 5.dp,
-                            start = PADDING_VALUE,
-                            end = PADDING_VALUE,
-                        )
                     ) {
-                        ChequeItem(cheque = Cheques[position],
-                            onDeleteClick = {
-                                isShowDialog.value = true
-                                showDialog.value = true
-                            },
-                            onItemClick = {
-                                navigator.screenNavigate(
-                                    ChequeDetailsScreenDestination(
-                                        cheque = it
-                                    )
-                                )
-                            }
-                        )
+                    items(data.results.size) { position ->
+                        Box(
+                            modifier = Modifier.padding(
+                                top = 5.dp,
+                                bottom = 5.dp,
+                                start = PADDING_VALUE,
+                                end = PADDING_VALUE,
+                            )
+                        ) {
+                            ChequeItem(cheque = data.results[position],
+                                onDeleteClick = {
+                                    isShowDialog.value = true
+                                    showDialog.value = true
+                                },
+                                onItemClick = {
+
+                                }
+                            )
+
+                        }
 
                     }
-
                 }
-            }
         }
 
     }

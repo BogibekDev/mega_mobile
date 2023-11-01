@@ -1,6 +1,5 @@
 package uz.nlg.mega.utils
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -73,11 +72,11 @@ enum class ProductSearchType {
     None
 }
 
-sealed class ChequeType(val title: Int?): Serializable {
-    data object Saved: ChequeType(title = R.string.str_saved)
-    data object Paid: ChequeType(title = R.string.str_paid)
-    data object Returned: ChequeType(title = R.string.str_returned)
-    data object None: ChequeType(title = null)
+sealed class ChequeType(val status: String): Serializable {
+    data object Pending: ChequeType("pending")
+    data object Done: ChequeType("done")
+    data object Returned: ChequeType("returned")
+    data object None: ChequeType("")
 }
 
 sealed class PaymentType(val title: Int): Serializable {

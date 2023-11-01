@@ -23,23 +23,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
-import uz.nlg.mega.model.Customer
 import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E6
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
-import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.MainFont
-import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.PaymentType
 import uz.nlg.mega.utils.moneyType
@@ -82,18 +78,18 @@ fun PaymentScreen(
                     .padding(top = PADDING_VALUE)
             ) {
                 item {
-                    Row (
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = if (cheque.customer == null) Arrangement.End else Arrangement.Center,
+                        horizontalArrangement = if (cheque.seller == null) Arrangement.End else Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        if (cheque.customer != null) SimpleTextField(
+                        if (cheque.seller != null) SimpleTextField(
                             modifier = Modifier
                                 .weight(1f),
                             hint = "",
-                            text = cheque.customer.name,
+                            text = cheque.seller.firstName,
                             backgroundColor = Color.White,
                             strokeColor = Color_E8,
                             textColor = ItemTextColor,
@@ -105,14 +101,14 @@ fun PaymentScreen(
                                 .padding(start = 16.dp),
                             text = stringResource(id = R.string.str_customers_list),
                             icon = painterResource(id = R.drawable.customers),
-                            isCustomerHave = cheque.customer != null
+                            isCustomerHave = cheque.seller != null
                         ) {
                             navigator!!.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
                         }
 
                     }
 
-                    Column (
+                    Column(
                         modifier = Modifier
                             .padding(top = 15.dp)
                             .fillMaxWidth(),
@@ -211,7 +207,7 @@ fun PaymentScreen(
                         }
                     }
 
-                    Column (
+                    Column(
                         modifier = Modifier
                             .padding(top = PADDING_VALUE),
                         horizontalAlignment = Alignment.Start
@@ -246,7 +242,7 @@ fun PaymentScreen(
                         }
 
                         AnimatedVisibility(paymentMethods.contains(PaymentType.Terminal)) {
-                            Column (
+                            Column(
                                 modifier = Modifier
                                     .padding(top = PADDING_VALUE)
                             ) {
@@ -275,7 +271,7 @@ fun PaymentScreen(
                         }
 
                         AnimatedVisibility(paymentMethods.contains(PaymentType.OnlinePayment)) {
-                            Column (
+                            Column(
                                 modifier = Modifier
                                     .padding(top = PADDING_VALUE)
                             ) {
@@ -304,7 +300,7 @@ fun PaymentScreen(
                         }
 
                         AnimatedVisibility(paymentMethods.contains(PaymentType.Credit)) {
-                            Column (
+                            Column(
                                 modifier = Modifier
                                     .padding(vertical = PADDING_VALUE)
                             ) {
@@ -372,7 +368,7 @@ fun PaymentScreen(
                     )
 
                     Text(
-                        text = cheque.totalPrice.moneyType(),
+                        text = cheque.chequeSum.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -401,27 +397,4 @@ fun PaymentScreen(
     }
 
 
-}
-
-@Preview
-@Composable
-fun PaymentScreenPreview() {
-    PaymentScreen(
-        cheque = Cheque(
-            type = ChequeType.Paid,
-            serialNumber = 12345,
-            clientName = "Ogabek Matyakubov",
-            date = "15.10.2023",
-            time = "15:23",
-            products = OrderProducts,
-            totalPrice = 1_500_000,
-            customer = Customer(
-                id = 1,
-                name = "Ogabek Matyakubov",
-                phoneNumber = "93 203 73 13",
-                priceDiff = -1234456,
-                surname = "Matyakubov"
-            )
-        )
-    )
 }

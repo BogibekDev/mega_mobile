@@ -99,7 +99,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color_F6)
     ) {
-        Column(
+        Column (
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally

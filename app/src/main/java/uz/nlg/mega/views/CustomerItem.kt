@@ -10,22 +10,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.nlg.mega.model.Customer
-import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
+import uz.nlg.mega.ui.theme.GreenColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.RedTextColor
-import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.forSearchText
@@ -82,7 +79,7 @@ fun CustomerItem(
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
-                        color = if (customer.priceDiff > 0L)  GreenColor else RedTextColor
+                        color = if (customer.priceDiff > 0L) GreenColor else RedTextColor
                     )
 
             }
@@ -93,21 +90,6 @@ fun CustomerItem(
                     .fillMaxWidth()
                     .background(Color_E8)
             )
-        }
-    }
-}
-
-
-@Preview
-@Composable
-fun ItemCustomerPreview() {
-    LazyColumn {
-        for (i in 0..10) {
-            item {
-                CustomerItem(
-                    customer = Cheques.first().customer!!
-                ){}
-            }
         }
     }
 }

@@ -29,16 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
-import uz.nlg.mega.ui.theme.GreenColor
+import uz.nlg.mega.model.Client
+import uz.nlg.mega.model.Seller
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_AF
 import uz.nlg.mega.ui.theme.Color_E8
-import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.MainColor
-import uz.nlg.mega.ui.theme.RedTextColor
-import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.MainFont
-import uz.nlg.mega.utils.OrderProducts
+import uz.nlg.mega.utils.dateToString
+import uz.nlg.mega.utils.findChequeType
 import uz.nlg.mega.utils.moneyType
 import uz.nlg.mega.utils.typeColor
 
@@ -90,7 +89,7 @@ fun ChequeItem(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = cheque.clientName,
+                        text = "${cheque.client.firstName} ${cheque.client.lastName}",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
@@ -100,7 +99,7 @@ fun ChequeItem(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = cheque.time,
+                        text = dateToString(cheque.createdAt),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
@@ -114,7 +113,7 @@ fun ChequeItem(
                     horizontalAlignment = Alignment.End
                 ) {
                     Text(
-                        text = cheque.totalPrice.moneyType(),
+                        text = cheque.chequeSum.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
@@ -125,7 +124,7 @@ fun ChequeItem(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = "${cheque.products.size} ${stringResource(id = R.string.str_quantity)}",
+                        text = "${cheque.itemsCount} ${stringResource(id = R.string.str_quantity)}",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
@@ -136,11 +135,11 @@ fun ChequeItem(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = stringResource(id = cheque.type.title!!),
+                        text = stringResource(id = findChequeType(cheque.status)),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
-                        color = typeColor(cheque.type),
+                        color = typeColor(cheque.status),
                         maxLines = 1
                     )
 
@@ -170,13 +169,23 @@ fun ChequeItem(
 fun ChequeItemPreview() {
     ChequeItem(
         cheque = Cheque(
-            type = ChequeType.Saved,
-            serialNumber = 155466,
-            clientName = "Bogibek Matyaqubov",
-            date = "12.12.2023",
-            time = "15:00",
-            products = OrderProducts,
-            totalPrice = 2_000_000
+            chequeSum = 2_400_000,
+            client = Client(
+                firstName = "Bogibek",
+                id = 12,
+                lastName = "Matyaqubov",
+                phoneNumber = "122112221"
+            ),
+            createdAt = "2023-11-01T12:38:41.021783Z",
+            id = 12,
+            itemsCount = 123,
+            seller = Seller(
+                firstName = "Qummi",
+                id = 12,
+                lastName = "Azamat"
+            ),
+            serialNumber = 2131232,
+            status = "done"
         ),
     )
 }

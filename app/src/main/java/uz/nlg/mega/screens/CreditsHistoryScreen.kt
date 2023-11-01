@@ -12,10 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.views.BackTopSection
-import uz.nlg.mega.views.CreditItem
 
 @Destination
 @Composable
@@ -37,9 +35,9 @@ fun CreditsHistoryScreen(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    items(Cheques.size) { position ->
-                        CreditItem(cheque = Cheques[position])
-                    }
+//                    items(Cheques.size) { position ->
+//                        CreditItem(cheque = Cheques[position])
+//                    }
                 }
             }
         }

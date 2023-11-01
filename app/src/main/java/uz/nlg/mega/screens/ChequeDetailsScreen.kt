@@ -23,28 +23,23 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Cheque
-import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
-import uz.nlg.mega.screens.destinations.ChequeItemListScreenDestination
 import uz.nlg.mega.ui.theme.Color_11
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_BD
 import uz.nlg.mega.ui.theme.Color_E8
-import uz.nlg.mega.ui.theme.ItemTextColor
-import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.dateToString
+import uz.nlg.mega.utils.findChequeType
 import uz.nlg.mega.utils.moneyType
-import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.utils.typeColor
 import uz.nlg.mega.views.BackTopSection
-import uz.nlg.mega.views.ChequeProductsItem
 import uz.nlg.mega.views.SecondaryButton
 
 @Destination
@@ -81,7 +76,7 @@ fun ChequeDetailsScreen(
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = cheque.totalPrice.moneyType(),
+                        text = cheque.chequeSum.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
@@ -89,7 +84,7 @@ fun ChequeDetailsScreen(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "${cheque.date} ${cheque.time}",
+                        text = dateToString(cheque.createdAt),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
@@ -154,7 +149,7 @@ fun ChequeDetailsScreen(
                             color = Color_66
                         )
                         Text(
-                            text = "${cheque.date} ${cheque.time}",
+                            text = dateToString(cheque.createdAt),
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
@@ -190,14 +185,14 @@ fun ChequeDetailsScreen(
                             horizontalAlignment = Alignment.End
                         ) {
                             Text(
-                                text = cheque.customer!!.name,
+                                text = cheque.client.firstName + " " + cheque.client.lastName,
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 color = Color_66
                             )
                             Text(
-                                text = cheque.customer.phoneNumber,
+                                text = cheque.client.phoneNumber,
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
@@ -231,7 +226,7 @@ fun ChequeDetailsScreen(
                             color = Color_66
                         )
                         Text(
-                            text = cheque.clientName,
+                            text = cheque.seller.firstName + " " + cheque.seller.lastName,
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
@@ -264,11 +259,11 @@ fun ChequeDetailsScreen(
                             color = Color_66
                         )
                         Text(
-                            text = stringResource(id = cheque.type.title!!),
+                            text = stringResource(id = findChequeType(cheque.status)),
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
-                            color = typeColor(cheque.type)
+                            color = typeColor(cheque.status)
                         )
                     }
                     Spacer(
@@ -295,12 +290,12 @@ fun ChequeDetailsScreen(
                             .background(color = Color_E8)
                     )
 
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        val size = if (cheque.products.size >= 3) 2 else cheque.products.size
-                        for (i in 0..size) {
-                            ChequeProductsItem(product = cheque.products[i])
-                        }
-                    }
+//                    Column(modifier = Modifier.fillMaxWidth()) {
+//                        val size = if (cheque.products.size >= 3) 2 else cheque.products.size
+//                        for (i in 0..size) {
+//                            ChequeProductsItem(product = cheque.products[i])
+//                        }
+//                    }
 
                     Spacer(modifier = Modifier.height(PADDING_VALUE))
 
@@ -309,7 +304,7 @@ fun ChequeDetailsScreen(
                         text = stringResource(R.string.str_see_more),
                         textSize = 14.sp
                     ) {
-                        navigator!!.screenNavigate(ChequeItemListScreenDestination(cheque.products))
+//                        navigator!!.screenNavigate(ChequeItemListScreenDestination(cheque.products))
                     }
 
                     Spacer(modifier = Modifier.height(PADDING_VALUE))
@@ -358,7 +353,7 @@ fun ChequeDetailsScreen(
                         )
 
                         Text(
-                            text = cheque.totalPrice.moneyType(),
+                            text = cheque.chequeSum.moneyType(),
                             fontFamily = MainFont,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 13.sp,
@@ -366,7 +361,7 @@ fun ChequeDetailsScreen(
                         )
                     }
 
-                    Column (
+                    Column(
                         modifier = Modifier
                             .fillMaxHeight(),
                         verticalArrangement = Arrangement.SpaceEvenly
@@ -386,7 +381,7 @@ fun ChequeDetailsScreen(
                                         color = Color_66
                                     )
                                 ) {
-                                    append(" " + cheque.totalPrice.moneyType())
+                                    append(" " + cheque.chequeSum.moneyType())
                                 }
                             },
                             fontFamily = MainFont,
@@ -410,7 +405,7 @@ fun ChequeDetailsScreen(
                                         color = Color_66
                                     )
                                 ) {
-                                    append(" " + cheque.totalPrice.moneyType())
+                                    append(" " + cheque.chequeSum.moneyType())
                                 }
                             },
                             fontFamily = MainFont,
@@ -425,12 +420,4 @@ fun ChequeDetailsScreen(
         }
     }
 
-}
-
-@Preview
-@Composable
-fun ChequeDetailsScreenPreview() {
-    ChequeDetailsScreen(
-        cheque = Cheques[0]
-    )
 }

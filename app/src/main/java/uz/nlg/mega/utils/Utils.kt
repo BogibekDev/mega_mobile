@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -12,6 +11,7 @@ import androidx.compose.ui.text.withStyle
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 import retrofit2.HttpException
+import uz.nlg.mega.R
 import uz.nlg.mega.activity.LoginActivity
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.GreenColor
@@ -95,12 +95,10 @@ fun String.forSearchText(search: String): AnnotatedString {
 }
 
 
-fun typeColor(type: ChequeType): Color {
-    return when (type) {
-        ChequeType.Saved -> DarkBlueMainColor
-        ChequeType.Paid -> GreenColor
-        else -> RedTextColor
-    }
+fun typeColor(type: String) = when (type) {
+    ChequeType.Pending.status -> DarkBlueMainColor
+    ChequeType.Done.status -> GreenColor
+    else -> RedTextColor
 }
 
 fun printError(e: HttpException) {
@@ -130,6 +128,32 @@ fun printError(e: Exception) {
     e.printStackTrace()
 
     Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+
+}
+
+fun findChequeType(status: ChequeType) = when (status) {
+    ChequeType.Pending -> R.string.str_saved
+    ChequeType.Returned -> R.string.str_returned
+    ChequeType.Done -> R.string.str_paid
+    ChequeType.None -> R.string.str_empty
+}
+
+fun findChequeType(status: String) = when (status) {
+    ChequeType.Pending.status -> R.string.str_saved
+    ChequeType.Returned.status -> R.string.str_returned
+    ChequeType.Done.status -> R.string.str_paid
+    else -> R.string.str_empty
+}
+
+
+fun dateToString(date: String): String {
+//    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+//    val formattedDate = LocalDateTime.parse(date, dateFormatter)
+//    return DateTimeFormatter.ofPattern("hh:mm | dd.MM.yyyy").format(formattedDate)
+
+    val day = date.substring(0..9)
+    val time = date.subSequence(11..15)
+    return "$time | $day"
 
 }
 
