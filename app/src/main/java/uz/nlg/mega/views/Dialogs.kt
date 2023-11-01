@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,8 +37,9 @@ import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 
 @Composable
-fun DeleteDialog(
-    value: String = stringResource(R.string.str_delete_title),
+fun DialogMessage(
+    value: String,
+    icon: Painter,
     setShowDialog: (Boolean) -> Unit,
     yesClicked: () -> Unit
 ) {
@@ -60,7 +62,7 @@ fun DeleteDialog(
             ) {
                 Icon(
                     modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = R.drawable.ic_delete_blue),
+                    painter = icon,
                     tint = RedTextColor,
                     contentDescription = null,
                 )
@@ -119,8 +121,9 @@ fun DeleteDialog(
 @Preview(showBackground = true)
 @Composable
 fun DeleteDialogPreview() {
-    DeleteDialog(
+    DialogMessage(
         value = stringResource(id = R.string.str_delete_title),
+        icon = painterResource(id = R.drawable.ic_delete_blue),
         setShowDialog = {  },
         yesClicked = {}
     )

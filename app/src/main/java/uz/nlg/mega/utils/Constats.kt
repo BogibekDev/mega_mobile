@@ -1,5 +1,6 @@
 package uz.nlg.mega.utils
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -90,3 +91,7 @@ enum class CreditType: Serializable {
     Daily,
     Monthly
 }
+
+const val AccessToken = "access"
+const val RefreshToken = "refresh"
+const val IsSignedIn = "isSignedIn"

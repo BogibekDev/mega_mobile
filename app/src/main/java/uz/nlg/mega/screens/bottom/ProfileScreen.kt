@@ -14,10 +14,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,6 +49,7 @@ import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
 import uz.nlg.mega.utils.screenNavigate
+import uz.nlg.mega.views.DialogMessage
 import uz.nlg.mega.views.NextButton
 import uz.nlg.mega.views.ProfileTopSection
 import uz.nlg.mega.views.SecondaryButton
@@ -54,6 +58,23 @@ import uz.nlg.mega.views.SecondaryButton
 fun ProfileScreen(
     navigator: DestinationsNavigator? = null
 ) {
+
+    val showDialog = remember { mutableStateOf(false) }
+    if (showDialog.value) {
+        DialogMessage(
+            value = stringResource(id = R.string.str_log_out_title),
+            setShowDialog = {
+                isShowDialog.value = it
+                showDialog.value = it
+            },
+            icon = painterResource(id = R.drawable.ic_log_out),
+            yesClicked = {
+                //delete request
+                showDialog.value = false
+                isShowDialog.value = false
+            }
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -66,7 +87,8 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ProfileTopSection {
-
+                isShowDialog.value = true
+                showDialog.value = true
             }
 
             LazyColumn(

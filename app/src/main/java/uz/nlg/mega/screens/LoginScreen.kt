@@ -1,5 +1,8 @@
 package uz.nlg.mega.screens
 
+import android.app.Activity
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,15 +25,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import uz.nlg.mega.MainActivity
 import uz.nlg.mega.R
 import uz.nlg.mega.mvvm.LoginViewModel
 import uz.nlg.mega.ui.theme.Color_66
@@ -41,18 +45,18 @@ import uz.nlg.mega.ui.theme.TextFieldFillColor
 import uz.nlg.mega.ui.theme.TextFieldStrokeColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.PasswordTextField
 import uz.nlg.mega.views.SimpleTextField
 import java.util.Locale
 
-@Destination(start = true)
-//@Destination
 @Composable
 fun LoginScreen(
-    navigator: DestinationsNavigator?,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val activity = (LocalContext.current as? Activity)
 
     var username by remember {
         mutableStateOf("")
@@ -60,6 +64,15 @@ fun LoginScreen(
 
     var password by remember {
         mutableStateOf("")
+    }
+
+    if (viewModel.isSuccess.value == true) {
+        Intent(LocalContext.current, MainActivity::class.java).apply {
+            startActivity(LocalContext.current, this, null)
+        }
+        activity?.finish()
+    } else if (viewModel.isSuccess.value == false) {
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
     }
 
     Box(
@@ -151,13 +164,10 @@ fun LoginScreen(
             )
         }
 
-        if (viewModel.isLoading.value) Box (
-            modifier = Modifier
-                .fillMaxSize()
-                .background(DialogMoreBackgroundColor),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+        if (viewModel.isLoading.value) LoadingView()
+
+        if (viewModel.isSuccess.value == false) {
+            Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -166,7 +176,5 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginScreen(
-        navigator = null
-    )
+    LoginScreen()
 }

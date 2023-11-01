@@ -83,4 +83,6 @@
     <string name="str_total_credit">Jami qardorligi</string>
     <string name="str_total_invest">Jami haqdorligi</string>
     <string name="str_to_see_credit_history">Qarzlar tarixini ko\'rish</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="str_log_out_title">Siz chindan ham chiqmoqchimisiz?</string>
 </resources>

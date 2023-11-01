@@ -102,7 +102,7 @@ fun typeColor(type: ChequeType): Color {
 
 fun printError(e: HttpException) {
 
-    val TAG = "->->->->-> ERROR HAPPENED <-<-<-<-<-"
+    val TAG = "->->->->-> ERROR <-<-<-<-<-"
 
     Log.w(TAG, "->->->->->->->->->->->->->->-> ERROR HAPPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
     Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR OPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
@@ -110,6 +110,21 @@ fun printError(e: HttpException) {
     Log.i(TAG, "->->->->-> ERROR CODE:  ${e.code()} <-<-<-<-<-")
     Log.i(TAG, "->->->->-> ERROR MESSAGE:  ${e.message()} <-<-<-<-<-")
     Log.i(TAG, "->->->->-> ERROR RESPONSE\n${e.response()}\n<-<-<-<-<-")
+
+    Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+
+}
+
+fun printError(e: Exception) {
+
+    val TAG = "->->->->-> ERROR <-<-<-<-<-"
+
+    Log.w(TAG, "->->->->->->->->->->->->->->-> ERROR HAPPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+    Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR OPENED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
+
+    Log.i(TAG, "->->->->-> ERROR MESSAGE:  ${e.message} <-<-<-<-<-")
+
+    e.printStackTrace()
 
     Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
 

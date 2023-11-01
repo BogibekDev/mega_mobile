@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +35,7 @@ import uz.nlg.mega.utils.Cheques
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.ChequeItem
-import uz.nlg.mega.views.DeleteDialog
+import uz.nlg.mega.views.DialogMessage
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.SimpleTopSection
 
@@ -47,12 +48,13 @@ fun ChequesScreen(
 ) {
     val showDialog = remember { mutableStateOf(false) }
     if (showDialog.value) {
-        DeleteDialog(
+        DialogMessage(
             value = stringResource(id = R.string.str_delete_title),
             setShowDialog = {
                 isShowDialog.value = it
                 showDialog.value = it
             },
+            icon = painterResource(id = R.drawable.ic_delete_blue),
             yesClicked = {
                 //delete request
                 showDialog.value = false
@@ -102,8 +104,6 @@ fun ChequesScreen(
                         chequeType = ChequeType.Saved
                         chequesType = ChequeType.Saved
                     }
-
-
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
