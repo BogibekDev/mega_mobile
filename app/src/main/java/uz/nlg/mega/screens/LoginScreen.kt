@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,7 +37,6 @@ import uz.nlg.mega.MainActivity
 import uz.nlg.mega.R
 import uz.nlg.mega.mvvm.LoginViewModel
 import uz.nlg.mega.ui.theme.Color_66
-import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.TextColorTextField
 import uz.nlg.mega.ui.theme.TextFieldFillColor
@@ -72,7 +70,9 @@ fun LoginScreen(
         }
         activity?.finish()
     } else if (viewModel.isSuccess.value == false) {
-        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
+        viewModel.isSuccess.value = null
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
     }
 
     Box(
@@ -165,10 +165,6 @@ fun LoginScreen(
         }
 
         if (viewModel.isLoading.value) LoadingView()
-
-        if (viewModel.isSuccess.value == false) {
-            Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
-        }
 
     }
 }
