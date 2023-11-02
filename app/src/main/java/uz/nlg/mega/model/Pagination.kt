@@ -11,5 +11,5 @@ data class Pagination <T> (
     @SerializedName("previous")
     val previous: String?,
     @SerializedName("results")
-    val results: ArrayList<T>?
+    val results: ArrayList<T>
 )

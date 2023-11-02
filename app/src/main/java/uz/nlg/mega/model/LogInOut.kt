@@ -5,6 +5,6 @@ data class Login(
     val password: String
 )
 
-data class LogOut(
+data class Refresh(
     val refresh: String
 )

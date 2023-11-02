@@ -154,8 +154,9 @@ fun ProductsScreen(
                                     id = 1,
                                     name = "Sayding L-Brus-15x240",
                                     quantity = 55,
-                                    firstType = "dona",
-                                    secondType = "pachka",
+                                    firstQuantityType = "dona",
+                                    secondQuantityType = "pachka",
+                                    coefficient = "",
                                     price = 10_000
                                 )
                             ) {}

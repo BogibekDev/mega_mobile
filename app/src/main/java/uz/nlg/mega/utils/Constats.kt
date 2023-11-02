@@ -94,3 +94,4 @@ enum class CreditType: Serializable {
 const val AccessToken = "access"
 const val RefreshToken = "refresh"
 const val IsSignedIn = "isSignedIn"
+const val ProfileName = "profileName"

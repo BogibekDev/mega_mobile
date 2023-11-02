@@ -7,12 +7,14 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-import uz.nlg.mega.model.LogOut
+import uz.nlg.mega.model.Category
+import uz.nlg.mega.model.Refresh
+import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
 
 interface ApiServiceWithAuth {
 
-    @GET("cheques")
+    @GET("cheques/")
     suspend fun getAllCheques(
         @Query("status") status: String = "",
         @Query("page") page: Int = 1,
@@ -24,7 +26,13 @@ interface ApiServiceWithAuth {
 
     @POST("auth/logout/")
     suspend fun profileLogOut(
-        @Body logOut: LogOut
+        @Body refresh: Refresh
     ): Response<Unit>
+
+    @GET("categories/")
+    suspend fun getCategories(): Response<Pagination<Category>>
+
+    @GET("products-for-mobile/")
+    suspend fun getProducts(): Response<Pagination<Product>>
 
 }

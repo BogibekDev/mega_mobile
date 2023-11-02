@@ -1,6 +1,5 @@
 package uz.nlg.mega.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -22,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +54,6 @@ import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
 import uz.nlg.mega.views.AmountTextField
 import uz.nlg.mega.views.DoneTopSection
-import uz.nlg.mega.views.SimpleTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -68,7 +64,7 @@ fun EnterQuantityScreen(
 ) {
 
     var productType by remember {
-        mutableStateOf(product.firstType)
+        mutableStateOf(product.firstQuantityType)
     }
 
     var quantity by remember {
@@ -192,9 +188,9 @@ fun EnterQuantityScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = productType == product.firstType,
+                            selected = productType == product.firstQuantityType,
                             onClick = {
-                                productType = product.firstType
+                                productType = product.firstQuantityType
                             },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MainColor,
@@ -205,7 +201,7 @@ fun EnterQuantityScreen(
                         )
 
                         Text(
-                            text = product.firstType,
+                            text = product.firstQuantityType,
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
@@ -218,9 +214,9 @@ fun EnterQuantityScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = productType == product.secondType,
+                            selected = productType == product.secondQuantityType,
                             onClick = {
-                                productType = product.secondType
+                                productType = product.secondQuantityType
                             },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MainColor,
@@ -231,7 +227,7 @@ fun EnterQuantityScreen(
                         )
 
                         Text(
-                            text = product.secondType,
+                            text = product.secondQuantityType,
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
@@ -384,8 +380,9 @@ fun EnterQuantityScreenPreview() {
             id = 1,
             name = "Produckt name",
             quantity = 22,
-            firstType = "Dona",
-            secondType = "Blok",
+            firstQuantityType = "Dona",
+            secondQuantityType = "Blok",
+            coefficient = "",
             price = 1_300_000
         )
     )

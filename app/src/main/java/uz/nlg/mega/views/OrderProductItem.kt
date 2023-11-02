@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Icon
@@ -74,7 +73,7 @@ fun OrderProductItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = "${product.quantity} ${product.firstType}",
+                    text = "${product.quantity} ${product.firstQuantityType}",
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
@@ -120,71 +119,81 @@ fun OrderProductItemPreview() {
                     id = 1,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 2,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 3,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 4,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 5,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 6,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 7,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 8,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 9,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 ), Product(
                     id = 10,
                     name = "Sayding L-Brus-15x240",
                     quantity = 2,
-                    firstType = "pachka",
-                    secondType = "dona",
+                    firstQuantityType = "pachka",
+                    secondQuantityType = "dona",
+                    coefficient = "",
                     price = 20_000
                 )
             )

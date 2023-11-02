@@ -1,5 +1,6 @@
 package uz.nlg.mega.screens.bottom
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,7 @@ import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.views.ChequeItem
 import uz.nlg.mega.views.DialogMessage
 import uz.nlg.mega.views.LoadingView
@@ -49,10 +52,12 @@ fun ChequesScreen(
     viewModel: ChequeViewModel = hiltViewModel()
 ) {
     val showDialog = remember { mutableStateOf(false) }
+
     val page by remember {
         mutableStateOf(1)
     }
 
+    if (viewModel.isGoLogin.value) navigateToLoginScreen(LocalContext.current)
 
     if (showDialog.value) {
         DialogMessage(
@@ -78,8 +83,11 @@ fun ChequesScreen(
         viewModel.getCheques(chequeType.status)
     }
 
-    val data = viewModel.data.value
-
+    if (viewModel.errorMessage.value != null) {
+        viewModel._error.value = null
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+    }
 
     Box(
         modifier = Modifier
@@ -164,13 +172,13 @@ fun ChequesScreen(
 
             if (viewModel.isLoading.value)
                 LoadingView()
-            else if (data?.results != null)
+            else if (viewModel.data.value != null)
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize(),
 
                     ) {
-                    items(data.results.size) { position ->
+                    items(viewModel.data.value!!.results.size) { position ->
                         Box(
                             modifier = Modifier.padding(
                                 top = 5.dp,
@@ -179,7 +187,7 @@ fun ChequesScreen(
                                 end = PADDING_VALUE,
                             )
                         ) {
-                            ChequeItem(cheque = data.results[position],
+                            ChequeItem(cheque = viewModel.data.value!!.results[position],
                                 onDeleteClick = {
                                     isShowDialog.value = true
                                     showDialog.value = true

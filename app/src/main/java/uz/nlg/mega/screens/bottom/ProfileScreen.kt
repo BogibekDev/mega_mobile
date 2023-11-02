@@ -67,7 +67,12 @@ fun ProfileScreen(
 
     if (viewModel.isGoLogin.value) navigateToLoginScreen(LocalContext.current)
 
+    if (!viewModel.errorMessage.value.isNullOrEmpty())
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+
     val showDialog = remember { mutableStateOf(false) }
+
     if (showDialog.value) {
         DialogMessage(
             value = stringResource(id = R.string.str_log_out_title),
@@ -84,14 +89,6 @@ fun ProfileScreen(
 
             }
         )
-    }
-
-    if (!viewModel.errorMessage.value.isNullOrEmpty())
-        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
-            .show()
-
-    if (viewModel.isLoggedOut.value) {
-        navigateToLoginScreen(LocalContext.current)
     }
 
     Box(

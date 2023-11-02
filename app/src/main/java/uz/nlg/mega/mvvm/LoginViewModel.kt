@@ -2,10 +2,10 @@ package uz.nlg.mega.mvvm
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -15,6 +15,8 @@ import uz.nlg.mega.data.repository.LoginRepository
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.AccessToken
 import uz.nlg.mega.utils.IsSignedIn
+import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.ProfileName
 import uz.nlg.mega.utils.RefreshToken
 import uz.nlg.mega.utils.printError
 import javax.inject.Inject
@@ -39,22 +41,32 @@ class LoginViewModel @Inject constructor(
     fun userLogin(username: String, password: String) = viewModelScope.launch {
         _loading.value = true
         try {
-            val response = repository.userLogin(username, password)
+            val handler =
+                NetworkHandler(repository.userLogin(username, password), ErrorResponse::class.java)
 
-            if (response.isSuccessful) {
-                securePrefs.saveString(AccessToken, response.body()?.access!!)
-                securePrefs.saveString(RefreshToken, response.body()?.refresh!!)
+            handler.handleSuccess {
+                securePrefs.saveString(AccessToken, it.access)
+                securePrefs.saveString(RefreshToken, it.refresh)
+                SharedPrefs(context).saveString(ProfileName, "${it.firstName} ${it.lastName}")
+
+                Log.i("TOKEN", it.access)
+                Log.i("TOKEN", it.refresh)
 
                 SharedPrefs(context).saveBoolean(IsSignedIn, true)
-
                 isSuccess.value = true
-            } else {
-                val errorResponse =
-                    Gson().fromJson(response.errorBody()!!.string(), ErrorResponse::class.java)
-                _error.value = errorResponse.message ?: "No Connection"
+            }
+
+            handler.handleFailure {
+                _error.value = it.message ?: "No Connection"
                 isSuccess.value = false
             }
+
+            handler.handleServerError {
+                _error.value = "Server error: $it"
+            }
+
             _loading.value = false
+
         } catch (e: HttpException) {
             _loading.value = false
             printError(e)

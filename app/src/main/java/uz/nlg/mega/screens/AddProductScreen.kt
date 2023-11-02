@@ -27,7 +27,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Product
-import uz.nlg.mega.screens.destinations.EnterQuantityScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
@@ -159,12 +158,17 @@ fun AddProductScreen(
                                     id = 1,
                                     name = "Sayding L-Brus-15x240",
                                     quantity = 55,
-                                    firstType = "dona",
-                                    secondType = "pachka",
+                                    firstQuantityType = "dona",
+                                    secondQuantityType = "pachka",
+                                    coefficient = "",
                                     price = 10_000
                                 )
                             ) {
-                                navigator.screenNavigate(EnterQuantityScreenDestination(it))
+                                navigator.screenNavigate(
+                                    uz.nlg.mega.screens.destinations.EnterQuantityScreenDestination(
+                                        it
+                                    )
+                                )
                             }
                         }
                     }
