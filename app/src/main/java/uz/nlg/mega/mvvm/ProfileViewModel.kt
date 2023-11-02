@@ -110,16 +110,19 @@ class ProfileViewModel @Inject constructor(
                 handler.handleSuccess {
                     myProfile.value = it
                     _loading.value = false
+                    isTrue = false
                 }
 
                 handler.handleFailure {
                     _error.value = it.detail
                     _loading.value = false
+                    isTrue = false
                 }
 
                 handler.handleServerError {
                     _error.value = "Server error: $it"
                     _loading.value = false
+                    isTrue = false
                 }
 
                 handler.handleRefreshToken(this) {
