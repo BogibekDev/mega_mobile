@@ -67,9 +67,10 @@ fun ProfileScreen(
 
     if (viewModel.isGoLogin.value) navigateToLoginScreen(LocalContext.current)
 
-    if (!viewModel.errorMessage.value.isNullOrEmpty())
-        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
-            .show()
+    if (!viewModel.errorMessage.value.isNullOrEmpty()){
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
+        viewModel.errorMessage.value = null
+    }
 
     val showDialog = remember { mutableStateOf(false) }
 

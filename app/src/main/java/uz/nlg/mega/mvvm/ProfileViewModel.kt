@@ -113,7 +113,7 @@ class ProfileViewModel @Inject constructor(
                     isTrue = false
                 }
 
-                handler.handleFailure {
+                handler.handleFailure(401) {
                     _error.value = it.detail
                     _loading.value = false
                     isTrue = false

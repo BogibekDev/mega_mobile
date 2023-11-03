@@ -84,9 +84,9 @@ fun ChequesScreen(
     }
 
     if (viewModel.errorMessage.value != null) {
-        viewModel._error.value = null
         Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
             .show()
+        viewModel._error.value = null
     }
 
     Box(
