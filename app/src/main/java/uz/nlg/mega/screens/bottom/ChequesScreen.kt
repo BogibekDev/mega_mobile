@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,14 +30,19 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.data.local.SharedPrefs
+import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.mvvm.ChequeViewModel
+import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.ProfileName
 import uz.nlg.mega.utils.navigateToLoginScreen
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.ChequeItem
 import uz.nlg.mega.views.DialogMessage
 import uz.nlg.mega.views.LoadingView
@@ -52,41 +58,43 @@ fun ChequesScreen(
     viewModel: ChequeViewModel = hiltViewModel()
 ) {
     val showDialog = remember { mutableStateOf(false) }
-
-    val page by remember {
-        mutableStateOf(1)
+    val deleteCheque = remember {
+        mutableStateOf<Cheque?>(null)
     }
 
     if (viewModel.isGoLogin.value) navigateToLoginScreen(LocalContext.current)
 
     if (showDialog.value) {
-        DialogMessage(
-            value = stringResource(id = R.string.str_delete_title),
-            setShowDialog = {
-                isShowDialog.value = it
-                showDialog.value = it
-            },
-            icon = painterResource(id = R.drawable.ic_delete_blue),
-            yesClicked = {
-                //delete request
-                showDialog.value = false
-                isShowDialog.value = false
-            }
-        )
+        if (deleteCheque.value != null) {
+            DialogMessage(
+                value = stringResource(id = R.string.str_delete_title),
+                setShowDialog = {
+                    isShowDialog.value = it
+                    showDialog.value = it
+                },
+                icon = painterResource(id = R.drawable.ic_delete_blue),
+                yesClicked = {
+                    viewModel.deleteChequeById(deleteCheque.value!!)
+                    showDialog.value = false
+                    isShowDialog.value = false
+                }
+            )
+        }
     }
+
 
     var chequeType by remember {
         mutableStateOf(chequesType)
     }
 
     LaunchedEffect(chequeType) {
-        viewModel.getCheques(chequeType.status)
+        viewModel.getCheques(chequeType.status, isTypeChanged = true)
     }
 
     if (viewModel.errorMessage.value != null) {
         Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
             .show()
-        viewModel._error.value = null
+        viewModel.errorMessage.value = null
     }
 
     Box(
@@ -97,7 +105,8 @@ fun ChequesScreen(
         Column {
             SimpleTopSection(
                 title = stringResource(id = R.string.str_cheques),
-                name = "Azamatjon",
+                name = SharedPrefs(LocalContext.current).getString(ProfileName)
+                    ?: stringResource(R.string.str_user),
             )
 
             Spacer(modifier = Modifier.height(PADDING_VALUE))
@@ -172,13 +181,13 @@ fun ChequesScreen(
 
             if (viewModel.isLoading.value)
                 LoadingView()
-            else if (viewModel.data.value != null)
+            else if (viewModel.data.isNotEmpty())
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize(),
-
-                    ) {
-                    items(viewModel.data.value!!.results.size) { position ->
+                    state = rememberLazyListState()
+                ) {
+                    items(viewModel.data.size - 1) { position ->
                         Box(
                             modifier = Modifier.padding(
                                 top = 5.dp,
@@ -187,19 +196,52 @@ fun ChequesScreen(
                                 end = PADDING_VALUE,
                             )
                         ) {
-                            ChequeItem(cheque = viewModel.data.value!!.results[position],
+                            ChequeItem(
+                                cheque = viewModel.data[position],
                                 onDeleteClick = {
+                                    deleteCheque.value = it
                                     isShowDialog.value = true
                                     showDialog.value = true
                                 },
                                 onItemClick = {
-
+                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it))
                                 }
                             )
 
                         }
 
                     }
+
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .padding(
+                                    top = 5.dp,
+                                    bottom = 5.dp,
+                                    start = PADDING_VALUE,
+                                    end = PADDING_VALUE,
+                                )
+                        ) {
+                            ChequeItem(
+                                cheque = viewModel.data.last(),
+                                onDeleteClick = {
+                                    deleteCheque.value = it
+                                    isShowDialog.value = true
+                                    showDialog.value = true
+                                },
+                                onItemClick = {
+                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it))
+                                }
+                            )
+
+                        }
+
+                        if (viewModel.data.size >= 15) LaunchedEffect(true) {
+                            viewModel.getCheques(chequeType.status)
+                        }
+
+                    }
+
                 }
         }
 

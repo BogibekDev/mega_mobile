@@ -14,20 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import uz.nlg.mega.model.Product
+import uz.nlg.mega.model.ChequeItem
 import uz.nlg.mega.ui.theme.Color_11
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.utils.MainFont
-import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.moneyType
 
 @Composable
 fun ChequeProductsItem(
-    product: Product
+    item: ChequeItem
 ) {
     Box(
         modifier = Modifier
@@ -38,7 +36,9 @@ fun ChequeProductsItem(
                 .fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -49,7 +49,7 @@ fun ChequeProductsItem(
                 ) {
                     Column {
                         Text(
-                            text = product.name,
+                            text = item.product.name,
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 13.sp,
@@ -57,7 +57,7 @@ fun ChequeProductsItem(
                             maxLines = 1
                         )
                         Text(
-                            text = "${product.quantity} x ${product.price}",
+                            text = "${item.quantity}  x  ${item.soldPrice.moneyType()}",
                             fontFamily = MainFont,
                             fontWeight = FontWeight.Normal,
                             fontSize = 13.sp,
@@ -67,7 +67,7 @@ fun ChequeProductsItem(
                     }
 
                     Text(
-                        text = "= ${(product.price * product.quantity).moneyType()}",
+                        text = "= ${item.total.moneyType()}",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
@@ -86,12 +86,4 @@ fun ChequeProductsItem(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChequeProductsItemPreview() {
-    ChequeProductsItem(
-        product = OrderProducts[0]
-    )
 }

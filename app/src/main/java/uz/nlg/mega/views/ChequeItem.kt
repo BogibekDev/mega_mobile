@@ -44,7 +44,7 @@ import uz.nlg.mega.utils.typeColor
 @Composable
 fun ChequeItem(
     cheque: Cheque,
-    onDeleteClick: (() -> Unit)? = null,
+    onDeleteClick: ((Cheque) -> Unit)? = null,
     onItemClick: ((cheque: Cheque) -> Unit)? = null,
 ) {
     Box(
@@ -155,7 +155,7 @@ fun ChequeItem(
                     .size(20.dp, 20.dp)
                     .clip(CircleShape)
                     .clickable {
-                        onDeleteClick!!.invoke()
+                        onDeleteClick!!.invoke(cheque)
                     }
             )
 

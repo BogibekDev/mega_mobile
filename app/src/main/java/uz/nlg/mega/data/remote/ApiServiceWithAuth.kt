@@ -1,16 +1,19 @@
 package uz.nlg.mega.data.remote
 
-import uz.nlg.mega.model.Cheque
-import uz.nlg.mega.model.Pagination
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 import uz.nlg.mega.model.Category
-import uz.nlg.mega.model.Refresh
+import uz.nlg.mega.model.Cheque
+import uz.nlg.mega.model.ChequeDetailResponse
+import uz.nlg.mega.model.Pagination
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
+import uz.nlg.mega.model.Refresh
 
 interface ApiServiceWithAuth {
 
@@ -20,6 +23,17 @@ interface ApiServiceWithAuth {
         @Query("page") page: Int = 1,
         @Query("page_size") pageSize: Int = 15,
     ): Response<Pagination<Cheque>>
+
+
+    @DELETE("cheques/{id}/")
+    suspend fun deleteCheque(
+        @Path("id") id: Int,
+    ): Response<Unit>
+
+    @GET("cheques/{id}/")
+    suspend fun getChequeById(
+        @Path("id") id: Int
+    ): Response<ChequeDetailResponse>
 
     @GET("profile/")
     suspend fun getProfile(): Response<Profile>
@@ -34,5 +48,6 @@ interface ApiServiceWithAuth {
 
     @GET("products-for-mobile/")
     suspend fun getProducts(): Response<Pagination<Product>>
+
 
 }

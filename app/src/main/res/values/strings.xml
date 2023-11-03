@@ -86,4 +86,5 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="str_log_out_title">Siz chindan ham chiqmoqchimisiz?</string>
     <string name="str_empty" />
+    <string name="str_user">Foydalanuvchi</string>
 </resources>
