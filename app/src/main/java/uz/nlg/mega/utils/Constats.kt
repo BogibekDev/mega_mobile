@@ -91,6 +91,8 @@ enum class CreditType: Serializable {
     Monthly
 }
 
+const val MostSoldProducts = "most"
+
 const val AccessToken = "access"
 const val RefreshToken = "refresh"
 const val IsSignedIn = "isSignedIn"

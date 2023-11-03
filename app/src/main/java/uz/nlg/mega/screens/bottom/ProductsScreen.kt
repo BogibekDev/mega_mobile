@@ -1,5 +1,6 @@
 package uz.nlg.mega.screens.bottom
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,34 +14,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.hilt.navigation.compose.hiltViewModel
 import uz.nlg.mega.R
-import uz.nlg.mega.model.Product
+import uz.nlg.mega.mvvm.ProductsViewModel
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
 import uz.nlg.mega.ui.theme.MainColor
+import uz.nlg.mega.utils.MostSoldProducts
 import uz.nlg.mega.utils.ProductSearchType
-import uz.nlg.mega.views.AddingProductItem
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.views.CategoryItem
 import uz.nlg.mega.views.CategoryTopItem
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.MainButton
+import uz.nlg.mega.views.ProductItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Composable
 fun ProductsScreen(
-    navigator: DestinationsNavigator? = null
+    viewModel: ProductsViewModel = hiltViewModel()
 ) {
+
+    if (viewModel.isGoLogin.value) {
+        navigateToLoginScreen(LocalContext.current)
+    }
+
+    if (viewModel.errorMessage.value != null) {
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+        viewModel.errorMessage.value = null
+    }
+
+    LaunchedEffect(true) {
+        viewModel.getProducts("")
+    }
+
     var searchText by remember {
         mutableStateOf("")
     }
@@ -53,7 +75,7 @@ fun ProductsScreen(
         mutableStateOf(false)
     }
 
-    var inCategory by remember {
+    val inCategory by remember {
         mutableStateOf(false)
     }
 
@@ -64,11 +86,9 @@ fun ProductsScreen(
     ) {
         Column {
             SearchAndFilterTopSection(
-                isBack = true,
-                title = stringResource(id = R.string.str_take_order),
-                onBackClick = {
-                    navigator!!.navigateUp()
-                },
+                isBack = false,
+                title = stringResource(id = R.string.str_products),
+                onBackClick = {},
                 onEditTextBackClick = {
                     searchText = ""
                 }
@@ -94,10 +114,13 @@ fun ProductsScreen(
                     backgroundColor = if (productType == ProductSearchType.ByCategory) MainColor else Color.White,
                     strokeColor = if (productType == ProductSearchType.ByCategory) MainColor else Color_E8
                 ) {
-                    productType = if (productType == ProductSearchType.ByCategory)
+                    productType = if (productType == ProductSearchType.ByCategory) {
+                        viewModel.getProducts(searchText)
                         ProductSearchType.None
-                    else
+                    } else {
+                        viewModel.getCategories()
                         ProductSearchType.ByCategory
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -112,10 +135,13 @@ fun ProductsScreen(
                     backgroundColor = if (productType == ProductSearchType.ByMoreSold) MainColor else Color.White,
                     strokeColor = if (productType == ProductSearchType.ByMoreSold) MainColor else Color_E8
                 ) {
-                    productType = if (productType == ProductSearchType.ByMoreSold)
+                    productType = if (productType == ProductSearchType.ByMoreSold) {
+                        viewModel.getProducts(searchText, true)
                         ProductSearchType.None
-                    else
+                    } else {
+                        viewModel.getProducts(searchText, true, MostSoldProducts)
                         ProductSearchType.ByMoreSold
+                    }
                 }
             }
 
@@ -141,49 +167,69 @@ fun ProductsScreen(
                 }
             }
 
-            if (isSearching || productType != ProductSearchType.ByCategory) {
-                LazyColumn(
-                    modifier = Modifier
-                        .background(Color.White)
-                ) {
-                    for (i in 1..30) {
-                        item {
-                            AddingProductItem(
+            if (viewModel.isLoading.value)
+                LoadingView()
+            else Column {
+                if (isSearching || productType != ProductSearchType.ByCategory) {
+                    if (viewModel.products.isNotEmpty()) LazyColumn(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .weight(1f),
+                        state = rememberLazyListState()
+                    ) {
+                        items(viewModel.products.size - 1) { index ->
+                            ProductItem(
                                 search = searchText,
-                                product = Product(
-                                    id = 1,
-                                    name = "Sayding L-Brus-15x240",
-                                    quantity = 55,
-                                    firstQuantityType = "dona",
-                                    secondQuantityType = "pachka",
-                                    coefficient = "",
-                                    price = 10_000
-                                )
-                            ) {}
+                                product = viewModel.products[index]
+                            ) {
+
+                            }
+                        }
+                        item {
+                            ProductItem(
+                                search = searchText,
+                                product = viewModel.products.last()
+                            ) {
+
+                            }
+                            if (viewModel.products.size >= 15) LaunchedEffect(true) {
+                                viewModel.getProducts(searchText)
+                            }
                         }
                     }
                 }
-            }
 
-            if (!isSearching && productType == ProductSearchType.ByCategory) {
-                LazyColumn(
-                    modifier = Modifier
-                        .background(Color.White)
-                ) {
-                    for (i in 0..15) {
+                if (!isSearching && productType == ProductSearchType.ByCategory) {
+                    if (viewModel.categories.isNotEmpty()) LazyColumn(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .weight(1f),
+                        state = rememberLazyListState()
+                    ) {
+                        items(viewModel.categories.size - 1) {
+                            CategoryItem(
+                                id = viewModel.categories[it].id,
+                                title = viewModel.categories[it].name,
+                                quantity = viewModel.categories[it].subcategoriesCount,
+                            ) {
+
+                            }
+                        }
                         item {
                             CategoryItem(
-                                id = 1,
-                                title = "Kategoriyalar",
-                                quantity = 22
+                                id = viewModel.categories.last().id,
+                                title = viewModel.categories.last().name,
+                                quantity = viewModel.categories.last().subcategoriesCount,
                             ) {
-                                inCategory = true
+
+                            }
+                            if (viewModel.categories.size >= 15) LaunchedEffect(true) {
+                                viewModel.getCategories()
                             }
                         }
                     }
                 }
             }
-
         }
     }
 }

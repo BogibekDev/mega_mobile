@@ -43,11 +43,19 @@ interface ApiServiceWithAuth {
         @Body refresh: Refresh
     ): Response<Unit>
 
-    @GET("categories/")
-    suspend fun getCategories(): Response<Pagination<Category>>
-
     @GET("products-for-mobile/")
-    suspend fun getProducts(): Response<Pagination<Product>>
+    suspend fun getProducts(
+        @Query("search") search: String = "",
+        @Query("ordering") ordering: String = "",
+        @Query("page") page: Int = 1,
+        @Query("page_size") pageSize: Int = 15
+    ): Response<Pagination<Product>>
+
+    @GET("categories/")
+    suspend fun getCategories(
+        @Query("page") page: Int = 1,
+        @Query("page_size") pageSize: Int = 15
+    ): Response<Pagination<Category>>
 
 
 }

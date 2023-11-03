@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Pagination <T> (
     @SerializedName("count")
-    val count: Int?,
+    var count: Int?,
     @SerializedName("next")
-    val next: String?,
+    var next: String?,
     @SerializedName("previous")
-    val previous: String?,
+    var previous: String?,
     @SerializedName("results")
     val results: ArrayList<T>
 )

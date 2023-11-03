@@ -7,7 +7,7 @@ class ProductsRepository @Inject constructor(
     private val apiService: ApiServiceWithAuth
 ) {
 
-    suspend fun getCategories() = apiService.getCategories()
-    suspend fun getProducts() = apiService.getProducts()
+    suspend fun getCategories(page: Int) = apiService.getCategories(page)
+    suspend fun getProducts(search: String, page: Int, ordering: String) = apiService.getProducts(search = search, page = page, ordering = ordering)
 
 }
