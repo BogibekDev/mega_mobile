@@ -121,7 +121,7 @@ class ChequeViewModel
 
     }
 
-    fun deleteChequeById(cheque: Cheque) = viewModelScope.launch {
+    fun deleteChequeById(cheque: Cheque, status: String) = viewModelScope.launch {
         _loading.value = true
 
         try {
@@ -136,13 +136,13 @@ class ChequeViewModel
                 )
 
                 handler.handleSuccess {
-                    _data.remove(cheque)
+                    getCheques(status, true)
                     isStillCalling = false
                     _loading.value = false
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it.detail
+                    _error.value = it.error ?: it.detail ?: it.message ?: it.code
                     _loading.value = false
                     isStillCalling = false
                 }

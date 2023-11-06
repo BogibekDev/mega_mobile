@@ -74,7 +74,7 @@ fun ChequesScreen(
                 },
                 icon = painterResource(id = R.drawable.ic_delete_blue),
                 yesClicked = {
-                    viewModel.deleteChequeById(deleteCheque.value!!)
+                    viewModel.deleteChequeById(deleteCheque.value!!, chequesType.status)
                     showDialog.value = false
                     isShowDialog.value = false
                 }

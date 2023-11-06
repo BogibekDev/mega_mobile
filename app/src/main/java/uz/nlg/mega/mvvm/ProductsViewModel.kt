@@ -85,7 +85,7 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it.detail
+                        _error.value = it.error
                         _loading.value = false
                         isStillCalling = false
                     }
