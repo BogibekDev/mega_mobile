@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import uz.nlg.mega.model.Customer
+import uz.nlg.mega.model.SearchedClient
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.GreenColor
@@ -31,8 +31,8 @@ import uz.nlg.mega.utils.moneyType
 @Composable
 fun CustomerItem(
     searchText: String = "",
-    customer: Customer,
-    onItemClick: (customer: Customer) -> Unit
+    customer: SearchedClient,
+    onItemClick: (customer: SearchedClient) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -55,7 +55,7 @@ fun CustomerItem(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = customer.name.forSearchText(searchText),
+                        text = "${customer.firstName} ${customer.lastName}".forSearchText(searchText),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 15.sp,
@@ -73,13 +73,13 @@ fun CustomerItem(
                     )
                 }
 
-                if (customer.priceDiff != 0L)
+                if (customer.balance != 0L)
                     Text(
-                        text = customer.priceDiff.moneyType(),
+                        text = customer.balance.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
-                        color = if (customer.priceDiff > 0L) GreenColor else RedTextColor
+                        color = if (customer.balance > 0L) GreenColor else RedTextColor
                     )
 
             }

@@ -29,11 +29,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
 import uz.nlg.mega.ui.theme.MainColor
-import uz.nlg.mega.utils.Customers
 import uz.nlg.mega.utils.FilterType
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.views.CustomerFilterView
-import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Destination
@@ -59,7 +57,7 @@ fun AddCustomerScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
         ) {
@@ -78,21 +76,21 @@ fun AddCustomerScreen(
             }
 
             LazyColumn {
-                Customers.forEach {
-                    item {
-                        CustomerItem(
-                            searchText = searchText,
-                            customer = it
-                        ) {
-
-                        }
-                    }
-                }
+//                Customers.forEach {
+//                    item {
+//                        CustomerItem(
+//                            searchText = searchText,
+//                            customer = it
+//                        ) {
+//
+//                        }
+//                    }
+//                }
             }
 
         }
 
-        Box (
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 70.dp)
@@ -112,7 +110,7 @@ fun AddCustomerScreen(
             modifier = Modifier
                 .fillMaxSize(),
             contentAlignment = Alignment.BottomEnd
-        ){
+        ) {
             Box(
                 modifier = Modifier
                     .padding(end = 38.dp)

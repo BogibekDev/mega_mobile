@@ -14,6 +14,7 @@ import uz.nlg.mega.model.Pagination
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
 import uz.nlg.mega.model.Refresh
+import uz.nlg.mega.model.SearchClientResponse
 
 interface ApiServiceWithAuth {
 
@@ -57,5 +58,12 @@ interface ApiServiceWithAuth {
         @Query("page_size") pageSize: Int = 15
     ): Response<Pagination<Category>>
 
+
+    @GET("clients/")
+    suspend fun searchClient(
+        @Query("search") search: String = "",
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int = 20,
+    ): Response<SearchClientResponse>
 
 }

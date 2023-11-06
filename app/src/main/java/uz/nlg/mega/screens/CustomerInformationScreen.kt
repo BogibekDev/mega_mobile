@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.model.Customer
+import uz.nlg.mega.model.SearchedClient
 import uz.nlg.mega.screens.destinations.CreditsHistoryScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
@@ -53,15 +53,15 @@ import uz.nlg.mega.views.SimpleTextField
 @Composable
 fun CustomerInformationScreen(
     navigator: DestinationsNavigator? = null,
-    customer: Customer? = null
+    customer: SearchedClient? = null
 ) {
 
     var name by remember {
-        mutableStateOf(customer?.name ?: "")
+        mutableStateOf(customer?.firstName ?: "")
     }
 
     var surname by remember {
-        mutableStateOf(customer?.surname ?: "")
+        mutableStateOf(customer?.lastName ?: "")
     }
 
     var phoneNumber by remember {
@@ -69,7 +69,7 @@ fun CustomerInformationScreen(
     }
 
     var description by remember {
-        mutableStateOf(customer?.description ?: "")
+        mutableStateOf(customer?.extraInfo ?: "")
     }
 
     Box(
@@ -211,7 +211,7 @@ fun CustomerInformationScreen(
                         ) {
                             Text(
                                 modifier = Modifier,
-                                text = if (customer.priceDiff < 0L) {
+                                text = if (customer.balance < 0L) {
                                     stringResource(id = R.string.str_total_credit)
                                 } else {
                                     stringResource(id = R.string.str_total_invest)
@@ -224,11 +224,11 @@ fun CustomerInformationScreen(
 
                             Text(
                                 modifier = Modifier,
-                                text = customer.priceDiff.moneyType(),
+                                text = customer.balance.moneyType(),
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
-                                color = if (customer.priceDiff < 0L) {
+                                color = if (customer.balance < 0L) {
                                     RedTextColor
                                 } else {
                                     GreenColor
