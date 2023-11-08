@@ -15,6 +15,7 @@ import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
 import uz.nlg.mega.model.Refresh
 import uz.nlg.mega.model.SearchClientResponse
+import uz.nlg.mega.model.Subcategory
 
 interface ApiServiceWithAuth {
 
@@ -52,12 +53,23 @@ interface ApiServiceWithAuth {
         @Query("page_size") pageSize: Int = 15
     ): Response<Pagination<Product>>
 
+    @GET("products/")
+    suspend fun getProductsBySubcategory(
+        @Query("subcategory_ids") subcategoryId: Int,
+        @Query("page_size") pageSize: Int = 15
+    ): Response<Pagination<Product>>
+
     @GET("categories/")
     suspend fun getCategories(
         @Query("page") page: Int = 1,
         @Query("page_size") pageSize: Int = 15
     ): Response<Pagination<Category>>
 
+    @GET("subcategories/")
+    suspend fun getSubcategories(
+        @Query("category_ids") categoryId: Int,
+        @Query("page_size") pageSize: Int = 15
+    ): Response<Pagination<Subcategory>>
 
     @GET("clients/")
     suspend fun searchClient(

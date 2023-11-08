@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import uz.nlg.mega.R
 import uz.nlg.mega.model.BottomNav
+import uz.nlg.mega.model.Subcategory
 import java.io.Serializable
 
 val MainFont = FontFamily(
@@ -91,9 +92,11 @@ enum class CreditType: Serializable {
     Monthly
 }
 
-const val MostSoldProducts = "most"
+const val MostSoldProducts = "sales_number"
 
 const val AccessToken = "access"
 const val RefreshToken = "refresh"
 const val IsSignedIn = "isSignedIn"
 const val ProfileName = "profileName"
+
+val TopFirstSubCategory = Subcategory(0, "Kategoriyalar", 0)

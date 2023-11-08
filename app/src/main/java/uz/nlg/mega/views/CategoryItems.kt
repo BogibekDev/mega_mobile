@@ -169,7 +169,6 @@ fun CategoryItemsPreview() {
                             id = 1,
                             name = "Kategoriya",
                             productsCount = 10,
-                            subcategories = listOf(),
                             subcategoriesCount = 0
                         )
                     ) {

@@ -10,8 +10,6 @@ data class Category(
     val name: String,
     @SerializedName("products_count")
     val productsCount: Int,
-    @SerializedName("subcategories")
-    val subcategories: List<Subcategory>,
     @SerializedName("subcategories_count")
     val subcategoriesCount: Int
 )
@@ -20,5 +18,7 @@ data class Subcategory(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
-    val name: String
+    val name: String,
+    @SerializedName("products_count")
+    val productsCount: Int
 )

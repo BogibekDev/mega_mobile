@@ -1,6 +1,7 @@
 package uz.nlg.mega.mvvm
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,9 +17,13 @@ import uz.nlg.mega.data.repository.RefreshTokenRepository
 import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.model.Product
+import uz.nlg.mega.model.ProductsScreenState
 import uz.nlg.mega.model.Subcategory
+import uz.nlg.mega.screens.bottom.productsScreenState
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.ProductSearchType
+import uz.nlg.mega.utils.TopFirstSubCategory
 import uz.nlg.mega.utils.printError
 import uz.nlg.mega.utils.refreshToken
 import javax.inject.Inject
@@ -48,15 +53,28 @@ class ProductsViewModel @Inject constructor(
     private var productPage = 0
 
     private var mainCategories = mutableStateListOf<Category>()
+    private var mainProducts = mutableStateListOf<Product>()
 
     private var _categories = mutableStateListOf<Category>()
     val categories = _categories
 
-    private val _subCategories = mutableStateListOf<Subcategory>()
+    private val _topSubCategories = mutableStateListOf(TopFirstSubCategory)
+    val topSubCategories = _topSubCategories
+
+    private val _subCategories = mutableStateListOf<Category>()
     val subCategories = _subCategories
+
+    private val _subCategoryProducts = mutableStateListOf<Product>()
+    val subCategoryProducts = _subCategoryProducts
 
     private var isCategoriesNextAvailable = true
     private var categoryPage = 0
+
+    private var isSubcategoriesNextAvailable = true
+    private var subcategoryPage = 0
+
+    private var isSubcategoryProductsNextAvailable = true
+    private var subcategoryProductsPage = 0
 
     fun getProducts(search: String, isTypeChanged: Boolean = false, ordering: String = "") = viewModelScope.launch {
         if (isTypeChanged) {
@@ -78,12 +96,17 @@ class ProductsViewModel @Inject constructor(
 
                         isProductsNextAvailable = it.next != null
 
-                        if (isTypeChanged) _products.clear()
+                        if (isTypeChanged) {
+                            _products.clear()
+                            mainProducts.clear()
+                        }
 
                         _products.addAll(it.results)
+                        mainProducts.addAll(it.results)
 
                         _categories.clear()
                         mainCategories.clear()
+
                         isCategoriesNextAvailable = true
                         categoryPage = 0
 
@@ -148,6 +171,8 @@ class ProductsViewModel @Inject constructor(
                         mainCategories.addAll(it.results)
 
                         _products.clear()
+                        mainProducts.clear()
+
                         isProductsNextAvailable = true
                         productPage = 0
 
@@ -192,25 +217,171 @@ class ProductsViewModel @Inject constructor(
         }
     }
 
-    fun getSubCategory(id: Int) = viewModelScope.launch {
-        _loading.value = true
+    fun getSubCategory(category: Category, isClear: Boolean = false) = viewModelScope.launch {
 
-        _subCategories.clear()
+        isSubcategoryProductsNextAvailable = true
+        subcategoryProductsPage = 0
+        _subCategoryProducts.clear()
 
-        val category = categories.find { it.id == id }!!
+        if (isClear) {
+            _loading.value = productPage == 1
+            _subCategories.clear()
+            _topSubCategories.clear()
+            _topSubCategories.add(TopFirstSubCategory)
+        }
 
-        _subCategories.add(Subcategory(0, "Kategoriyalar"))
-        _subCategories.add(Subcategory(category.id, category.name))
+        if (isSubcategoriesNextAvailable) {
+            subcategoryPage++
+            _loading.value = productPage == 1
 
-        _categories.clear()
+            try {
 
-        val tempCategories: ArrayList<Category> = arrayListOf()
-        for (i in category.subcategories) tempCategories.add(Category(i.id, i.name, 0, emptyList(), 0))
+                var isStillCalling = true
+                while (isStillCalling) {
 
-        _categories.addAll(tempCategories)
+                    val handler = NetworkHandler(repository.getSubcategories(category.id), ErrorResponse::class.java)
 
-        _loading.value = false
+                    handler.handleSuccess {
+
+                        isSubcategoriesNextAvailable = it.next != null
+
+                        _topSubCategories.add(Subcategory(category.id, category.name, category.productsCount))
+                        for (i in it.results) {
+                            _subCategories.add(Category(i.id, i.name, i.productsCount, i.productsCount))
+                        }
+
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleFailure(401) {
+                        _error.value = it.error
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleServerError {
+                        _error.value = "Server error: $it"
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleRefreshToken(this) {
+                        refreshToken(refreshRepository, securePrefs) {
+                            if (it) {
+                                isStillCalling = true
+                            } else {
+                                isStillCalling = false
+                                _error.value = "Something went wrong"
+                                SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                                _goLogin.value = true
+                            }
+                        }
+                    }
+
+                }
+
+            } catch (e: HttpException) {
+                _loading.value = false
+                printError(e)
+            } catch (e: Exception) {
+                _loading.value = false
+                printError(e)
+            }
+        }
     }
 
+    fun getSubCategoryProducts(subCategory: Subcategory) = viewModelScope.launch {
+
+        _loading.value = productPage == 1
+        isSubcategoriesNextAvailable = true
+        subcategoryPage = 0
+        _subCategories.clear()
+
+        if (isSubcategoryProductsNextAvailable) {
+            subcategoryProductsPage++
+            _loading.value = productPage == 1
+
+            try {
+
+                var isStillCalling = true
+                while (isStillCalling) {
+
+                    val handler = NetworkHandler(repository.getProductsBySubcategory(subCategory.id), ErrorResponse::class.java)
+
+                    handler.handleSuccess {
+
+                        isSubcategoryProductsNextAvailable = it.next != null
+
+                        _topSubCategories.add(subCategory)
+                        _subCategoryProducts.addAll(it.results)
+
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleFailure(401) {
+                        _error.value = it.error
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleServerError {
+                        _error.value = "Server error: $it"
+                        _loading.value = false
+                        isStillCalling = false
+                    }
+
+                    handler.handleRefreshToken(this) {
+                        refreshToken(refreshRepository, securePrefs) {
+                            if (it) {
+                                isStillCalling = true
+                            } else {
+                                isStillCalling = false
+                                _error.value = "Something went wrong"
+                                SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                                _goLogin.value = true
+                            }
+                        }
+                    }
+
+                }
+
+            } catch (e: HttpException) {
+                _loading.value = false
+                printError(e)
+            } catch (e: Exception) {
+                _loading.value = false
+                printError(e)
+            }
+        }
+    }
+
+    fun onBackPressed(activity: Activity) = viewModelScope.launch {
+
+        _loading.value = true
+
+        val lastAction = topSubCategories.size - 1
+        _topSubCategories.removeLast()
+
+        isSubcategoriesNextAvailable = true
+        subcategoryPage = 0
+
+        when (lastAction) {
+            1 -> {
+                productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.ByCategory)
+            }
+            2 -> {
+                val lastData = topSubCategories.last()
+                getSubCategory(Category(lastData.id, lastData.name, lastData.productsCount, lastData.productsCount), true)
+            }
+            else -> {
+                activity.finish()
+            }
+        }
+
+        _loading.value = false
+
+    }
 
 }
