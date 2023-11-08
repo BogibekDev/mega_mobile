@@ -75,7 +75,7 @@ fun ProductsScreen(
         mutableStateOf(false)
     }
 
-    val inCategory by remember {
+    var inCategory by remember {
         mutableStateOf(false)
     }
 
@@ -145,27 +145,21 @@ fun ProductsScreen(
                 }
             }
 
-            if (!isSearching && inCategory) LazyRow(
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-            ) {
-                for (i in 0..0) {
+            if (!isSearching && inCategory)
+                if (viewModel.subCategories.isNotEmpty()) LazyRow(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    state = rememberLazyListState(viewModel.subCategories.size)
+                ) {
+                    items(viewModel.subCategories.size - 1) {
+                        CategoryTopItem(title = viewModel.subCategories[it].name, isLast = false)
+                    }
                     item {
-                        CategoryTopItem(
-                            title = "Kategoriyalar",
-                            isLast = false
-                        )
+                        CategoryTopItem(title = viewModel.subCategories.last().name, isLast = true)
                     }
                 }
-                item {
-                    CategoryTopItem(
-                        title = "Kategoriyalar",
-                        isLast = true
-                    )
-                }
-            }
 
             if (viewModel.isLoading.value)
                 LoadingView()
@@ -206,22 +200,24 @@ fun ProductsScreen(
                             .weight(1f),
                         state = rememberLazyListState()
                     ) {
-                        items(viewModel.categories.size - 1) {
+                        items(viewModel.categories.size - 1) {id ->
                             CategoryItem(
-                                id = viewModel.categories[it].id,
-                                title = viewModel.categories[it].name,
-                                quantity = viewModel.categories[it].subcategoriesCount,
+                                category = viewModel.categories[id]
                             ) {
-
+                                if (it.subcategoriesCount >= 1) {
+                                    inCategory = true
+                                    viewModel.getSubCategory(it.id)
+                                }
                             }
                         }
                         item {
                             CategoryItem(
-                                id = viewModel.categories.last().id,
-                                title = viewModel.categories.last().name,
-                                quantity = viewModel.categories.last().subcategoriesCount,
+                                category = viewModel.categories.last()
                             ) {
-
+                                if (it.subcategoriesCount >= 1) {
+                                    inCategory = true
+                                    viewModel.getSubCategory(it.id)
+                                }
                             }
                             if (viewModel.categories.size >= 15) LaunchedEffect(true) {
                                 viewModel.getCategories()

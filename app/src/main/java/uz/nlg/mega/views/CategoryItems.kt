@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.nlg.mega.R
+import uz.nlg.mega.model.Category
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_BD
 import uz.nlg.mega.ui.theme.Color_E8
@@ -70,10 +71,8 @@ fun CategoryTopItem(
 
 @Composable
 fun CategoryItem(
-    id: Int,
-    title: String,
-    quantity: Int,
-    onItemClick: (categoryId: Int) -> Unit
+    category: Category,
+    onItemClick: (category: Category) -> Unit
 ) {
 
     Column(
@@ -81,7 +80,7 @@ fun CategoryItem(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clickable {
-                onItemClick.invoke(id)
+                onItemClick.invoke(category)
             }
     ) {
         Row(
@@ -93,7 +92,7 @@ fun CategoryItem(
         ) {
 
             Text(
-                text = title,
+                text = category.name,
                 fontFamily = MainFont,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
@@ -102,7 +101,7 @@ fun CategoryItem(
 
             Row() {
                 Text(
-                    text = "$quantity",
+                    text = "${category.subcategoriesCount}",
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
@@ -166,9 +165,13 @@ fun CategoryItemsPreview() {
             for (i in 0..15) {
                 item {
                     CategoryItem(
-                        id = 1,
-                        title = "Kategoriyalar",
-                        quantity = 22
+                        category = Category(
+                            id = 1,
+                            name = "Kategoriya",
+                            productsCount = 10,
+                            subcategories = listOf(),
+                            subcategoriesCount = 0
+                        )
                     ) {
 
                     }

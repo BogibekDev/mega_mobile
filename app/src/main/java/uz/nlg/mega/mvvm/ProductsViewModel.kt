@@ -16,6 +16,7 @@ import uz.nlg.mega.data.repository.RefreshTokenRepository
 import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.model.Product
+import uz.nlg.mega.model.Subcategory
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
 import uz.nlg.mega.utils.printError
@@ -46,8 +47,13 @@ class ProductsViewModel @Inject constructor(
     private var isProductsNextAvailable = true
     private var productPage = 0
 
+    private var mainCategories = mutableStateListOf<Category>()
+
     private var _categories = mutableStateListOf<Category>()
     val categories = _categories
+
+    private val _subCategories = mutableStateListOf<Subcategory>()
+    val subCategories = _subCategories
 
     private var isCategoriesNextAvailable = true
     private var categoryPage = 0
@@ -77,6 +83,7 @@ class ProductsViewModel @Inject constructor(
                         _products.addAll(it.results)
 
                         _categories.clear()
+                        mainCategories.clear()
                         isCategoriesNextAvailable = true
                         categoryPage = 0
 
@@ -138,6 +145,7 @@ class ProductsViewModel @Inject constructor(
                         isCategoriesNextAvailable = it.next != null
 
                         _categories.addAll(it.results)
+                        mainCategories.addAll(it.results)
 
                         _products.clear()
                         isProductsNextAvailable = true
@@ -182,6 +190,26 @@ class ProductsViewModel @Inject constructor(
                 printError(e)
             }
         }
+    }
+
+    fun getSubCategory(id: Int) = viewModelScope.launch {
+        _loading.value = true
+
+        _subCategories.clear()
+
+        val category = categories.find { it.id == id }!!
+
+        _subCategories.add(Subcategory(0, "Kategoriyalar"))
+        _subCategories.add(Subcategory(category.id, category.name))
+
+        _categories.clear()
+
+        val tempCategories: ArrayList<Category> = arrayListOf()
+        for (i in category.subcategories) tempCategories.add(Category(i.id, i.name, 0, emptyList(), 0))
+
+        _categories.addAll(tempCategories)
+
+        _loading.value = false
     }
 
 

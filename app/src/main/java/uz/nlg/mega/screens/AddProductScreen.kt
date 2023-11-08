@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
+import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
@@ -183,9 +184,13 @@ fun AddProductScreen(
                     for (i in 0..15) {
                         item {
                             CategoryItem(
-                                id = 1,
-                                title = "Kategoriyalar",
-                                quantity = 22
+                                category = Category(
+                                    id = 1,
+                                    name = "Kategoriya",
+                                    productsCount = 10,
+                                    subcategories = listOf(),
+                                    subcategoriesCount = 0
+                                )
                             ) {
                                 inCategory = true
                             }
