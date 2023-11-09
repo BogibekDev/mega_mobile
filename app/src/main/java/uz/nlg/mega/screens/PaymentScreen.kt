@@ -78,36 +78,6 @@ fun PaymentScreen(
                     .padding(top = PADDING_VALUE)
             ) {
                 item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = if (cheque.seller == null) Arrangement.End else Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        if (cheque.seller != null) SimpleTextField(
-                            modifier = Modifier
-                                .weight(1f),
-                            hint = "",
-                            text = cheque.seller.firstName,
-                            backgroundColor = Color.White,
-                            strokeColor = Color_E8,
-                            textColor = ItemTextColor,
-                            readOnly = true
-                        ) {}
-
-                        SecondaryButtonWithIcon(
-                            modifier = Modifier
-                                .padding(start = 16.dp),
-                            text = stringResource(id = R.string.str_customers_list),
-                            icon = painterResource(id = R.drawable.customers),
-                            isCustomerHave = cheque.seller != null
-                        ) {
-                            navigator!!.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
-                        }
-
-                    }
-
                     Column(
                         modifier = Modifier
                             .padding(top = 15.dp)

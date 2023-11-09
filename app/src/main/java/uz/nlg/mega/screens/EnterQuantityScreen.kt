@@ -300,8 +300,7 @@ fun EnterQuantityScreen(
                         textSize = 14.sp,
                         textLimit = 25,
                         keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done,
-                        isPriceString = true
+                        imeAction = ImeAction.Done
                     ) {
                         productPrice = it
                         totalPrice = quantity * productPrice

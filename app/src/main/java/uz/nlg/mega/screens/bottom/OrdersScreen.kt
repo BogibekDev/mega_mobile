@@ -41,7 +41,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import uz.nlg.mega.R
+import uz.nlg.mega.model.Seller
+import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.screens.destinations.AddProductScreenDestination
+import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.ui.theme.ItemTextColor
@@ -49,8 +52,11 @@ import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.RedTextColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
+import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.OrderProductItem
+import uz.nlg.mega.views.SecondaryButtonWithIcon
+import uz.nlg.mega.views.SimpleTextField
 import uz.nlg.mega.views.SimpleTopSection
 
 val isMoreShow = mutableStateOf(false)
@@ -63,6 +69,10 @@ fun OrdersScreen(
 
     var isMoreOpen by remember {
         mutableStateOf(isMoreShow.value)
+    }
+
+    var seller by remember {
+        mutableStateOf<Seller?>(Seller(firstName = "Ogabek", 1, "Matyakubov"))
     }
 
     Box(
@@ -84,6 +94,38 @@ fun OrdersScreen(
                         modifier = Modifier
                             .padding(bottom = 65.dp)
                     ) {
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(PADDING_VALUE),
+                                horizontalArrangement = if (seller == null) Arrangement.End else Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                if (seller != null) SimpleTextField(
+                                    modifier = Modifier
+                                        .weight(1f),
+                                    hint = "",
+                                    text = "${seller!!.firstName} ${seller!!.lastName}",
+                                    backgroundColor = Color.White,
+                                    strokeColor = Color_E8,
+                                    textColor = ItemTextColor,
+                                    readOnly = true
+                                ) {}
+
+                                SecondaryButtonWithIcon(
+                                    modifier = Modifier
+                                        .padding(start = 16.dp),
+                                    text = stringResource(id = R.string.str_customers_list),
+                                    icon = painterResource(id = R.drawable.customers),
+                                    isCustomerHave = seller != null
+                                ) {
+                                    navigator.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
+                                }
+
+                            }
+                        }
                         items(
                             items = OrderProducts,
                             key = { item ->
