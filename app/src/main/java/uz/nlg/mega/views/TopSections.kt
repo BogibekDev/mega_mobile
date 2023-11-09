@@ -207,6 +207,7 @@ fun SearchAndFilterTopSection(
     onBackClick: () -> Unit,
     onFilterClick: (() -> Unit)? = null,
     onEditTextBackClick: (() -> Unit)? = null,
+    onEditTextClearClick: (() -> Unit)? = null,
     searchFunction: (text: String) -> Unit
 ) {
 
@@ -306,7 +307,8 @@ fun SearchAndFilterTopSection(
                         onEditTextBackClick?.invoke()
                         isSearching = false
                     },
-                    onChangeListener = searchFunction
+                    onChangeListener = searchFunction,
+                    onClearClick = onEditTextClearClick
                 )
             }
         }

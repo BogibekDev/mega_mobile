@@ -80,6 +80,11 @@ class ProductsViewModel @Inject constructor(
         if (isTypeChanged) {
             isProductsNextAvailable = true
             productPage = 0
+
+            isCategoriesNextAvailable = true
+            categoryPage = 0
+
+            productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.None)
         }
         if (isProductsNextAvailable) {
             productPage++
@@ -101,11 +106,11 @@ class ProductsViewModel @Inject constructor(
                             mainProducts.clear()
                         }
 
-                        _products.addAll(it.results)
-                        mainProducts.addAll(it.results)
-
                         _categories.clear()
                         mainCategories.clear()
+
+                        _products.addAll(it.results)
+                        mainProducts.addAll(it.results)
 
                         isCategoriesNextAvailable = true
                         categoryPage = 0

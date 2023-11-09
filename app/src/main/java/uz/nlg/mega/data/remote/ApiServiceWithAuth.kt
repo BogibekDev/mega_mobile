@@ -53,9 +53,9 @@ interface ApiServiceWithAuth {
         @Query("page_size") pageSize: Int = 15
     ): Response<Pagination<Product>>
 
-    @GET("products/")
+    @GET("products-for-mobile/")
     suspend fun getProductsBySubcategory(
-        @Query("subcategory_ids") subcategoryId: Int,
+        @Query("subcategory") subcategoryId: Int,
         @Query("page_size") pageSize: Int = 15
     ): Response<Pagination<Product>>
 

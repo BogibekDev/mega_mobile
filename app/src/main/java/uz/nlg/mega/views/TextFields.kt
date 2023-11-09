@@ -132,7 +132,6 @@ fun AmountTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     isReadOnly: Boolean = false,
-    isPriceString: Boolean = false,
     onChangeListener: (amount: Long) -> Unit
 ) {
     var textState by remember {
@@ -276,6 +275,7 @@ fun SearchTextField(
     hint: String,
     text: String,
     onBackClick: () -> Unit,
+    onClearClick: (() -> Unit)? = null,
     onChangeListener: (text: String) -> Unit
 ) {
     var textState by remember {
@@ -332,6 +332,7 @@ fun SearchTextField(
         trailingIcon = {
             IconButton(onClick = {
                 textState = ""
+                onClearClick?.invoke()
             }) {
                 if (textState.isNotEmpty()) Icon(
                     painter = painterResource(id = R.drawable.ic_x),

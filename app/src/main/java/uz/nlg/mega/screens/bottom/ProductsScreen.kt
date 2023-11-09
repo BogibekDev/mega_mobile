@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.Job
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.ProductsScreenState
@@ -63,6 +64,10 @@ fun ProductsScreen(
         viewModel.onBackPressed(activity)
     }
 
+    var searchJob by remember {
+        mutableStateOf<Job>(Job())
+    }
+
     if (viewModel.isGoLogin.value) {
         navigateToLoginScreen(LocalContext.current)
     }
@@ -81,6 +86,11 @@ fun ProductsScreen(
         mutableStateOf(false)
     }
 
+    LaunchedEffect(searchText) {
+        searchJob.cancel()
+        searchJob = viewModel.getProducts(searchText, true)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -93,20 +103,24 @@ fun ProductsScreen(
                 onBackClick = {},
                 onEditTextBackClick = {
                     searchText = ""
+                },
+                onEditTextClearClick = {
+                    searchText = ""
+                    isSearching = false
                 }
             ) {
                 searchText = it
                 isSearching = searchText != ""
             }
 
-            if (!productsScreenState.value.isCategorySectionState)
-                SimpleProductsSection(viewModel = viewModel, searchText = searchText)
-            else
+            if (productsScreenState.value.isCategorySectionState)
                 ProductsCategorySection(
                     viewModel = viewModel,
                     productsScreenState.value.category!!,
                     searchText
                 )
+            else
+                SimpleProductsSection(viewModel = viewModel, searchText = searchText)
 
         }
 
@@ -189,7 +203,7 @@ fun ProductsCategorySection(
                 }
                 item {
                     if (viewModel.subCategoryProducts.size >= 15) LaunchedEffect(true) {
-//                    viewModel.getSubCategoryProducts()
+//                        viewModel.getSubCategoryProducts()
                     }
                 }
             }
@@ -215,8 +229,17 @@ fun SimpleProductsSection(
         mutableStateOf(productsScreenState.value.productType)
     }
 
+    LaunchedEffect(searchText) {
+        productType = if (searchText.isEmpty()) {
+            productsScreenState.value.productType
+        } else {
+            ProductSearchType.None
+        }
+    }
+
+
     Column {
-        Row(
+        if (searchText.isEmpty()) Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -276,26 +299,20 @@ fun SimpleProductsSection(
                         .weight(1f),
                     state = rememberLazyListState()
                 ) {
-                    if (viewModel.isLoading.value) {
-                        item {
-                            LoadingView()
-                        }
-                    } else {
-                        items(viewModel.categories.size) { id ->
-                            CategoryItem(
-                                category = viewModel.categories[id]
-                            ) {
-                                if (it.subcategoriesCount >= 1) {
-                                    viewModel.getSubCategory(it, true)
-                                    productsScreenState.value =
-                                        ProductsScreenState(true, it, ProductSearchType.ByCategory)
-                                }
+                    items(viewModel.categories.size) { id ->
+                        CategoryItem(
+                            category = viewModel.categories[id]
+                        ) {
+                            if (it.subcategoriesCount >= 1) {
+                                viewModel.getSubCategory(it, true)
+                                productsScreenState.value =
+                                    ProductsScreenState(true, it, ProductSearchType.ByCategory)
                             }
                         }
-                        item {
-                            if (viewModel.categories.size >= 15) LaunchedEffect(true) {
-                                viewModel.getCategories()
-                            }
+                    }
+                    item {
+                        if (viewModel.categories.size >= 15) LaunchedEffect(true) {
+                            viewModel.getCategories()
                         }
                     }
                 }
@@ -305,21 +322,15 @@ fun SimpleProductsSection(
                     .weight(1f),
                 state = rememberLazyListState()
             ) {
-                if (viewModel.isLoading.value) {
-                    item {
-                        LoadingView()
-                    }
-                } else {
-                    items(viewModel.products.size) { index ->
-                        ProductItem(
-                            search = searchText,
-                            product = viewModel.products[index]
-                        ) {}
-                    }
-                    item {
-                        if (viewModel.products.size >= 15) LaunchedEffect(true) {
-                            viewModel.getProducts(searchText)
-                        }
+                items(viewModel.products.size) { index ->
+                    ProductItem(
+                        search = searchText,
+                        product = viewModel.products[index]
+                    ) {}
+                }
+                item {
+                    if (viewModel.products.size >= 15) LaunchedEffect(true) {
+                        viewModel.getProducts(searchText)
                     }
                 }
             }
