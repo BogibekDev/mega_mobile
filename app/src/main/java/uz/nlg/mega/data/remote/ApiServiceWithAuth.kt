@@ -94,4 +94,11 @@ interface ApiServiceWithAuth {
     ): Response<Client>
 
 
+    @GET("payments/")
+    suspend fun getDebtHistory(
+        @Query("client") client: Int,
+        @Query("payment_type") paymentType: String = "debt",
+    )
+
+
 }

@@ -19,7 +19,7 @@ data class Client(
     @SerializedName("balance")
     val balance: Long?,
     @SerializedName("extra_info")
-    var extraInfo: String,
+    var extraInfo: String?,
     @SerializedName("first_name")
     var firstName: String,
     @SerializedName("id")

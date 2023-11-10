@@ -51,7 +51,7 @@ fun CreditItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = cheque.client.firstName,
+                        text = cheque.client?.firstName?:"",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,

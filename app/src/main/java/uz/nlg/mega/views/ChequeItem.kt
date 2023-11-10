@@ -45,7 +45,7 @@ import uz.nlg.mega.utils.typeColor
 fun ChequeItem(
     cheque: Cheque,
     onDeleteClick: ((Cheque) -> Unit)? = null,
-    onItemClick: ((cheque: Cheque) -> Unit)? = null,
+    onItemClick: ((Cheque) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -57,7 +57,9 @@ fun ChequeItem(
                 shape = RoundedCornerShape(13.dp)
             )
             .background(Color.White)
-            .clickable { onItemClick?.invoke(cheque) }
+            .clickable {
+                onItemClick?.invoke(cheque)
+            }
     ) {
         Row(
             modifier = Modifier
@@ -89,7 +91,7 @@ fun ChequeItem(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = "${cheque.client.firstName} ${cheque.client.lastName}",
+                        text = "${cheque.client?.firstName} ${cheque.client?.lastName}",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 10.sp,
