@@ -12,20 +12,20 @@ data class SearchClientResponse(
     @SerializedName("previous")
     val previous: String?,
     @SerializedName("results")
-    val results: ArrayList<SearchedClient>
-):Serializable
+    val results: ArrayList<Client>
+) : Serializable
 
-data class SearchedClient(
+data class Client(
     @SerializedName("balance")
-    val balance: Long,
+    val balance: Long?,
     @SerializedName("extra_info")
-    val extraInfo: String,
+    var extraInfo: String,
     @SerializedName("first_name")
-    val firstName: String,
+    var firstName: String,
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
     @SerializedName("last_name")
-    val lastName: String,
+    var lastName: String,
     @SerializedName("phone_number")
-    val phoneNumber: String
-):Serializable
+    var phoneNumber: String
+) : Serializable

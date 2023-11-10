@@ -174,7 +174,9 @@ fun ChequeItemPreview() {
                 firstName = "Bogibek",
                 id = 12,
                 lastName = "Matyaqubov",
-                phoneNumber = "122112221"
+                phoneNumber = "122112221",
+                extraInfo = "",
+                balance = 0L
             ),
             createdAt = "2023-11-01T12:38:41.021783Z",
             id = 12,

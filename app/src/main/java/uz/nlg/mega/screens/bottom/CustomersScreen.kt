@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.Job
 import uz.nlg.mega.R
 import uz.nlg.mega.mvvm.SearchClientViewModel
 import uz.nlg.mega.screens.destinations.CustomerInformationScreenDestination
@@ -53,6 +54,9 @@ fun CustomersScreen(
     var searchText by remember {
         mutableStateOf("")
     }
+    var searchJob by remember {
+        mutableStateOf<Job>(Job())
+    }
 
     var isFilterOpen by remember {
         mutableStateOf(false)
@@ -62,8 +66,23 @@ fun CustomersScreen(
         mutableStateOf<FilterType>(FilterType.None)
     }
 
+
+    LaunchedEffect(filterType.status) {
+        searchJob.cancel()
+        searchJob = viewModel.searchClient(
+            search = searchText,
+            isSearched = true,
+            isDebt = filterType.status
+        )
+    }
+
     LaunchedEffect(searchText) {
-        viewModel.searchClient(searchText, true)
+        searchJob.cancel()
+        searchJob = viewModel.searchClient(
+            search = searchText,
+            isSearched = true,
+            isDebt = filterType.status
+        )
     }
 
     if (viewModel.errorMessage.value != null) {

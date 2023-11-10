@@ -58,13 +58,13 @@ var ScreensList = listOf(
     )
 )
 
-sealed class FilterType(val title: Int?) {
-    data object Qarzdorlar: FilterType(title = R.string.str_debtors)
-    data object Haqdorlar: FilterType(title = R.string.str_loaners)
-    data object InAscendingOrder: FilterType(title = R.string.str_ascending)
-    data object InDescendingOrder: FilterType(title = R.string.str_descending)
+sealed class FilterType(val status: Boolean?) {
+    data object Qarzdorlar : FilterType(status = true)
+    data object Haqdorlar : FilterType(status = false)
+    data object InAscendingOrder : FilterType(status = true)
+    data object InDescendingOrder : FilterType(status = false)
 
-    object None : FilterType(title = null)
+    data object None : FilterType(status = null)
 }
 
 enum class ProductSearchType {
@@ -73,21 +73,21 @@ enum class ProductSearchType {
     None
 }
 
-sealed class ChequeType(val status: String): Serializable {
-    data object Pending: ChequeType("pending")
-    data object Done: ChequeType("done")
-    data object Returned: ChequeType("returned")
-    data object None: ChequeType("")
+sealed class ChequeType(val status: String) : Serializable {
+    data object Pending : ChequeType("pending")
+    data object Done : ChequeType("done")
+    data object Returned : ChequeType("returned")
+    data object None : ChequeType("")
 }
 
-sealed class PaymentType(val title: Int): Serializable {
-    data object Cash: PaymentType(title = R.string.str_cash)
-    data object Terminal: PaymentType(title = R.string.str_terminal)
-    data object OnlinePayment: PaymentType(title = R.string.str_online_payment)
-    data object Credit: PaymentType(title = R.string.str_credit)
+sealed class PaymentType(val title: Int) : Serializable {
+    data object Cash : PaymentType(title = R.string.str_cash)
+    data object Terminal : PaymentType(title = R.string.str_terminal)
+    data object OnlinePayment : PaymentType(title = R.string.str_online_payment)
+    data object Credit : PaymentType(title = R.string.str_credit)
 }
 
-enum class CreditType: Serializable {
+enum class CreditType : Serializable {
     Daily,
     Monthly
 }

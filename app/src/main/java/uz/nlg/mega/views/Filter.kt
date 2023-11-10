@@ -80,7 +80,7 @@ fun MoneyFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(id = FilterType.Qarzdorlar.title!!),
+                    text = stringResource(id = R.string.str_debtors),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
@@ -123,7 +123,7 @@ fun MoneyFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(FilterType.Haqdorlar.title!!),
+                    text = stringResource(id = R.string.str_loaners),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
@@ -221,7 +221,7 @@ fun CustomerFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(FilterType.InAscendingOrder.title!!),
+                    text = stringResource(id=R.string.str_ascending),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
@@ -264,7 +264,7 @@ fun CustomerFilterView(
                 Text(
                     modifier = Modifier
                         .padding(start = 16.dp),
-                    text = stringResource(FilterType.InDescendingOrder.title!!),
+                    text = stringResource(id=R.string.str_descending),
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,

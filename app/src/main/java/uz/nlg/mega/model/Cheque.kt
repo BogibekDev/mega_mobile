@@ -20,7 +20,7 @@ data class Cheque(
     val serialNumber: Int,
     @SerializedName("status")
     val status: String
-): Serializable
+) : Serializable
 
 data class Seller(
     @SerializedName("first_name")
@@ -29,15 +29,4 @@ data class Seller(
     val id: Int,
     @SerializedName("last_name")
     val lastName: String
-): Serializable
-
-data class Client(
-    @SerializedName("first_name")
-    val firstName: String,
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("last_name")
-    val lastName: String,
-    @SerializedName("phone_number")
-    val phoneNumber: String
-): Serializable
+) : Serializable

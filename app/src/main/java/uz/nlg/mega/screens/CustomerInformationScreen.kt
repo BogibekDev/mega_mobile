@@ -1,5 +1,6 @@
 package uz.nlg.mega.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -28,10 +30,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.model.SearchedClient
+import uz.nlg.mega.model.Client
+import uz.nlg.mega.mvvm.ClientInfoViewModel
 import uz.nlg.mega.screens.destinations.CreditsHistoryScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
@@ -43,9 +47,11 @@ import uz.nlg.mega.ui.theme.TextFieldFillColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.BackTopSection
 import uz.nlg.mega.views.CustomerInfoTextField
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.SimpleTextField
 
@@ -53,8 +59,13 @@ import uz.nlg.mega.views.SimpleTextField
 @Composable
 fun CustomerInformationScreen(
     navigator: DestinationsNavigator? = null,
-    customer: SearchedClient? = null
+    customer: Client? = null,
+    viewModel: ClientInfoViewModel = hiltViewModel()
 ) {
+
+    val client = customer ?: Client(null, "", "", null, "", "")
+
+    val context = LocalContext.current
 
     var name by remember {
         mutableStateOf(customer?.firstName ?: "")
@@ -72,6 +83,13 @@ fun CustomerInformationScreen(
         mutableStateOf(customer?.extraInfo ?: "")
     }
 
+    if (viewModel.isGoLogin.value) navigateToLoginScreen(context)
+
+    if (viewModel.errorMessage.value != null) {
+        Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
+        viewModel.errorMessage.value = null
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -85,7 +103,15 @@ fun CustomerInformationScreen(
                 navigator!!.navigateUp()
             }
 
-            LazyColumn(
+
+            if (viewModel.data.value != null) {
+                Toast.makeText(context, stringResource(R.string.str_info_save), Toast.LENGTH_SHORT)
+                    .show()
+                navigator!!.navigateUp()
+            }
+
+            if (viewModel.isLoading.value) LoadingView()
+            else LazyColumn(
                 modifier = Modifier
                     .padding(PADDING_VALUE)
             ) {
@@ -176,7 +202,7 @@ fun CustomerInformationScreen(
                             backgroundColor = Color.White,
                             strokeColor = MainColor
                         ) {
-
+                            navigator!!.navigateUp()
                         }
 
                         Spacer(modifier = Modifier.width(20.dp))
@@ -190,9 +216,26 @@ fun CustomerInformationScreen(
                             strokeColor = MainColor
                         ) {
 
+                            if (name.isNotBlank() && phoneNumber.isNotBlank() && surname.isNotBlank()) {
+                                client.firstName = name.trim()
+                                client.lastName = surname.trim()
+                                client.phoneNumber = phoneNumber.trim()
+                                client.extraInfo = description.trim()
+
+                                if (customer == null) viewModel.addClient(client)
+                                else viewModel.editClient(client)
+
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    context.getText(R.string.str_enter_value_warning),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+
                         }
                     }
-
                     if (customer != null) Column {
                         Spacer(
                             modifier = Modifier
@@ -211,7 +254,7 @@ fun CustomerInformationScreen(
                         ) {
                             Text(
                                 modifier = Modifier,
-                                text = if (customer.balance < 0L) {
+                                text = if ((customer.balance ?: 0L) < 0L) {
                                     stringResource(id = R.string.str_total_credit)
                                 } else {
                                     stringResource(id = R.string.str_total_invest)
@@ -224,11 +267,11 @@ fun CustomerInformationScreen(
 
                             Text(
                                 modifier = Modifier,
-                                text = customer.balance.moneyType(),
+                                text = (customer.balance ?: 0L).moneyType(),
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
-                                color = if (customer.balance < 0L) {
+                                color = if ((customer.balance ?: 0L) < 0L) {
                                     RedTextColor
                                 } else {
                                     GreenColor

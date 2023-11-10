@@ -14,7 +14,7 @@ import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.data.repository.RefreshTokenRepository
 import uz.nlg.mega.data.repository.SearchClientRepository
 import uz.nlg.mega.model.ErrorResponse
-import uz.nlg.mega.model.SearchedClient
+import uz.nlg.mega.model.Client
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
 import uz.nlg.mega.utils.printError
@@ -33,7 +33,7 @@ class SearchClientViewModel @Inject constructor(
     private val _loading = mutableStateOf(false)
     val isLoading = _loading
 
-    private val _data = mutableStateListOf<SearchedClient>()
+    private val _data = mutableStateListOf<Client>()
     val data = _data
 
     private val _error = mutableStateOf<String?>(null)
@@ -46,7 +46,7 @@ class SearchClientViewModel @Inject constructor(
     private var page = 0
 
 
-    fun searchClient(search: String = "", isSearched: Boolean = false, isDebtor: Boolean? = null) =
+    fun searchClient(search: String = "", isSearched: Boolean = false, isDebt: Boolean? = null) =
         viewModelScope.launch {
 
             if (isSearched) {
@@ -66,7 +66,11 @@ class SearchClientViewModel @Inject constructor(
                 while (isStillCalling) {
 
                     val handler = NetworkHandler(
-                        repository.searchClient(search, page),
+                        repository.searchClient(
+                            search = search,
+                            isDebt = isDebt,
+                            page = page
+                        ),
                         ErrorResponse::class.java
                     )
 
@@ -120,17 +124,6 @@ class SearchClientViewModel @Inject constructor(
                 printError(e)
             }
 
-
         }
 
-    fun filteredBy(
-        list: ArrayList<SearchedClient>,
-        isDebtor: Boolean? = null
-    ): ArrayList<SearchedClient> {
-        if (isDebtor != null) {
-            return if (isDebtor) list.filter { client -> client.balance < 0 } as ArrayList<SearchedClient>
-            else list.filter { client -> client.balance >= 0 } as ArrayList<SearchedClient>
-        }
-        return list
-    }
 }

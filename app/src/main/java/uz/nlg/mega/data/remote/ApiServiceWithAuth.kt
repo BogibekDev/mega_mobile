@@ -5,11 +5,13 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.ChequeDetailResponse
+import uz.nlg.mega.model.Client
 import uz.nlg.mega.model.Pagination
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
@@ -74,8 +76,22 @@ interface ApiServiceWithAuth {
     @GET("clients/")
     suspend fun searchClient(
         @Query("search") search: String = "",
+        @Query("is_debt") isDebt: Boolean? = null,
+        @Query("ordering") ordering: String? = null,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int = 20,
     ): Response<SearchClientResponse>
+
+    @POST("clients/")
+    suspend fun addClient(
+        @Body client: Client
+    ): Response<Client>
+
+    @PUT("clients/{id}/")
+    suspend fun editClient(
+        @Path("id") id: Int,
+        @Body client: Client
+    ): Response<Client>
+
 
 }

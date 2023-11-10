@@ -87,4 +87,6 @@
     <string name="str_log_out_title">Siz chindan ham chiqmoqchimisiz?</string>
     <string name="str_empty" />
     <string name="str_user">Foydalanuvchi</string>
+    <string name="str_enter_value_warning">Xamma maydonlarni to\'ldiring</string>
+    <string name="str_info_save">Mijoz muvaffaqiyatli saqlandi</string>
 </resources>
