@@ -14,16 +14,16 @@ class NetworkHandler<R, E>(
 
     fun handleSuccess(
         vararg except: Int,
-        handler: (R) -> Unit
+        handler: (R?) -> Unit
     ) {
         if (request.code() in 200..299 && !except.contains(request.code())) {
-            handler.invoke(request.body()!!)
+            handler.invoke(request.body())
         }
     }
 
     fun handleFailure(
         vararg except: Int,
-        handler: (E) -> Unit
+        handler: (E?) -> Unit
     ) {
         if (request.code() in 400..499 && !except.contains(request.code())) {
             val errorResponse = Gson().fromJson(request.errorBody()!!.string(), error)
@@ -41,7 +41,7 @@ class NetworkHandler<R, E>(
 
     fun handleBySuccessStatusCode(
         code: Int,
-        handler: (R) -> Unit
+        handler: (R?) -> Unit
     ) {
         if (code in 200..299)
             if (request.code() == code) handler.invoke(request.body()!!)
@@ -49,7 +49,7 @@ class NetworkHandler<R, E>(
 
     fun handleByFailureStatusCode(
         code: Int,
-        handler: (E) -> Unit
+        handler: (E?) -> Unit
     ) {
         if (code in 400..499)
             if (request.code() == code) handler.invoke(
@@ -76,7 +76,7 @@ suspend fun refreshToken(
 ) {
     val handler = NetworkHandler(repository.refreshToken(), ErrorResponse::class.java)
     handler.handleSuccess {
-        securePrefs.saveString(AccessToken, it.access)
+        securePrefs.saveString(AccessToken, it!!.access)
         securePrefs.saveString(RefreshToken, it.refresh)
         onResult.invoke(true)
     }

@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import uz.nlg.mega.data.local.SecurePrefs
 import uz.nlg.mega.data.local.SharedPrefs
-import uz.nlg.mega.data.repository.ClientInfoRepository
+import uz.nlg.mega.data.repository.OrderRepository
 import uz.nlg.mega.data.repository.RefreshTokenRepository
-import uz.nlg.mega.model.Client
+import uz.nlg.mega.model.CartResponse
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
@@ -22,15 +22,14 @@ import uz.nlg.mega.utils.printError
 import uz.nlg.mega.utils.refreshToken
 import javax.inject.Inject
 
-@HiltViewModel
 @SuppressLint("StaticFieldLeak")
-class ClientInfoViewModel @Inject constructor(
-    private val repository: ClientInfoRepository,
-    private val refreshRepository: RefreshTokenRepository,
+@HiltViewModel
+class OrderViewModel @Inject constructor(
+    private val repository: OrderRepository,
+    private val refreshToken: RefreshTokenRepository,
     private val securePrefs: SecurePrefs,
     private val context: Context
 ) : ViewModel() {
-
 
     private val _loading = mutableStateOf(false)
     val isLoading = _loading
@@ -41,59 +40,51 @@ class ClientInfoViewModel @Inject constructor(
     private val _goLogin = mutableStateOf(false)
     val isGoLogin = _goLogin
 
-
-    private val _data = mutableStateOf<Client?>(null)
+    private val _data = mutableStateOf(CartResponse(null, 0L, arrayListOf()))
     val data = _data
 
-
-    fun addClient(client: Client) = viewModelScope.launch {
-
+    fun getCart() = viewModelScope.launch {
         _loading.value = true
 
         try {
-            var isStillCalling = true
+            var isTrue = true
+            while (isTrue) {
 
-            while (isStillCalling) {
-
-                val handler =
-                    NetworkHandler(repository.addClient(client), ErrorResponse::class.java)
+                val handler = NetworkHandler(repository.getCart(), ErrorResponse::class.java)
 
                 handler.handleSuccess {
-                    _data.value = it
-                    isStillCalling = false
+                    _data.value.cartItems.clear()
+                    _data.value = it!!
                     _loading.value = false
+                    isTrue = false
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.phoneNumber[0]
+                    _error.value = it!!.detail
                     _loading.value = false
-                    isStillCalling = false
-                }
-
-                handler.handleRefreshToken(this) {
-
-                    refreshToken(refreshRepository, securePrefs) { isRefreshed ->
-
-                        if (isRefreshed) {
-                            isStillCalling = true
-                        } else {
-                            isStillCalling = false
-                            _error.value = SomethingWentWrong
-                            SharedPrefs(context).saveBoolean(IsSignedIn, false)
-                            _goLogin.value = true
-                        }
-
-                    }
+                    isTrue = false
                 }
 
                 handler.handleServerError {
                     _error.value = "$ServerError$it"
                     _loading.value = false
-                    isStillCalling = false
+                    isTrue = false
+                }
+
+                handler.handleRefreshToken(this) {
+                    refreshToken(refreshToken, securePrefs) {
+                        if (it) {
+                            isTrue = true
+                        } else {
+                            isTrue = false
+                            _error.value = SomethingWentWrong
+                            SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                            _goLogin.value = true
+                        }
+                    }
                 }
 
             }
-
         } catch (e: HttpException) {
             _loading.value = false
             printError(e)
@@ -103,57 +94,46 @@ class ClientInfoViewModel @Inject constructor(
         }
     }
 
-
-    fun editClient(client: Client) = viewModelScope.launch {
+    fun deleteChequeItem(id: Int) = viewModelScope.launch {
         _loading.value = true
 
         try {
-            var isStillCalling = true
+            var isTrue = true
+            while (isTrue) {
 
-            while (isStillCalling) {
+                val handler = NetworkHandler(repository.deleteItem(id), ErrorResponse::class.java)
 
-                val handler =
-                    NetworkHandler(
-                        repository.editClient(client.id!!, client),
-                        ErrorResponse::class.java
-                    )
-
-                handler.handleSuccess {
-                    _data.value = it
-                    isStillCalling = false
-                    _loading.value = false
+                handler.handleSuccess() {
+                    getCart()
+                    isTrue = false
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.phoneNumber[0]
+                    _error.value = it!!.detail
                     _loading.value = false
-                    isStillCalling = false
-                }
-
-                handler.handleRefreshToken(this) {
-
-                    refreshToken(refreshRepository, securePrefs) { isRefreshed ->
-
-                        if (isRefreshed) {
-                            isStillCalling = true
-                        } else {
-                            isStillCalling = false
-                            _error.value = SomethingWentWrong
-                            SharedPrefs(context).saveBoolean(IsSignedIn, false)
-                            _goLogin.value = true
-                        }
-
-                    }
+                    isTrue = false
                 }
 
                 handler.handleServerError {
                     _error.value = "$ServerError$it"
                     _loading.value = false
-                    isStillCalling = false
+                    isTrue = false
+                }
+
+                handler.handleRefreshToken(this) {
+                    refreshToken(refreshToken, securePrefs) {
+                        if (it) {
+                            isTrue = true
+                        } else {
+                            isTrue = false
+                            _error.value = SomethingWentWrong
+                            SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                            _goLogin.value = true
+                        }
+                    }
                 }
 
             }
-
         } catch (e: HttpException) {
             _loading.value = false
             printError(e)
@@ -162,6 +142,5 @@ class ClientInfoViewModel @Inject constructor(
             printError(e)
         }
     }
-
 
 }

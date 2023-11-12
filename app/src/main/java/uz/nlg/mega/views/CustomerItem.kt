@@ -65,7 +65,7 @@ fun CustomerItem(
                     Spacer(modifier = Modifier.height(5.dp))
 
                     Text(
-                        text = customer.phoneNumber,
+                        text = customer.phoneNumber ?: "",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,

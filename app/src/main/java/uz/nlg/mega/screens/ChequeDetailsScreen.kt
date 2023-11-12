@@ -217,7 +217,7 @@ fun ChequeDetailsScreen(
                                     color = Color_66
                                 )
                                 Text(
-                                    text = viewModel.data.value!!.client.phoneNumber,
+                                    text = viewModel.data.value!!.client.phoneNumber ?: "",
                                     fontFamily = MainFont,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 14.sp,

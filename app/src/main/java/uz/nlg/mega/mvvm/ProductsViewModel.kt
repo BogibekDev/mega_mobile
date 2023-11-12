@@ -8,9 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import retrofit2.HttpException
 import uz.nlg.mega.data.local.SecurePrefs
 import uz.nlg.mega.data.local.SharedPrefs
@@ -25,6 +23,8 @@ import uz.nlg.mega.screens.bottom.productsScreenState
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
 import uz.nlg.mega.utils.ProductSearchType
+import uz.nlg.mega.utils.ServerError
+import uz.nlg.mega.utils.SomethingWentWrong
 import uz.nlg.mega.utils.TopFirstSubCategory
 import uz.nlg.mega.utils.printError
 import uz.nlg.mega.utils.refreshToken
@@ -78,85 +78,89 @@ class ProductsViewModel @Inject constructor(
     private var isSubcategoryProductsNextAvailable = true
     private var subcategoryProductsPage = 0
 
-    fun getProducts(search: String, isTypeChanged: Boolean = false, ordering: String = "") = viewModelScope.launch {
-        if (isTypeChanged) {
-            isProductsNextAvailable = true
-            productPage = 0
+    fun getProducts(search: String, isTypeChanged: Boolean = false, ordering: String = "") =
+        viewModelScope.launch {
+            if (isTypeChanged) {
+                isProductsNextAvailable = true
+                productPage = 0
 
-            isCategoriesNextAvailable = true
-            categoryPage = 0
+                isCategoriesNextAvailable = true
+                categoryPage = 0
 
-            productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.None)
-        }
-        if (isProductsNextAvailable) {
-            productPage++
-            _loading.value = productPage == 1
+                productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.None)
+            }
+            if (isProductsNextAvailable) {
+                productPage++
+                _loading.value = productPage == 1
 
-            try {
+                try {
 
-                var isStillCalling = true
-                while (isStillCalling) {
+                    var isStillCalling = true
+                    while (isStillCalling) {
 
-                    val handler = NetworkHandler(repository.getProducts(search, productPage, ordering), ErrorResponse::class.java)
+                        val handler = NetworkHandler(
+                            repository.getProducts(search, productPage, ordering),
+                            ErrorResponse::class.java
+                        )
 
-                    handler.handleSuccess {
+                        handler.handleSuccess {
 
-                        isProductsNextAvailable = it.next != null
+                            isProductsNextAvailable = it!!.next != null
 
-                        if (isTypeChanged) {
-                            _products.clear()
-                            mainProducts.clear()
+                            if (isTypeChanged) {
+                                _products.clear()
+                                mainProducts.clear()
+                            }
+
+                            _categories.clear()
+                            mainCategories.clear()
+
+                            _products.addAll(it.results)
+                            mainProducts.addAll(it.results)
+
+                            isCategoriesNextAvailable = true
+                            categoryPage = 0
+
+                            _loading.value = false
+                            isStillCalling = false
                         }
 
-                        _categories.clear()
-                        mainCategories.clear()
+                        handler.handleFailure(401) {
+                            _error.value = it!!.error
+                            _loading.value = false
+                            isStillCalling = false
+                        }
 
-                        _products.addAll(it.results)
-                        mainProducts.addAll(it.results)
+                        handler.handleServerError {
+                            _error.value = "$ServerError$it"
+                            _loading.value = false
+                            isStillCalling = false
+                        }
 
-                        isCategoriesNextAvailable = true
-                        categoryPage = 0
-
-                        _loading.value = false
-                        isStillCalling = false
-                    }
-
-                    handler.handleFailure(401) {
-                        _error.value = it.error
-                        _loading.value = false
-                        isStillCalling = false
-                    }
-
-                    handler.handleServerError {
-                        _error.value = "Server error: $it"
-                        _loading.value = false
-                        isStillCalling = false
-                    }
-
-                    handler.handleRefreshToken(this) {
-                        refreshToken(refreshRepository, securePrefs) {
-                            if (it) {
-                                isStillCalling = true
-                            } else {
-                                isStillCalling = false
-                                _error.value = "Something went wrong"
-                                SharedPrefs(context).saveBoolean(IsSignedIn, false)
-                                _goLogin.value = true
+                        handler.handleRefreshToken(this) {
+                            refreshToken(refreshRepository, securePrefs) {
+                                if (it) {
+                                    isStillCalling = true
+                                } else {
+                                    isStillCalling = false
+                                    _error.value = SomethingWentWrong
+                                    SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                                    _goLogin.value = true
+                                }
                             }
                         }
+
                     }
 
+                } catch (e: HttpException) {
+                    _loading.value = false
+                    printError(e)
+                } catch (e: Exception) {
+                    _loading.value = false
+                    printError(e)
                 }
-
-            } catch (e: HttpException) {
-                _loading.value = false
-                printError(e)
-            } catch (e: Exception) {
-                _loading.value = false
-                printError(e)
             }
         }
-    }
 
     fun getCategories() = viewModelScope.launch {
         if (isCategoriesNextAvailable) {
@@ -168,11 +172,14 @@ class ProductsViewModel @Inject constructor(
                 var isTrue = true
                 while (isTrue) {
 
-                    val handler = NetworkHandler(repository.getCategories(categoryPage), ErrorResponse::class.java)
+                    val handler = NetworkHandler(
+                        repository.getCategories(categoryPage),
+                        ErrorResponse::class.java
+                    )
 
                     handler.handleSuccess {
 
-                        isCategoriesNextAvailable = it.next != null
+                        isCategoriesNextAvailable = it!!.next != null
 
                         _categories.addAll(it.results)
                         mainCategories.addAll(it.results)
@@ -188,13 +195,13 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure {
-                        _error.value = it.detail
+                        _error.value = it!!.detail
                         _loading.value = false
                         isTrue = false
                     }
 
                     handler.handleServerError {
-                        _error.value = "Server error: $it"
+                        _error.value = "$ServerError$it"
                         _loading.value = false
                         isTrue = false
                     }
@@ -205,7 +212,7 @@ class ProductsViewModel @Inject constructor(
                                 isTrue = true
                             } else {
                                 isTrue = false
-                                _error.value = "Something went wrong"
+                                _error.value = SomethingWentWrong
                                 SharedPrefs(context).saveBoolean(IsSignedIn, false)
                                 _goLogin.value = true
                             }
@@ -246,15 +253,31 @@ class ProductsViewModel @Inject constructor(
                 var isStillCalling = true
                 while (isStillCalling) {
 
-                    val handler = NetworkHandler(repository.getSubcategories(category.id), ErrorResponse::class.java)
+                    val handler = NetworkHandler(
+                        repository.getSubcategories(category.id),
+                        ErrorResponse::class.java
+                    )
 
                     handler.handleSuccess {
 
-                        isSubcategoriesNextAvailable = it.next != null
+                        isSubcategoriesNextAvailable = it!!.next != null
 
-                        _topSubCategories.add(Subcategory(category.id, category.name, category.productsCount))
+                        _topSubCategories.add(
+                            Subcategory(
+                                category.id,
+                                category.name,
+                                category.productsCount
+                            )
+                        )
                         for (i in it.results) {
-                            _subCategories.add(Category(i.id, i.name, i.productsCount, i.productsCount))
+                            _subCategories.add(
+                                Category(
+                                    i.id,
+                                    i.name,
+                                    i.productsCount,
+                                    i.productsCount
+                                )
+                            )
                         }
 
                         _loading.value = false
@@ -262,13 +285,13 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it.error
+                        _error.value = it!!.error
                         _loading.value = false
                         isStillCalling = false
                     }
 
                     handler.handleServerError {
-                        _error.value = "Server error: $it"
+                        _error.value = "$ServerError$it"
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -279,7 +302,7 @@ class ProductsViewModel @Inject constructor(
                                 isStillCalling = true
                             } else {
                                 isStillCalling = false
-                                _error.value = "Something went wrong"
+                                _error.value = SomethingWentWrong
                                 SharedPrefs(context).saveBoolean(IsSignedIn, false)
                                 _goLogin.value = true
                             }
@@ -314,11 +337,14 @@ class ProductsViewModel @Inject constructor(
                 var isStillCalling = true
                 while (isStillCalling) {
 
-                    val handler = NetworkHandler(repository.getProductsBySubcategory(subCategory.id), ErrorResponse::class.java)
+                    val handler = NetworkHandler(
+                        repository.getProductsBySubcategory(subCategory.id),
+                        ErrorResponse::class.java
+                    )
 
                     handler.handleSuccess {
 
-                        isSubcategoryProductsNextAvailable = it.next != null
+                        isSubcategoryProductsNextAvailable = it!!.next != null
 
                         _topSubCategories.add(subCategory)
                         _subCategoryProducts.addAll(it.results)
@@ -328,13 +354,13 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it.error
+                        _error.value = it!!.error
                         _loading.value = false
                         isStillCalling = false
                     }
 
                     handler.handleServerError {
-                        _error.value = "Server error: $it"
+                        _error.value = "$ServerError$it"
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -345,7 +371,7 @@ class ProductsViewModel @Inject constructor(
                                 isStillCalling = true
                             } else {
                                 isStillCalling = false
-                                _error.value = "Something went wrong"
+                                _error.value = SomethingWentWrong
                                 SharedPrefs(context).saveBoolean(IsSignedIn, false)
                                 _goLogin.value = true
                             }
@@ -376,12 +402,22 @@ class ProductsViewModel @Inject constructor(
 
         when (lastAction) {
             1 -> {
-                productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.ByCategory)
+                productsScreenState.value =
+                    ProductsScreenState(false, null, ProductSearchType.ByCategory)
             }
+
             2 -> {
                 val lastData = topSubCategories.last()
-                getSubCategory(Category(lastData.id, lastData.name, lastData.productsCount, lastData.productsCount), true)
+                getSubCategory(
+                    Category(
+                        lastData.id,
+                        lastData.name,
+                        lastData.productsCount,
+                        lastData.productsCount
+                    ), true
+                )
             }
+
             else -> {
                 activity.finish()
             }

@@ -1,9 +1,10 @@
 package uz.nlg.mega.screens.bottom
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,17 +33,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import uz.nlg.mega.R
-import uz.nlg.mega.model.Seller
+import uz.nlg.mega.data.local.SharedPrefs
+import uz.nlg.mega.mvvm.OrderViewModel
 import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.screens.destinations.AddProductScreenDestination
 import uz.nlg.mega.ui.theme.Color_E8
@@ -53,7 +57,10 @@ import uz.nlg.mega.ui.theme.RedTextColor
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.ProfileName
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.OrderProductItem
 import uz.nlg.mega.views.SecondaryButtonWithIcon
 import uz.nlg.mega.views.SimpleTextField
@@ -64,15 +71,26 @@ val isMoreShow = mutableStateOf(false)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OrdersScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: OrderViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(true) {
+        viewModel.getCart()
+    }
 
     var isMoreOpen by remember {
         mutableStateOf(isMoreShow.value)
     }
 
-    var seller by remember {
-        mutableStateOf<Seller?>(Seller(firstName = "Ogabek", 1, "Matyakubov"))
+    if (viewModel.isGoLogin.value) {
+        navigateToLoginScreen(LocalContext.current)
+    }
+
+    if (viewModel.errorMessage.value != null) {
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+        viewModel.errorMessage.value = null
     }
 
     Box(
@@ -82,14 +100,17 @@ fun OrdersScreen(
         Column {
             SimpleTopSection(
                 title = stringResource(id = R.string.str_order),
-                name = "Ogabek Matyakubov"
+                name = SharedPrefs(LocalContext.current).getString(ProfileName)
+                    ?: stringResource(R.string.str_user)
             )
 
-            if (OrderProducts.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (viewModel.isLoading.value) {
+                    LoadingView()
+                } else {
                     LazyColumn(
                         modifier = Modifier
                             .padding(bottom = 65.dp)
@@ -99,15 +120,15 @@ fun OrdersScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(PADDING_VALUE),
-                                horizontalArrangement = if (seller == null) Arrangement.End else Arrangement.Center,
+                                horizontalArrangement = if (viewModel.data.value.client == null) Arrangement.End else Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                if (seller != null) SimpleTextField(
+                                if (viewModel.data.value.client != null) SimpleTextField(
                                     modifier = Modifier
                                         .weight(1f),
                                     hint = "",
-                                    text = "${seller!!.firstName} ${seller!!.lastName}",
+                                    text = "${viewModel.data.value.client!!.firstName} ${viewModel.data.value.client!!.lastName}",
                                     backgroundColor = Color.White,
                                     strokeColor = Color_E8,
                                     textColor = ItemTextColor,
@@ -119,7 +140,7 @@ fun OrdersScreen(
                                         .padding(start = 16.dp),
                                     text = stringResource(id = R.string.str_customers_list),
                                     icon = painterResource(id = R.drawable.customers),
-                                    isCustomerHave = seller != null
+                                    isCustomerHave = viewModel.data.value.client != null
                                 ) {
                                     navigator.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
                                 }
@@ -127,10 +148,7 @@ fun OrdersScreen(
                             }
                         }
                         items(
-                            items = OrderProducts,
-                            key = { item ->
-                                item.id
-                            }
+                            viewModel.data.value.cartItems
                         ) { item ->
                             RevealSwipe(
                                 modifier = Modifier,
@@ -147,7 +165,7 @@ fun OrdersScreen(
                                     )
                                 },
                                 onBackgroundEndClick = {
-
+                                    viewModel.deleteChequeItem(item.id)
                                 },
                                 backgroundCardEndColor = RedTextColor,
                                 animateBackgroundCardColor = true,
@@ -158,24 +176,10 @@ fun OrdersScreen(
                         }
                     }
                 }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(75.dp, 75.dp),
-                        painter = painterResource(id = R.drawable.empty_icon),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit
-                    )
-                }
             }
         }
 
-        if (OrderProducts.isNotEmpty()) Box(
+        if (viewModel.data.value.cartItems.isNotEmpty()) Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent),
@@ -191,7 +195,7 @@ fun OrdersScreen(
                 Text(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
-                    text = stringResource(id = R.string.str_total_price) + " ${80000}",
+                    text = stringResource(id = R.string.str_total_price) + " ${viewModel.data.value.totalPrice}",
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
@@ -216,7 +220,14 @@ fun OrdersScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        isMoreOpen = !isMoreOpen
+                        isMoreShow.value = isMoreOpen
+                    },
                 horizontalAlignment = Alignment.End
             ) {
 

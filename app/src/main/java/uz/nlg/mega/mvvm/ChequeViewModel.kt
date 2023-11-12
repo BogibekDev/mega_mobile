@@ -17,6 +17,8 @@ import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.ServerError
+import uz.nlg.mega.utils.SomethingWentWrong
 import uz.nlg.mega.utils.printError
 import uz.nlg.mega.utils.refreshToken
 import javax.inject.Inject
@@ -70,7 +72,7 @@ class ChequeViewModel
 
                     handler.handleSuccess {
 
-                        isNextAvailable = it.next != null
+                        isNextAvailable = it!!.next != null
 
                         if (isTypeChanged) _data.clear()
 
@@ -81,7 +83,7 @@ class ChequeViewModel
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it.detail
+                        _error.value = it!!.detail
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -94,7 +96,7 @@ class ChequeViewModel
                                 isStillCalling = true
                             } else {
                                 isStillCalling = false
-                                _error.value = "Something went wrong"
+                                _error.value = SomethingWentWrong
                                 SharedPrefs(context).saveBoolean(IsSignedIn, false)
                                 _goLogin.value = true
                             }
@@ -103,7 +105,7 @@ class ChequeViewModel
                     }
 
                     handler.handleServerError {
-                        _error.value = "Server error: $it"
+                        _error.value = "$ServerError$it"
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -142,7 +144,7 @@ class ChequeViewModel
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it.error ?: it.detail ?: it.message ?: it.code
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code
                     _loading.value = false
                     isStillCalling = false
                 }
@@ -155,7 +157,7 @@ class ChequeViewModel
                             isStillCalling = true
                         } else {
                             isStillCalling = false
-                            _error.value = "Something went wrong"
+                            _error.value = SomethingWentWrong
                             SharedPrefs(context).saveBoolean(IsSignedIn, false)
                             _goLogin.value = true
                         }
@@ -164,7 +166,7 @@ class ChequeViewModel
                 }
 
                 handler.handleServerError {
-                    _error.value = "Server error: $it"
+                    _error.value = "$ServerError$it"
                     _loading.value = false
                     isStillCalling = false
                 }

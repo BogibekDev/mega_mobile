@@ -27,5 +27,5 @@ data class Client(
     @SerializedName("last_name")
     var lastName: String,
     @SerializedName("phone_number")
-    var phoneNumber: String
+    var phoneNumber: String?
 ) : Serializable

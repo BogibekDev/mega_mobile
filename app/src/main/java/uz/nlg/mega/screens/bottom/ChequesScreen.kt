@@ -106,7 +106,7 @@ fun ChequesScreen(
             SimpleTopSection(
                 title = stringResource(id = R.string.str_cheques),
                 name = SharedPrefs(LocalContext.current).getString(ProfileName)
-                    ?: stringResource(R.string.str_user),
+                    ?: stringResource(R.string.str_user)
             )
 
             Spacer(modifier = Modifier.height(PADDING_VALUE))

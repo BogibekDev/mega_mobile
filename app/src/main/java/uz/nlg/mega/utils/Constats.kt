@@ -100,3 +100,6 @@ const val IsSignedIn = "isSignedIn"
 const val ProfileName = "profileName"
 
 val TopFirstSubCategory = Subcategory(0, "Kategoriyalar", 0)
+
+const val SomethingWentWrong = ""
+const val ServerError = ""

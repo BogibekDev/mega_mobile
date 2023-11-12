@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import uz.nlg.mega.model.CartResponse
 import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.ChequeDetailResponse
@@ -100,5 +101,12 @@ interface ApiServiceWithAuth {
         @Query("payment_type") paymentType: String = "debt",
     )
 
+    @GET("cart/")
+    suspend fun getCart(): Response<CartResponse>
+
+    @DELETE("cart-items/{id}/")
+    suspend fun deleteCartItem(
+        @Path("id") id: Int
+    ): Response<Unit>
 
 }
