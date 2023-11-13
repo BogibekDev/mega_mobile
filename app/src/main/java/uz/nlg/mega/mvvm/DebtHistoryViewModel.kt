@@ -75,7 +75,8 @@ class DebtHistoryViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it?.detail ?: it?.error ?: it?.code ?: it?.message ?: it?.phoneNumber?.get(0)
+                        _error.value = it?.detail ?: it?.error ?: it?.code ?: it?.message
+                                ?: it?.phoneNumber?.get(0)
                         _loading.value = false
                         isStillCalling = false
                     }
