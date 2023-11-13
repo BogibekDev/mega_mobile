@@ -49,13 +49,3 @@ data class ChequeProduct(
     val name: String
 ) : Serializable
 
-data class Payment(
-    @SerializedName("created_at")
-    val createdAt: String,
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("payment_type")
-    val paymentType: String,
-    @SerializedName("price")
-    val price: Int
-) : Serializable

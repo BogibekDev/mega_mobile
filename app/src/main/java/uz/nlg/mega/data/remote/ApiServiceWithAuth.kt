@@ -14,6 +14,7 @@ import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.ChequeDetailResponse
 import uz.nlg.mega.model.Client
 import uz.nlg.mega.model.Pagination
+import uz.nlg.mega.model.Payment
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
 import uz.nlg.mega.model.Refresh
@@ -96,10 +97,12 @@ interface ApiServiceWithAuth {
 
 
     @GET("payments/")
-    suspend fun getDebtHistory(
-        @Query("client") client: Int,
-        @Query("payment_type") paymentType: String = "debt",
-    )
+    suspend fun getPaymentHistoryByClient(
+        @Query("client") client: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int = 20,
+        //@Query("payment_type") paymentType: String = "debt",
+    ): Response<Pagination<Payment>>
 
     @GET("cart/")
     suspend fun getCart(): Response<CartResponse>

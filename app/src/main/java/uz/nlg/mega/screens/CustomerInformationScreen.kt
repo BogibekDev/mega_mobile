@@ -215,7 +215,6 @@ fun CustomerInformationScreen(
                             backgroundColor = MainColor,
                             strokeColor = MainColor
                         ) {
-
                             if (name.isNotBlank() && phoneNumber.isNotBlank() && surname.isNotBlank()) {
                                 client.firstName = name.trim()
                                 client.lastName = surname.trim()
@@ -302,7 +301,7 @@ fun CustomerInformationScreen(
                                 backgroundColor = Color.White,
                                 strokeColor = MainColor
                             ) {
-                                navigator!!.screenNavigate(CreditsHistoryScreenDestination)
+                                navigator!!.screenNavigate(CreditsHistoryScreenDestination(clientId = client.id!!))
                             }
                         }
                     }

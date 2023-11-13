@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import uz.nlg.mega.model.Cheque
+import uz.nlg.mega.model.Payment
 import uz.nlg.mega.ui.theme.Color_11
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
@@ -28,7 +28,7 @@ import uz.nlg.mega.utils.moneyType
 
 @Composable
 fun CreditItem(
-    cheque: Cheque
+    payment: Payment
 ) {
     Box(
         modifier = Modifier
@@ -43,7 +43,7 @@ fun CreditItem(
             ) {
                 Column {
                     Text(
-                        text = "№ ${cheque.serialNumber}",
+                        text = "№ ${payment.serialNumber}",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
@@ -51,7 +51,7 @@ fun CreditItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = cheque.client?.firstName?:"",
+                        text = payment.client?.firstName ?: "",
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
@@ -62,15 +62,15 @@ fun CreditItem(
                     horizontalAlignment = Alignment.End
                 ) {
                     Text(
-                        text = cheque.chequeSum.moneyType(),
+                        text = payment.price.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
-                        color = if (cheque.chequeSum > 0L) GreenColor else RedTextColor
+                        color = if (payment.price > 0L) GreenColor else RedTextColor
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = dateToString(cheque.createdAt),
+                        text = dateToString(payment.createdAt),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Normal,
                         fontSize = 13.sp,
