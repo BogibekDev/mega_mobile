@@ -48,16 +48,19 @@ import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.mvvm.OrderViewModel
 import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.screens.destinations.AddProductScreenDestination
+import uz.nlg.mega.screens.destinations.PaymentScreenDestination
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.DarkBlueMainColor
 import uz.nlg.mega.ui.theme.DialogMoreBackgroundColor
 import uz.nlg.mega.ui.theme.ItemTextColor
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.ui.theme.RedTextColor
+import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.OrderProducts
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.ProfileName
+import uz.nlg.mega.utils.moneyType
 import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.LoadingView
@@ -91,6 +94,11 @@ fun OrdersScreen(
         Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
             .show()
         viewModel.errorMessage.value = null
+    }
+
+    if (viewModel.goPayment.value) {
+        navigator.screenNavigate(PaymentScreenDestination(viewModel.cart.value!!, viewModel.data.value.totalPrice))
+        viewModel.goPayment.value = false
     }
 
     Box(
@@ -142,7 +150,7 @@ fun OrdersScreen(
                                     icon = painterResource(id = R.drawable.customers),
                                     isCustomerHave = viewModel.data.value.client != null
                                 ) {
-                                    navigator.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
+                                    navigator.screenNavigate(AddCustomerScreenDestination())
                                 }
 
                             }
@@ -195,7 +203,7 @@ fun OrdersScreen(
                 Text(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
-                    text = stringResource(id = R.string.str_total_price) + " ${viewModel.data.value.totalPrice}",
+                    text = stringResource(id = R.string.str_total_price) + " ${viewModel.data.value.totalPrice.moneyType()}",
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
@@ -267,6 +275,7 @@ fun OrdersScreen(
                                     .clickable {
                                         isMoreOpen = !isMoreOpen
                                         isMoreShow.value = isMoreOpen
+                                        viewModel.saveCheque(ChequeType.Returned)
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -311,6 +320,7 @@ fun OrdersScreen(
                                     .clickable {
                                         isMoreOpen = !isMoreOpen
                                         isMoreShow.value = isMoreOpen
+                                        viewModel.saveCheque(ChequeType.Pending)
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -353,7 +363,7 @@ fun OrdersScreen(
                                     .clip(CircleShape)
                                     .background(Color.White)
                                     .clickable {
-//                                        navigator.screenNavigate(PaymentScreenDestination(Cheques.first()))
+                                        viewModel.goPayment()
                                         isMoreOpen = !isMoreOpen
                                         isMoreShow.value = isMoreOpen
                                     },

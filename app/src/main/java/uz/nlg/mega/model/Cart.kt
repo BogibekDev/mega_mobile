@@ -33,3 +33,33 @@ data class CartProduct(
     @SerializedName("first_quantity_type")
     val quantityType: String
 ): Serializable
+
+data class CartClient(
+    val client: Int?
+)
+
+data class CartAddProduct(
+    @SerializedName("product")
+    val product: Int,
+    @SerializedName("quantity")
+    val quantity: Int,
+    @SerializedName("quantity_type")
+    val quantityType: String,
+    @SerializedName("sold_price")
+    val soldPrice: Long,
+    @SerializedName("id")
+    val id: Int = 0
+): Serializable
+
+data class Cart(
+    @SerializedName("id")
+    val id: Int = 0,
+    @SerializedName("client")
+    val client: Int?,
+    @SerializedName("status")
+    var status: String,
+    @SerializedName("cheque_items")
+    val chequeItems: ArrayList<CartAddProduct>,
+    @SerializedName("payments")
+    var payments: ArrayList<ChequePayment>
+): Serializable

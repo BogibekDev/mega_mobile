@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Job
 import uz.nlg.mega.R
 import uz.nlg.mega.model.Category
+import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.ProductsScreenState
 import uz.nlg.mega.model.Subcategory
 import uz.nlg.mega.mvvm.ProductsViewModel
@@ -61,7 +62,9 @@ fun ProductsScreen(
     val activity = LocalContext.current as Activity
 
     BackHandler {
-        viewModel.onBackPressed(activity)
+        viewModel.onBackPressed {
+            activity.finish()
+        }
     }
 
     var searchJob by remember {
@@ -132,7 +135,8 @@ fun ProductsScreen(
 fun ProductsCategorySection(
     viewModel: ProductsViewModel,
     category: Category,
-    searchText: String
+    searchText: String,
+    onClick: (Product) -> Unit = {}
 ) {
     Column {
         if (viewModel.topSubCategories.isNotEmpty()) LazyRow(
@@ -173,6 +177,11 @@ fun ProductsCategorySection(
                                     it.productsCount
                                 )
                             )
+                            productsScreenState.value.subCategory = Subcategory(
+                                it.id,
+                                it.name,
+                                it.productsCount
+                            )
                         }
                     }
                 }
@@ -199,11 +208,13 @@ fun ProductsCategorySection(
                     ProductItem(
                         search = searchText,
                         product = viewModel.subCategoryProducts[index]
-                    ) {}
+                    ) {
+                        onClick.invoke(it)
+                    }
                 }
                 item {
                     if (viewModel.subCategoryProducts.size >= 15) LaunchedEffect(true) {
-//                        viewModel.getSubCategoryProducts()
+                        viewModel.getSubCategoryProducts(productsScreenState.value.subCategory!!)
                     }
                 }
             }
@@ -215,7 +226,8 @@ fun ProductsCategorySection(
 @Composable
 fun SimpleProductsSection(
     viewModel: ProductsViewModel,
-    searchText: String
+    searchText: String,
+    onClick: (Product) -> Unit = {}
 ) {
 
     LaunchedEffect(true) {
@@ -326,7 +338,9 @@ fun SimpleProductsSection(
                     ProductItem(
                         search = searchText,
                         product = viewModel.products[index]
-                    ) {}
+                    ) {
+                        onClick.invoke(it)
+                    }
                 }
                 item {
                     if (viewModel.products.size >= 15) LaunchedEffect(true) {

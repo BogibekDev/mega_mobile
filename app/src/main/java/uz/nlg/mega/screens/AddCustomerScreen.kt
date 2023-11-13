@@ -1,5 +1,6 @@
 package uz.nlg.mega.screens
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,24 +23,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.Job
 import uz.nlg.mega.R
+import uz.nlg.mega.mvvm.AddCustomerViewModel
 import uz.nlg.mega.ui.theme.MainColor
+import uz.nlg.mega.utils.FilterMinusBalance
+import uz.nlg.mega.utils.FilterPlusBalance
 import uz.nlg.mega.utils.FilterType
 import uz.nlg.mega.utils.PADDING_VALUE
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.views.CustomerFilterView
+import uz.nlg.mega.views.CustomerItem
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.SearchAndFilterTopSection
 
 @Destination
 @Composable
 fun AddCustomerScreen(
     navigator: DestinationsNavigator? = null,
-    chequeId: Int
+    viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
 
     var searchText by remember {
@@ -52,6 +62,48 @@ fun AddCustomerScreen(
     var filterType by remember {
         mutableStateOf<FilterType>(FilterType.None)
     }
+
+    var searchJob by remember {
+        mutableStateOf<Job>(Job())
+    }
+
+    if (viewModel.isAdded.value) navigator!!.navigateUp()
+
+    LaunchedEffect(filterType.status) {
+        val status = when (filterType.status) {
+            null -> null
+            true -> FilterPlusBalance
+            else -> FilterMinusBalance
+        }
+        searchJob.cancel()
+        searchJob = viewModel.getCustomers(
+            search = searchText,
+            isSearched = true,
+            ordering = status
+        )
+    }
+
+    LaunchedEffect(searchText) {
+        val status = when (filterType.status) {
+            null -> null
+            true -> FilterPlusBalance
+            else -> FilterMinusBalance
+        }
+        searchJob.cancel()
+        searchJob = viewModel.getCustomers(
+            search = searchText,
+            isSearched = true,
+            ordering = status
+        )
+    }
+
+    if (viewModel.errorMessage.value != null) {
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+        viewModel.errorMessage.value = null
+    }
+
+    if (viewModel.isGoLogin.value) navigateToLoginScreen(LocalContext.current)
 
     Box(
         modifier = Modifier
@@ -75,19 +127,31 @@ fun AddCustomerScreen(
                 searchText = it
             }
 
-            LazyColumn {
-//                Customers.forEach {
-//                    item {
-//                        CustomerItem(
-//                            searchText = searchText,
-//                            customer = it
-//                        ) {
-//
-//                        }
-//                    }
-//                }
+            if (viewModel.isLoading.value) LoadingView()
+            else LazyColumn {
+                items(viewModel.data.size) {
+                    CustomerItem(
+                        customer = viewModel.data[it],
+                        onItemClick = { client ->
+                            viewModel.addCustomerToCheque(client.id!!)
+                        }
+                    )
+                }
+                item {
+                    if (viewModel.data.size >= 20) LaunchedEffect(true) {
+                        val status = when (filterType.status) {
+                            null -> null
+                            true -> FilterPlusBalance
+                            else -> FilterMinusBalance
+                        }
+                        viewModel.getCustomers(
+                            search = searchText,
+                            isSearched = false,
+                            ordering = status
+                        )
+                    }
+                }
             }
-
         }
 
         Box(
@@ -140,12 +204,4 @@ fun AddCustomerScreen(
         }
 
     }
-}
-
-@Preview
-@Composable
-fun AddCustomerScreenPreview() {
-    AddCustomerScreen(
-        chequeId = 1
-    )
 }

@@ -18,7 +18,7 @@ data class ChequeDetailResponse(
     @SerializedName("items_count")
     val itemsCount: Int,
     @SerializedName("payments")
-    val payments: ArrayList<Payment>,
+    val chequePayments: ArrayList<ChequePayment>,
     @SerializedName("seller")
     val seller: Seller,
     @SerializedName("serial_number")
@@ -49,3 +49,13 @@ data class ChequeProduct(
     val name: String
 ) : Serializable
 
+data class ChequePayment(
+    @SerializedName("created_at")
+    val createdAt: String,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("payment_type")
+    val paymentType: String,
+    @SerializedName("price")
+    val price: Long
+) : Serializable

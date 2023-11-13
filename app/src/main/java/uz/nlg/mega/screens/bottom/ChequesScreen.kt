@@ -187,7 +187,7 @@ fun ChequesScreen(
                         .fillMaxSize(),
                     state = rememberLazyListState()
                 ) {
-                    items(viewModel.data.size - 1) { position ->
+                    items(viewModel.data.size) { position ->
                         Box(
                             modifier = Modifier.padding(
                                 top = 5.dp,
@@ -213,29 +213,6 @@ fun ChequesScreen(
                     }
 
                     item {
-                        Box(
-                            modifier = Modifier
-                                .padding(
-                                    top = 5.dp,
-                                    bottom = 5.dp,
-                                    start = PADDING_VALUE,
-                                    end = PADDING_VALUE,
-                                )
-                        ) {
-                            ChequeItem(
-                                cheque = viewModel.data.last(),
-                                onDeleteClick = {
-                                    deleteCheque.value = it
-                                    isShowDialog.value = true
-                                    showDialog.value = true
-                                },
-                                onItemClick = {
-                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it))
-                                }
-                            )
-
-                        }
-
                         if (viewModel.data.size >= 15) LaunchedEffect(true) {
                             viewModel.getCheques(chequeType.status)
                         }

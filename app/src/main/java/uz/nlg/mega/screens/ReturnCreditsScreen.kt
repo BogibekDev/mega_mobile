@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,16 +65,28 @@ fun ReturnCreditsScreen(
         mutableStateOf<Customer?>(null)
     }
 
-    var priceCash by remember {
+    var cash by remember {
         mutableStateOf(0L)
     }
 
-    var priceTerminal by remember {
+    var online by remember {
         mutableStateOf(0L)
     }
 
-    var priceOnlinePayment by remember {
+    var humo by remember {
         mutableStateOf(0L)
+    }
+
+    var uzcard by remember {
+        mutableStateOf(0L)
+    }
+
+    var totalPrice by remember {
+        mutableStateOf(0L)
+    }
+
+    LaunchedEffect(cash, online, humo, uzcard) {
+        totalPrice = cash + online + humo + uzcard
     }
 
     Box(
@@ -121,7 +134,7 @@ fun ReturnCreditsScreen(
                             icon = painterResource(id = R.drawable.customers),
                             isCustomerHave = customer != null
                         ) {
-                            navigator!!.screenNavigate(AddCustomerScreenDestination(chequeId = 1))
+                            navigator!!.screenNavigate(AddCustomerScreenDestination())
                         }
 
                     }
@@ -166,10 +179,10 @@ fun ReturnCreditsScreen(
                             PaymentItem(
                                 modifier = Modifier
                                     .weight(.1f),
-                                title = stringResource(id = PaymentType.Terminal.title),
-                                isSelected = paymentMethods.contains(PaymentType.Terminal)
+                                title = stringResource(id = PaymentType.OnlinePayment.title),
+                                isSelected = paymentMethods.contains(PaymentType.OnlinePayment)
                             ) {
-                                val type = PaymentType.Terminal
+                                val type = PaymentType.OnlinePayment
                                 if (paymentMethods.contains(type)) {
                                     if (paymentMethods.size <= 1)
                                         return@PaymentItem false
@@ -189,10 +202,10 @@ fun ReturnCreditsScreen(
                             PaymentItem(
                                 modifier = Modifier
                                     .weight(.1f),
-                                title = stringResource(id = PaymentType.OnlinePayment.title),
-                                isSelected = paymentMethods.contains(PaymentType.OnlinePayment)
+                                title = stringResource(id = PaymentType.Humo.title),
+                                isSelected = paymentMethods.contains(PaymentType.Humo)
                             ) {
-                                val type = PaymentType.OnlinePayment
+                                val type = PaymentType.Humo
                                 if (paymentMethods.contains(type)) {
                                     if (paymentMethods.size <= 1)
                                         return@PaymentItem false
@@ -204,7 +217,23 @@ fun ReturnCreditsScreen(
                             }
 
                             Spacer(modifier = Modifier.width(10.dp))
-                            Spacer(modifier = Modifier.weight(.1f))
+
+                            PaymentItem(
+                                modifier = Modifier
+                                    .weight(.1f),
+                                title = stringResource(id = PaymentType.UzCard.title),
+                                isSelected = paymentMethods.contains(PaymentType.UzCard)
+                            ) {
+                                val type = PaymentType.UzCard
+                                if (paymentMethods.contains(type)) {
+                                    if (paymentMethods.size <= 1)
+                                        return@PaymentItem false
+                                    paymentMethods.remove(type)
+                                } else
+                                    paymentMethods.add(type)
+
+                                return@PaymentItem true
+                            }
 
                         }
                     }
@@ -238,36 +267,7 @@ fun ReturnCreditsScreen(
                                     textColor = ItemTextColor,
                                     textLimit = 25
                                 ) {
-                                    priceCash = it
-                                }
-                            }
-                        }
-
-                        AnimatedVisibility(paymentMethods.contains(PaymentType.Terminal)) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = PADDING_VALUE)
-                            ) {
-                                Text(
-                                    text = stringResource(id = PaymentType.Terminal.title),
-                                    fontFamily = MainFont,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 14.sp,
-                                    color = Color_66
-                                )
-
-                                Spacer(Modifier.height(10.dp))
-
-                                PriceTextField(
-                                    modifier = Modifier,
-                                    hint = "0",
-                                    text = "",
-                                    backgroundColor = Color.White,
-                                    strokeColor = Color_E8,
-                                    textColor = ItemTextColor,
-                                    textLimit = 25
-                                ) {
-                                    priceTerminal = it
+                                    cash = it
                                 }
                             }
                         }
@@ -296,7 +296,65 @@ fun ReturnCreditsScreen(
                                     textColor = ItemTextColor,
                                     textLimit = 25
                                 ) {
-                                    priceOnlinePayment = it
+                                    online = it
+                                }
+                            }
+                        }
+
+                        AnimatedVisibility(paymentMethods.contains(PaymentType.Humo)) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = PADDING_VALUE)
+                            ) {
+                                Text(
+                                    text = stringResource(id = PaymentType.Humo.title),
+                                    fontFamily = MainFont,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = Color_66
+                                )
+
+                                Spacer(Modifier.height(10.dp))
+
+                                PriceTextField(
+                                    modifier = Modifier,
+                                    hint = "0",
+                                    text = "",
+                                    backgroundColor = Color.White,
+                                    strokeColor = Color_E8,
+                                    textColor = ItemTextColor,
+                                    textLimit = 25
+                                ) {
+                                    humo = it
+                                }
+                            }
+                        }
+
+                        AnimatedVisibility(paymentMethods.contains(PaymentType.UzCard)) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = PADDING_VALUE)
+                            ) {
+                                Text(
+                                    text = stringResource(id = PaymentType.UzCard.title),
+                                    fontFamily = MainFont,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = Color_66
+                                )
+
+                                Spacer(Modifier.height(10.dp))
+
+                                PriceTextField(
+                                    modifier = Modifier,
+                                    hint = "0",
+                                    text = "",
+                                    backgroundColor = Color.White,
+                                    strokeColor = Color_E8,
+                                    textColor = ItemTextColor,
+                                    textLimit = 25
+                                ) {
+                                    uzcard = it
                                 }
                             }
                         }
@@ -341,7 +399,7 @@ fun ReturnCreditsScreen(
                     )
 
                     Text(
-                        text = (priceCash + priceTerminal + priceOnlinePayment).moneyType(),
+                        text = totalPrice.moneyType(),
                         fontFamily = MainFont,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -356,7 +414,7 @@ fun ReturnCreditsScreen(
                         .fillMaxWidth()
                         .padding(horizontal = PADDING_VALUE)
                         .padding(bottom = PADDING_VALUE),
-                    text = stringResource(id = R.string.str_pay),
+                    text = stringResource(id = R.string.str_pay) + "   ${totalPrice.moneyType()}",
                     textColor = Color.White,
                     textSize = 16.sp,
                     backgroundColor = MainColor,

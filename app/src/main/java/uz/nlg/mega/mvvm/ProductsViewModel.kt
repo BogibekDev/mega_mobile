@@ -1,7 +1,6 @@
 package uz.nlg.mega.mvvm
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -169,8 +168,8 @@ class ProductsViewModel @Inject constructor(
 
             try {
 
-                var isTrue = true
-                while (isTrue) {
+                var isStillCalling = true
+                while (isStillCalling) {
 
                     val handler = NetworkHandler(
                         repository.getCategories(categoryPage),
@@ -191,27 +190,27 @@ class ProductsViewModel @Inject constructor(
                         productPage = 0
 
                         _loading.value = false
-                        isTrue = false
+                        isStillCalling = false
                     }
 
                     handler.handleFailure {
                         _error.value = it!!.detail
                         _loading.value = false
-                        isTrue = false
+                        isStillCalling = false
                     }
 
                     handler.handleServerError {
                         _error.value = "$ServerError$it"
                         _loading.value = false
-                        isTrue = false
+                        isStillCalling = false
                     }
 
                     handler.handleRefreshToken(this) {
                         refreshToken(refreshRepository, securePrefs) {
                             if (it) {
-                                isTrue = true
+                                isStillCalling = true
                             } else {
-                                isTrue = false
+                                isStillCalling = false
                                 _error.value = SomethingWentWrong
                                 SharedPrefs(context).saveBoolean(IsSignedIn, false)
                                 _goLogin.value = true
@@ -390,7 +389,7 @@ class ProductsViewModel @Inject constructor(
         }
     }
 
-    fun onBackPressed(activity: Activity) = viewModelScope.launch {
+    fun onBackPressed(onBackPressed: () -> Unit) = viewModelScope.launch {
 
         _loading.value = true
 
@@ -419,7 +418,7 @@ class ProductsViewModel @Inject constructor(
             }
 
             else -> {
-                activity.finish()
+                onBackPressed.invoke()
             }
         }
 

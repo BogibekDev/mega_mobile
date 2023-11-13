@@ -217,7 +217,7 @@ fun ChequeDetailsScreen(
                                     color = Color_66
                                 )
                                 Text(
-                                    text = viewModel.data.value!!.client.phoneNumber?:"",
+                                    text = viewModel.data.value!!.client.phoneNumber ?: "",
                                     fontFamily = MainFont,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 14.sp,
@@ -317,7 +317,7 @@ fun ChequeDetailsScreen(
 
                         Column(modifier = Modifier.fillMaxWidth()) {
                             val size =
-                                if (viewModel.data.value!!.chequeItems.size >= 3) 2 else viewModel.data.value!!.chequeItems.size
+                                if (viewModel.data.value!!.chequeItems.size >= 3) 3 else viewModel.data.value!!.chequeItems.size
                             for (i in 0 until size) {
                                 ChequeProductsItem(item = viewModel.data.value!!.chequeItems[i])
                             }
@@ -325,7 +325,7 @@ fun ChequeDetailsScreen(
 
                         Spacer(modifier = Modifier.height(PADDING_VALUE))
 
-                        if (viewModel.data.value!!.chequeItems.size >= 1)
+                        if (viewModel.data.value!!.chequeItems.size >= 2)
                             SecondaryButton(
                                 modifier = Modifier,
                                 text = stringResource(R.string.str_see_more),

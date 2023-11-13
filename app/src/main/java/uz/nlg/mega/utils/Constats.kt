@@ -82,9 +82,11 @@ sealed class ChequeType(val status: String) : Serializable {
 
 sealed class PaymentType(val title: Int) : Serializable {
     data object Cash : PaymentType(title = R.string.str_cash)
-    data object Terminal : PaymentType(title = R.string.str_terminal)
     data object OnlinePayment : PaymentType(title = R.string.str_online_payment)
     data object Credit : PaymentType(title = R.string.str_credit)
+    data object Humo : PaymentType(title = R.string.str_humo)
+
+    data object UzCard: PaymentType(title = R.string.str_uzcard)
 }
 
 enum class CreditType : Serializable {
@@ -101,5 +103,13 @@ const val ProfileName = "profileName"
 
 val TopFirstSubCategory = Subcategory(0, "Kategoriyalar", 0)
 
-const val SomethingWentWrong = ""
-const val ServerError = ""
+const val SomethingWentWrong = "Xatolik sodir bo'ldi"
+const val ServerError = "Serverda xatolik sodir bo'ldi, Xatolik codi: "
+const val OrderCustomerNullError = "Iltimos mijozni tanlang"
+const val OrderNoProductError = "Savatchangiz hali bosh, iltimos uni to'ldiring"
+const val PaymentNoEqualSum = "Kiritilgan summa tavorlar narxidan kam bo'lmasligi kerak"
+const val AddProductQuantityError = "Tovar miqdorini kiriting"
+const val AddProductPriceError = "Tovar miqdorini kiriting"
+
+const val FilterMinusBalance = "-balance"
+const val FilterPlusBalance = "balance"

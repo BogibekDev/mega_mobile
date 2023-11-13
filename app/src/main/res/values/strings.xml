@@ -89,4 +89,7 @@
     <string name="str_user">Foydalanuvchi</string>
     <string name="str_enter_value_warning">Xamma maydonlarni to\'ldiring</string>
     <string name="str_info_save">Mijoz muvaffaqiyatli saqlandi</string>
+    <string name="str_uzcard">uzcard</string>
+    <string name="str_humo">humo</string>
+    <string name="str_product_added">Tovar savatga qo\'shildi</string>
 </resources>
