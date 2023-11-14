@@ -93,4 +93,6 @@
     <string name="str_humo">Humo</string>
     <string name="str_product_added">Tovar savatga qo\'shildi</string>
     <string name="str_payment_done">Sizning to\'lovingiz amalga oshirildi.</string>
+    <string name="str_close">Yopish</string>
+    <string name="str_more_info">Batafsil...</string>
 </resources>

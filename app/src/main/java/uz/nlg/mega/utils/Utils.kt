@@ -130,14 +130,6 @@ fun printError(e: Exception) {
     Log.e(TAG, "->->->->->->->->->->->->->->-> ERROR CLOSED <-<-<-<-<-<-<-<-<-<-<-<-<-<-<-")
 
 }
-
-fun findChequeType(status: ChequeType) = when (status) {
-    ChequeType.Pending -> R.string.str_saved
-    ChequeType.Returned -> R.string.str_returned
-    ChequeType.Done -> R.string.str_paid
-    ChequeType.None -> R.string.str_empty
-}
-
 fun findChequeType(status: String) = when (status) {
     ChequeType.Pending.status -> R.string.str_saved
     ChequeType.Returned.status -> R.string.str_returned
@@ -164,4 +156,14 @@ fun navigateToLoginScreen(context: Context) {
         activity?.startActivity(this)
     }
     activity?.finish()
+}
+
+fun String.asPaymentType(): Int {
+    return when (this) {
+        "cash" -> PaymentType.Cash.title
+        "online" -> PaymentType.OnlinePayment.title
+        "humo" -> PaymentType.Humo.title
+        "uzcard" -> PaymentType.UzCard.title
+        else -> PaymentType.Credit.title
+    }
 }

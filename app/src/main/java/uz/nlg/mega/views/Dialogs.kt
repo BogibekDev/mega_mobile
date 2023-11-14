@@ -20,11 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -115,16 +113,4 @@ fun DialogMessage(
             }
         }
     }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DeleteDialogPreview() {
-    DialogMessage(
-        value = stringResource(id = R.string.str_delete_title),
-        icon = painterResource(id = R.drawable.ic_delete_blue),
-        setShowDialog = {  },
-        yesClicked = {}
-    )
 }

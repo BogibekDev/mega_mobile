@@ -204,7 +204,7 @@ fun ChequesScreen(
                                     showDialog.value = true
                                 },
                                 onItemClick = {
-                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it))
+                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it.id))
                                 }
                             )
 
