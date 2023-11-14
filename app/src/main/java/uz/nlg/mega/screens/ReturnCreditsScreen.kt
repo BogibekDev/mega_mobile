@@ -1,5 +1,6 @@
 package uz.nlg.mega.screens
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -24,16 +26,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import uz.nlg.mega.R
-import uz.nlg.mega.model.Customer
+import uz.nlg.mega.data.local.SharedPrefs
+import uz.nlg.mega.model.ChequePayment
+import uz.nlg.mega.model.Credit
+import uz.nlg.mega.mvvm.PaymentViewModel
 import uz.nlg.mega.screens.destinations.AddCustomerScreenDestination
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E6
@@ -44,8 +53,10 @@ import uz.nlg.mega.utils.MainFont
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.PaymentType
 import uz.nlg.mega.utils.moneyType
+import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.BackTopSection
+import uz.nlg.mega.views.LoadingView
 import uz.nlg.mega.views.MainButton
 import uz.nlg.mega.views.PaymentItem
 import uz.nlg.mega.views.PriceTextField
@@ -55,15 +66,15 @@ import uz.nlg.mega.views.SimpleTextField
 @Destination
 @Composable
 fun ReturnCreditsScreen(
-    navigator: DestinationsNavigator? = null
+    navigator: DestinationsNavigator? = null,
+    viewModel: PaymentViewModel = hiltViewModel()
 ) {
     val paymentMethods = remember {
         mutableStateListOf<PaymentType>(PaymentType.Cash)
     }
 
-    val customer by remember {
-        mutableStateOf<Customer?>(null)
-    }
+    val customerName = SharedPrefs(LocalContext.current).getString("clientName")
+    val customerId = SharedPrefs(LocalContext.current).getInt("clientId")
 
     var cash by remember {
         mutableStateOf(0L)
@@ -85,8 +96,43 @@ fun ReturnCreditsScreen(
         mutableStateOf(0L)
     }
 
+    val context = LocalContext.current
+
     LaunchedEffect(cash, online, humo, uzcard) {
         totalPrice = cash + online + humo + uzcard
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                SharedPrefs(context).saveString("clientName", null)
+                SharedPrefs(context).saveInt("clientId", 0)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    if (viewModel.isGoLogin.value) {
+        navigateToLoginScreen(LocalContext.current)
+    }
+
+    if (viewModel.errorMessage.value != null) {
+        Toast.makeText(LocalContext.current, viewModel.errorMessage.value, Toast.LENGTH_SHORT)
+            .show()
+        viewModel.errorMessage.value = null
+    }
+
+    if (viewModel.isPayed.value) {
+        Toast.makeText(LocalContext.current, stringResource(id = R.string.str_payment_done), Toast.LENGTH_SHORT)
+            .show()
+        navigator!!.navigateUp()
     }
 
     Box(
@@ -103,7 +149,9 @@ fun ReturnCreditsScreen(
                 navigator!!.navigateUp()
             }
 
-            LazyColumn(
+            if (viewModel.isLoading.value) {
+                LoadingView()
+            } else LazyColumn(
                 modifier = Modifier
                     .padding(horizontal = PADDING_VALUE)
                     .padding(top = PADDING_VALUE)
@@ -112,15 +160,15 @@ fun ReturnCreditsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = if (customer == null) Arrangement.End else Arrangement.Center,
+                        horizontalArrangement = if (customerName == null) Arrangement.End else Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        if (customer != null) SimpleTextField(
+                        if (customerName != null) SimpleTextField(
                             modifier = Modifier
                                 .weight(1f),
                             hint = "",
-                            text = customer!!.name,
+                            text = customerName,
                             backgroundColor = Color.White,
                             strokeColor = Color_E8,
                             textColor = ItemTextColor,
@@ -132,9 +180,9 @@ fun ReturnCreditsScreen(
                                 .padding(start = 16.dp),
                             text = stringResource(id = R.string.str_customers_list),
                             icon = painterResource(id = R.drawable.customers),
-                            isCustomerHave = customer != null
+                            isCustomerHave = customerName != null
                         ) {
-                            navigator!!.screenNavigate(AddCustomerScreenDestination())
+                            navigator!!.screenNavigate(AddCustomerScreenDestination(false))
                         }
 
                     }
@@ -421,15 +469,42 @@ fun ReturnCreditsScreen(
                     strokeColor = MainColor
                 ) {
 
+                    val payments = arrayListOf(
+                        ChequePayment(
+                            "",
+                            0,
+                            "cash",
+                            cash
+                        ),
+                        ChequePayment(
+                            "",
+                            0,
+                            "online",
+                            online
+                        ),
+                        ChequePayment(
+                            "",
+                            0,
+                            "humo",
+                            humo
+                        ),
+                        ChequePayment(
+                            "",
+                            0,
+                            "uzcard",
+                            uzcard
+                        )
+                    )
+
+                    val credit = Credit(
+                        client = customerId,
+                        payments = payments,
+                        totalPrice = totalPrice
+                    )
+                    viewModel.returnCredits(credit)
                 }
             }
         }
 
     }
-}
-
-@Preview
-@Composable
-fun ReturnCreditsScreenPreview() {
-    ReturnCreditsScreen()
 }

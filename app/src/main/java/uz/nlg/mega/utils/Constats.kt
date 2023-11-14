@@ -110,6 +110,8 @@ const val OrderNoProductError = "Savatchangiz hali bosh, iltimos uni to'ldiring"
 const val PaymentNoEqualSum = "Kiritilgan summa tavorlar narxidan kam bo'lmasligi kerak"
 const val AddProductQuantityError = "Tovar miqdorini kiriting"
 const val AddProductPriceError = "Tovar miqdorini kiriting"
+const val PaymentPriceError = "Iltimos 0 dan katta summa kiriting"
+const val NoInternetError = "Iltimos internetga ulanganligingizni tekshiring"
 
 const val FilterMinusBalance = "-balance"
 const val FilterPlusBalance = "balance"

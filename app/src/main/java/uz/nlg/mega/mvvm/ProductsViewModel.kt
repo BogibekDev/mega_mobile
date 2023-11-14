@@ -21,6 +21,7 @@ import uz.nlg.mega.model.Subcategory
 import uz.nlg.mega.screens.bottom.productsScreenState
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.ProductSearchType
 import uz.nlg.mega.utils.ServerError
 import uz.nlg.mega.utils.SomethingWentWrong
@@ -125,7 +126,7 @@ class ProductsViewModel @Inject constructor(
                         }
 
                         handler.handleFailure(401) {
-                            _error.value = it!!.error
+                            _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                             _loading.value = false
                             isStillCalling = false
                         }
@@ -194,7 +195,7 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure {
-                        _error.value = it!!.detail
+                        _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -284,7 +285,7 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it!!.error
+                        _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -353,7 +354,6 @@ class ProductsViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it!!.error
                         _loading.value = false
                         isStillCalling = false
                     }

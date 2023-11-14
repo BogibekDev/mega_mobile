@@ -16,6 +16,7 @@ import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.AccessToken
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.ProfileName
 import uz.nlg.mega.utils.RefreshToken
 import uz.nlg.mega.utils.ServerError
@@ -58,7 +59,7 @@ class LoginViewModel @Inject constructor(
             }
 
             handler.handleFailure {
-                _error.value = it!!.message ?: "No Connection"
+                _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                 isSuccess.value = false
             }
 

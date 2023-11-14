@@ -19,6 +19,7 @@ import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.OrderCustomerNullError
 import uz.nlg.mega.utils.OrderNoProductError
 import uz.nlg.mega.utils.ServerError
@@ -68,7 +69,7 @@ class OrderViewModel @Inject constructor(
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.detail
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }
@@ -117,7 +118,7 @@ class OrderViewModel @Inject constructor(
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.detail
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }
@@ -193,7 +194,7 @@ class OrderViewModel @Inject constructor(
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it!!.error
+                        _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                         _loading.value = false
                         isStillCalling = false
                     }

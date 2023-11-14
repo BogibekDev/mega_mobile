@@ -150,7 +150,7 @@ fun OrdersScreen(
                                     icon = painterResource(id = R.drawable.customers),
                                     isCustomerHave = viewModel.data.value.client != null
                                 ) {
-                                    navigator.screenNavigate(AddCustomerScreenDestination())
+                                    navigator.screenNavigate(AddCustomerScreenDestination(true))
                                 }
 
                             }

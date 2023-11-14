@@ -17,6 +17,7 @@ import uz.nlg.mega.model.Profile
 import uz.nlg.mega.utils.AccessToken
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.RefreshToken
 import uz.nlg.mega.utils.ServerError
 import uz.nlg.mega.utils.SomethingWentWrong
@@ -78,7 +79,7 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.detail ?: "No Connection"
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }
@@ -116,7 +117,7 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.detail
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }

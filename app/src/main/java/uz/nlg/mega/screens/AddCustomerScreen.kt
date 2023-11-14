@@ -32,6 +32,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Job
 import uz.nlg.mega.R
+import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.mvvm.AddCustomerViewModel
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.FilterMinusBalance
@@ -48,7 +49,8 @@ import uz.nlg.mega.views.SearchAndFilterTopSection
 @Composable
 fun AddCustomerScreen(
     navigator: DestinationsNavigator? = null,
-    viewModel: AddCustomerViewModel = hiltViewModel()
+    viewModel: AddCustomerViewModel = hiltViewModel(),
+    isCart: Boolean
 ) {
 
     var searchText by remember {
@@ -66,6 +68,8 @@ fun AddCustomerScreen(
     var searchJob by remember {
         mutableStateOf<Job>(Job())
     }
+
+    val context = LocalContext.current
 
     if (viewModel.isAdded.value) navigator!!.navigateUp()
 
@@ -133,7 +137,13 @@ fun AddCustomerScreen(
                     CustomerItem(
                         customer = viewModel.data[it],
                         onItemClick = { client ->
-                            viewModel.addCustomerToCheque(client.id!!)
+                            if (isCart)
+                                viewModel.addCustomerToCheque(client.id!!)
+                            else {
+                                SharedPrefs(context).saveString("clientName", "${client.firstName} ${client.lastName}")
+                                SharedPrefs(context).saveInt("clientId", client.id!!)
+                                navigator!!.navigateUp()
+                            }
                         }
                     )
                 }

@@ -17,6 +17,7 @@ import uz.nlg.mega.model.Category
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.model.ChequeDetailResponse
 import uz.nlg.mega.model.Client
+import uz.nlg.mega.model.Credit
 import uz.nlg.mega.model.Pagination
 import uz.nlg.mega.model.Payment
 import uz.nlg.mega.model.Product
@@ -130,5 +131,10 @@ interface ApiServiceWithAuth {
     suspend fun saveCheque(
         @Body cart: Cart
     ): Response<Cart>
+
+    @POST("payments/")
+    suspend fun returnCredits(
+        @Body credit: Credit
+    ): Response<Credit>
 
 }

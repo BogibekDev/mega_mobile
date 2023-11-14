@@ -471,12 +471,12 @@ fun PaymentScreen(
                             "cash",
                             cash
                         ),
-//                        ChequePayment(
-//                            "",
-//                            0,
-//                            "online",
-//                            online
-//                        ),
+                        ChequePayment(
+                            "",
+                            0,
+                            "online",
+                            online
+                        ),
                         ChequePayment(
                             "",
                             0,
@@ -489,12 +489,12 @@ fun PaymentScreen(
                             "uzcard",
                             uzcard
                         ),
-//                        ChequePayment(
-//                            "",
-//                            0,
-//                            "credit",
-//                            credit
-//                        )
+                        ChequePayment(
+                            "",
+                            0,
+                            "debt",
+                            credit
+                        )
                     )
                     cart.payments = payments
                     cart.status = "done"

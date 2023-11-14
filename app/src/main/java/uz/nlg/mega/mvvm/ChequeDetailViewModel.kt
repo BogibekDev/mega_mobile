@@ -16,6 +16,7 @@ import uz.nlg.mega.model.ChequeDetailResponse
 import uz.nlg.mega.model.ErrorResponse
 import uz.nlg.mega.utils.IsSignedIn
 import uz.nlg.mega.utils.NetworkHandler
+import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.ServerError
 import uz.nlg.mega.utils.SomethingWentWrong
 import uz.nlg.mega.utils.printError
@@ -66,7 +67,7 @@ class ChequeDetailViewModel
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.detail
+                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }
