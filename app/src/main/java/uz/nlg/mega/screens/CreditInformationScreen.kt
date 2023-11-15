@@ -56,7 +56,7 @@ fun CreditInformationScreen(
     val today: String = sdf.format(calendar.time)
     calendar.add(Calendar.MONTH, -1)
     val monthAgo: String = sdf.format(calendar.time)
-    val sellerId = SharedPrefs(LocalContext.current).getString(SellerId)!!
+    val sellerId = SharedPrefs(LocalContext.current).getString(SellerId) ?: "1"
 
 
     LaunchedEffect(searchText) {
