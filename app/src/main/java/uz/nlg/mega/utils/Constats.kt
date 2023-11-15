@@ -100,6 +100,7 @@ const val AccessToken = "access"
 const val RefreshToken = "refresh"
 const val IsSignedIn = "isSignedIn"
 const val ProfileName = "profileName"
+const val SellerId = "sellerId"
 
 val TopFirstSubCategory = Subcategory(0, "Kategoriyalar", 0)
 

@@ -45,7 +45,6 @@ class ClientInfoViewModel @Inject constructor(
     private val _data = mutableStateOf<Client?>(null)
     val data = _data
 
-
     fun addClient(client: Client) = viewModelScope.launch {
 
         _loading.value = true

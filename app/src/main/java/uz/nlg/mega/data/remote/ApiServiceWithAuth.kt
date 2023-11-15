@@ -137,4 +137,21 @@ interface ApiServiceWithAuth {
         @Body credit: Credit
     ): Response<Credit>
 
+    @GET("payments/")
+    suspend fun getDebtByDayOrMonth(
+        @Query("search") search: String,
+        @Query("seller") seller: String,
+        @Query("created_at_min") createdAtMin: String,
+        @Query("created_at_max") createdAtMax: String,
+        @Query("payment_type") paymentType: String = "debt",
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int = 20,
+    ): Response<Pagination<Payment>>
+
+
+    @GET("clients/{id}/")
+    suspend fun getClientById(
+        @Path("id") id: Int,
+    ): Response<Client>
+
 }

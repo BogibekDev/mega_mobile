@@ -18,9 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +66,7 @@ fun SimpleTextField(
     textSize: TextUnit = 16.sp,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
+    isEditable: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     onChangeListener: (text: String) -> Unit
@@ -82,6 +83,7 @@ fun SimpleTextField(
                 color = strokeColor,
                 shape = RoundedCornerShape(8.dp)
             ),
+        enabled = isEditable,
         value = textState,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = backgroundColor,
@@ -458,6 +460,7 @@ fun CustomerInfoTextField(
     textColor: Color,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
+    isEditable: Boolean = true,
     onChangeListener: (text: String) -> Unit
 ) {
     var textState by remember {
@@ -510,6 +513,7 @@ fun CustomerInfoTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
+
             textStyle = TextStyle(
                 color = textColor,
                 fontSize = 14.sp,
@@ -521,6 +525,7 @@ fun CustomerInfoTextField(
                 onChangeListener.invoke(textState)
             },
             singleLine = true,
+            enabled = isEditable,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
                 imeAction = imeAction

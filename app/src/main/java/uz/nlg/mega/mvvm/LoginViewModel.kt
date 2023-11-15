@@ -19,6 +19,7 @@ import uz.nlg.mega.utils.NetworkHandler
 import uz.nlg.mega.utils.NoInternetError
 import uz.nlg.mega.utils.ProfileName
 import uz.nlg.mega.utils.RefreshToken
+import uz.nlg.mega.utils.SellerId
 import uz.nlg.mega.utils.ServerError
 import uz.nlg.mega.utils.printError
 import javax.inject.Inject
@@ -55,6 +56,8 @@ class LoginViewModel @Inject constructor(
                 Log.i("TOKEN", it.refresh)
 
                 SharedPrefs(context).saveBoolean(IsSignedIn, true)
+                SharedPrefs(context).saveString(SellerId, it.userId.toString())
+
                 isSuccess.value = true
             }
 

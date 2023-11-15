@@ -60,27 +60,28 @@ import uz.nlg.mega.views.SimpleTextField
 fun CustomerInformationScreen(
     navigator: DestinationsNavigator? = null,
     customer: Client? = null,
+    isEditable: Boolean = true,
     viewModel: ClientInfoViewModel = hiltViewModel()
 ) {
 
-    val client = customer ?: Client(null, "", "", null, "", "")
+    val client = customer ?: Client(0L, "", "", 1, "", "")
 
     val context = LocalContext.current
 
     var name by remember {
-        mutableStateOf(customer?.firstName ?: "")
+        mutableStateOf(client.firstName)
     }
 
     var surname by remember {
-        mutableStateOf(customer?.lastName ?: "")
+        mutableStateOf(client.lastName)
     }
 
     var phoneNumber by remember {
-        mutableStateOf(customer?.phoneNumber ?: "")
+        mutableStateOf(client.phoneNumber ?: "")
     }
 
     var description by remember {
-        mutableStateOf(customer?.extraInfo ?: "")
+        mutableStateOf(client.extraInfo ?: "")
     }
 
     if (viewModel.isGoLogin.value) navigateToLoginScreen(context)
@@ -89,6 +90,7 @@ fun CustomerInformationScreen(
         Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
         viewModel.errorMessage.value = null
     }
+
 
     Box(
         modifier = Modifier
@@ -124,7 +126,8 @@ fun CustomerInformationScreen(
                         strokeColor = Color_E8,
                         textColor = ItemTextColor,
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
+                        isEditable = isEditable,
                     ) {
                         name = it
                     }
@@ -139,7 +142,8 @@ fun CustomerInformationScreen(
                         strokeColor = Color_E8,
                         textColor = ItemTextColor,
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
+                        isEditable = isEditable,
                     ) {
                         surname = it
                     }
@@ -154,7 +158,8 @@ fun CustomerInformationScreen(
                         strokeColor = Color_E8,
                         textColor = ItemTextColor,
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        isEditable = isEditable,
                     ) {
                         phoneNumber = it
                     }
@@ -181,7 +186,8 @@ fun CustomerInformationScreen(
                         strokeColor = Color_E8,
                         textColor = ItemTextColor,
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        isEditable = isEditable,
                     ) {
                         description = it
                     }
@@ -215,24 +221,24 @@ fun CustomerInformationScreen(
                             backgroundColor = MainColor,
                             strokeColor = MainColor
                         ) {
-                            if (name.isNotBlank() && phoneNumber.isNotBlank() && surname.isNotBlank()) {
-                                client.firstName = name.trim()
-                                client.lastName = surname.trim()
-                                client.phoneNumber = phoneNumber.trim()
-                                client.extraInfo = description.trim()
+                            if (isEditable) {
+                                if (name.isNotBlank() && phoneNumber.isNotBlank() && surname.isNotBlank()) {
+                                    client.firstName = name.trim()
+                                    client.lastName = surname.trim()
+                                    client.phoneNumber = phoneNumber.trim()
+                                    client.extraInfo = description.trim()
 
-                                if (customer == null) viewModel.addClient(client)
-                                else viewModel.editClient(client)
+                                    if (customer == null) viewModel.addClient(client)
+                                    else viewModel.editClient(client)
 
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getText(R.string.str_enter_value_warning),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        context.getText(R.string.str_enter_value_warning),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-
-
                         }
                     }
                     if (customer != null) Column {
@@ -253,7 +259,7 @@ fun CustomerInformationScreen(
                         ) {
                             Text(
                                 modifier = Modifier,
-                                text = if ((customer.balance ?: 0L) < 0L) {
+                                text = if ((client.balance ?: 0L) < 0L) {
                                     stringResource(id = R.string.str_total_credit)
                                 } else {
                                     stringResource(id = R.string.str_total_invest)
@@ -266,11 +272,11 @@ fun CustomerInformationScreen(
 
                             Text(
                                 modifier = Modifier,
-                                text = (customer.balance ?: 0L).moneyType(),
+                                text = (client.balance ?: 0L).moneyType(),
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
-                                color = if ((customer.balance ?: 0L) < 0L) {
+                                color = if ((client.balance ?: 0L) < 0L) {
                                     RedTextColor
                                 } else {
                                     GreenColor

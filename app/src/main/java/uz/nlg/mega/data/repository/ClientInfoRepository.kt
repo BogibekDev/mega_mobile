@@ -9,6 +9,7 @@ class ClientInfoRepository @Inject constructor(private val apiService: ApiServic
     suspend fun addClient(client: Client) = apiService.addClient(client = client)
 
     suspend fun editClient(id: Int, client: Client) = apiService.editClient(id, client)
+    suspend fun getClientById(clientId: Int) = apiService.getClientById(clientId)
 
 
 }
