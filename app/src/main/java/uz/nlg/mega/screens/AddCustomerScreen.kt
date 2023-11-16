@@ -34,12 +34,14 @@ import kotlinx.coroutines.Job
 import uz.nlg.mega.R
 import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.mvvm.AddCustomerViewModel
+import uz.nlg.mega.screens.destinations.CustomerInformationScreenDestination
 import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.FilterMinusBalance
 import uz.nlg.mega.utils.FilterPlusBalance
 import uz.nlg.mega.utils.FilterType
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.navigateToLoginScreen
+import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.CustomerFilterView
 import uz.nlg.mega.views.CustomerItem
 import uz.nlg.mega.views.LoadingView
@@ -199,7 +201,7 @@ fun AddCustomerScreen(
                     .clip(CircleShape)
                     .background(MainColor)
                     .clickable {
-
+                        navigator!!.screenNavigate(CustomerInformationScreenDestination(null, true))
                     },
                 contentAlignment = Alignment.Center
             ) {

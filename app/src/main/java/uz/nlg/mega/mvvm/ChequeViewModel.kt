@@ -49,6 +49,9 @@ class ChequeViewModel
     private var isNextAvailable = true
     private var page = 0
 
+    private val _pendingAdded = mutableStateOf(false)
+    val isPendingAddedToCart = _pendingAdded
+
     fun getCheques(status: String = "", isTypeChanged: Boolean = false) = viewModelScope.launch {
 
         if (isTypeChanged) {
@@ -84,7 +87,8 @@ class ChequeViewModel
                     }
 
                     handler.handleFailure(401) {
-                        _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
+                        _error.value =
+                            it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                         _loading.value = false
                         isStillCalling = false
                     }
@@ -145,7 +149,69 @@ class ChequeViewModel
                 }
 
                 handler.handleFailure(401) {
-                    _error.value = it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
+                    _error.value =
+                        it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
+                    _loading.value = false
+                    isStillCalling = false
+                }
+
+                handler.handleRefreshToken(this) {
+
+                    refreshToken(refreshRepository, securePrefs) { isRefreshed ->
+
+                        if (isRefreshed) {
+                            isStillCalling = true
+                        } else {
+                            isStillCalling = false
+                            _error.value = SomethingWentWrong
+                            SharedPrefs(context).saveBoolean(IsSignedIn, false)
+                            _goLogin.value = true
+                        }
+
+                    }
+                }
+
+                handler.handleServerError {
+                    _error.value = "$ServerError$it"
+                    _loading.value = false
+                    isStillCalling = false
+                }
+
+            }
+
+        } catch (e: HttpException) {
+            _loading.value = false
+            printError(e)
+        } catch (e: Exception) {
+            _loading.value = false
+            printError(e)
+        }
+
+    }
+
+    fun addPendingToCart(id: Int) = viewModelScope.launch {
+        _loading.value = true
+
+        try {
+
+            var isStillCalling = true
+
+            while (isStillCalling) {
+
+                val handler = NetworkHandler(
+                    repository.addPendingToCart(id),
+                    ErrorResponse::class.java,
+                )
+
+                handler.handleSuccess {
+                    _pendingAdded.value = true
+                    isStillCalling = false
+                    _loading.value = false
+                }
+
+                handler.handleFailure(401) {
+                    _error.value =
+                        it!!.error ?: it.detail ?: it.message ?: it.code ?: NoInternetError
                     _loading.value = false
                     isStillCalling = false
                 }

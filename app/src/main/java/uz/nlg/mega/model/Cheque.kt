@@ -22,4 +22,6 @@ data class Cheque(
     val status: String
 ) : Serializable
 
-
+data class PendingCheque(
+    val cheque: Int
+)

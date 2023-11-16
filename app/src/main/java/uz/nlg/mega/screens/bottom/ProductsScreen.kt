@@ -89,9 +89,17 @@ fun ProductsScreen(
         mutableStateOf(false)
     }
 
+    var isFirst by remember {
+        mutableStateOf(true)
+    }
+
     LaunchedEffect(searchText) {
-        searchJob.cancel()
-        searchJob = viewModel.getProducts(searchText, true)
+        if (isFirst) {
+            isFirst = false
+        } else {
+            searchJob.cancel()
+            searchJob = viewModel.getProducts(searchText, true)
+        }
     }
 
     Box(

@@ -33,17 +33,13 @@ import uz.nlg.mega.utils.ScreensList
 import uz.nlg.mega.views.BottomNavItem
 
 
-var homeScreenState = ScreenID.ChequesScreen
+var homeScreenState = mutableStateOf(ScreenID.ChequesScreen)
 
 @Destination(start = true)
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator? = null
 ) {
-
-    var screenID by remember {
-        mutableStateOf(homeScreenState)
-    }
 
     Box(
         modifier = Modifier
@@ -71,10 +67,9 @@ fun HomeScreen(
                 for (i in ScreensList) {
                     BottomNavItem(
                         item = i,
-                        isSelected = i.id == screenID
+                        isSelected = i.id == homeScreenState.value
                     ) {
-                        homeScreenState = i.id
-                        screenID = i.id
+                        homeScreenState.value = i.id
                     }
                 }
             }
@@ -94,7 +89,7 @@ fun HomeScreen(
                 .padding(bottom = 72.dp)
         ) {
 
-            when (screenID) {
+            when (homeScreenState.value) {
                 ScreenID.ChequesScreen -> {
                     ChequesScreen(
                         navigator = navigator!!

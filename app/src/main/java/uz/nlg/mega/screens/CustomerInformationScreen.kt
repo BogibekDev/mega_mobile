@@ -318,9 +318,3 @@ fun CustomerInformationScreen(
         }
     }
 }
-
-@Preview
-@Composable
-fun CustomerInformationScreenPreview() {
-    CustomerInformationScreen()
-}

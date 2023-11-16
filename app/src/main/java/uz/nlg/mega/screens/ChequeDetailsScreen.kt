@@ -436,7 +436,7 @@ fun ChequeDetailsScreen(
             Spacer(
                 modifier = Modifier
                     .padding(PADDING_VALUE)
-                    .height(1.dp)
+                    .height(2.dp)
                     .fillMaxWidth()
                     .background(Color_E8)
             )

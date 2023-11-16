@@ -20,6 +20,7 @@ import uz.nlg.mega.model.Client
 import uz.nlg.mega.model.Credit
 import uz.nlg.mega.model.Pagination
 import uz.nlg.mega.model.Payment
+import uz.nlg.mega.model.PendingCheque
 import uz.nlg.mega.model.Product
 import uz.nlg.mega.model.Profile
 import uz.nlg.mega.model.Refresh
@@ -45,6 +46,11 @@ interface ApiServiceWithAuth {
     suspend fun getChequeById(
         @Path("id") id: Int
     ): Response<ChequeDetailResponse>
+
+    @POST("cheques/pending-change/")
+    suspend fun addChequeToCart(
+        @Body body: PendingCheque
+    ): Response<Unit>
 
     @GET("profile/")
     suspend fun getProfile(): Response<Profile>

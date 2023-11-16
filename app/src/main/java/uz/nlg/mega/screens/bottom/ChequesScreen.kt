@@ -34,6 +34,7 @@ import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.model.Cheque
 import uz.nlg.mega.mvvm.ChequeViewModel
 import uz.nlg.mega.screens.destinations.ChequeDetailsScreenDestination
+import uz.nlg.mega.screens.homeScreenState
 import uz.nlg.mega.ui.theme.Color_66
 import uz.nlg.mega.ui.theme.Color_E8
 import uz.nlg.mega.ui.theme.Color_F6
@@ -41,6 +42,7 @@ import uz.nlg.mega.ui.theme.MainColor
 import uz.nlg.mega.utils.ChequeType
 import uz.nlg.mega.utils.PADDING_VALUE
 import uz.nlg.mega.utils.ProfileName
+import uz.nlg.mega.utils.ScreenID
 import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.ChequeItem
@@ -80,6 +82,11 @@ fun ChequesScreen(
                 }
             )
         }
+    }
+
+    if (viewModel.isPendingAddedToCart.value) {
+        homeScreenState.value = ScreenID.OrdersScreen
+        viewModel.isPendingAddedToCart.value = false
     }
 
 
@@ -204,7 +211,11 @@ fun ChequesScreen(
                                     showDialog.value = true
                                 },
                                 onItemClick = {
-                                    navigator.screenNavigate(ChequeDetailsScreenDestination(it.id))
+                                    if (it.status == ChequeType.Pending.status) {
+                                        viewModel.addPendingToCart(it.id)
+                                    } else {
+                                        navigator.screenNavigate(ChequeDetailsScreenDestination(it.id))
+                                    }
                                 }
                             )
 
