@@ -20,12 +20,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Job
 import uz.nlg.mega.R
+import uz.nlg.mega.model.ProductsScreenState
 import uz.nlg.mega.mvvm.ProductsViewModel
 import uz.nlg.mega.screens.bottom.ProductsCategorySection
 import uz.nlg.mega.screens.bottom.SimpleProductsSection
 import uz.nlg.mega.screens.bottom.productsScreenState
 import uz.nlg.mega.screens.destinations.EnterQuantityScreenDestination
 import uz.nlg.mega.ui.theme.Color_F6
+import uz.nlg.mega.utils.ProductSearchType
 import uz.nlg.mega.utils.navigateToLoginScreen
 import uz.nlg.mega.utils.screenNavigate
 import uz.nlg.mega.views.LoadingView
@@ -77,6 +79,10 @@ fun AddProductScreen(
             searchJob.cancel()
             searchJob = viewModel.getProducts(searchText, true)
         }
+    }
+
+    LaunchedEffect(true) {
+        productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.None, null)
     }
 
     Box(

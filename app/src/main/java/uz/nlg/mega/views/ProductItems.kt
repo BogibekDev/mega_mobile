@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,19 +54,29 @@ fun AddingProductItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier
+                    .weight(1f),
                 text = product.name.forSearchText(search),
                 fontFamily = MainFont,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
-                color = ItemTextColor
+                color = ItemTextColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Start
             )
 
             Text(
+                modifier = Modifier
+                    .weight(0.2f),
                 text = "${product.quantity} ${product.firstQuantityType}",
                 fontFamily = MainFont,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = Color_66
+                color = Color_66,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End
             )
         }
 
@@ -102,7 +114,8 @@ fun ProductItem(
         ) {
 
             Column(
-                modifier = Modifier,
+                modifier = Modifier
+                    .weight(1f),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
@@ -110,7 +123,10 @@ fun ProductItem(
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
-                    color = ItemTextColor
+                    color = ItemTextColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
                 )
 
                 Spacer(Modifier.height(6.dp))
@@ -120,17 +136,25 @@ fun ProductItem(
                     fontFamily = MainFont,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
-                    color = Color_BD
+                    color = Color_BD,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
                 )
 
             }
 
             Text(
+                modifier = Modifier
+                    .weight(0.2f),
                 text = "${product.quantity} ${product.firstQuantityType}",
                 fontFamily = MainFont,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = Color_66
+                color = Color_66,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End
             )
 
         }

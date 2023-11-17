@@ -102,6 +102,10 @@ fun ProductsScreen(
         }
     }
 
+    LaunchedEffect(true) {
+        productsScreenState.value = ProductsScreenState(false, null, ProductSearchType.None, null)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

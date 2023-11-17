@@ -24,6 +24,7 @@ import uz.nlg.mega.R
 import uz.nlg.mega.data.local.SharedPrefs
 import uz.nlg.mega.mvvm.DebtInformationViewModel
 import uz.nlg.mega.screens.destinations.CustomerInformationScreenDestination
+import uz.nlg.mega.ui.theme.RedTextColor
 import uz.nlg.mega.utils.CreditType
 import uz.nlg.mega.utils.SellerId
 import uz.nlg.mega.utils.navigateToLoginScreen
@@ -110,6 +111,7 @@ fun CreditInformationScreen(
                     CreditInformationItem(
                         searchText = searchText,
                         payment = viewModel.data[position],
+                        priceColor = RedTextColor,
                         onItemClick = { client ->
                             navigator!!.screenNavigate(
                                 CustomerInformationScreenDestination(

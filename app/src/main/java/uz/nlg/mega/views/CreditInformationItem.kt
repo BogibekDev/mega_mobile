@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +34,7 @@ import uz.nlg.mega.utils.moneyType
 fun CreditInformationItem(
     searchText: String = "",
     payment: Payment,
+    priceColor: Color? = null,
     onItemClick: (Client?) -> Unit
 ) {
     Box(
@@ -82,7 +84,7 @@ fun CreditInformationItem(
                         fontFamily = MainFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
-                        color = if (payment.price >= 0L) GreenColor else RedTextColor
+                        color = priceColor ?: if (payment.price >= 0L) GreenColor else RedTextColor
                     )
 
             }
