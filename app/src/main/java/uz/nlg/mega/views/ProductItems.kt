@@ -61,7 +61,7 @@ fun AddingProductItem(
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
                 color = ItemTextColor,
-                maxLines = 1,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Start
             )
@@ -124,7 +124,7 @@ fun ProductItem(
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
                     color = ItemTextColor,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Start
                 )
