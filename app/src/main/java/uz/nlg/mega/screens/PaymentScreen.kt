@@ -464,38 +464,14 @@ fun PaymentScreen(
                     backgroundColor = MainColor,
                     strokeColor = MainColor
                 ) {
-                    val payments = arrayListOf(
-                        ChequePayment(
-                            "",
-                            0,
-                            "cash",
-                            cash
-                        ),
-                        ChequePayment(
-                            "",
-                            0,
-                            "online",
-                            online
-                        ),
-                        ChequePayment(
-                            "",
-                            0,
-                            "humo",
-                            humo
-                        ),
-                        ChequePayment(
-                            "",
-                            0,
-                            "uzcard",
-                            uzcard
-                        ),
-                        ChequePayment(
-                            "",
-                            0,
-                            "debt",
-                            credit
-                        )
-                    )
+
+                    val payments = ArrayList<ChequePayment>()
+                    if (cash > 0) payments.add(ChequePayment("", 0, "cash", cash))
+                    if (online > 0) payments.add(ChequePayment("", 0, "online", online))
+                    if (humo > 0) payments.add(ChequePayment("", 0, "humo", humo))
+                    if (uzcard > 0) payments.add(ChequePayment("", 0, "uzcard", uzcard))
+                    if (credit > 0) payments.add(ChequePayment("", 0, "debt", credit))
+
                     cart.payments = payments
                     cart.status = "done"
                     viewModel.saveCheque(cart, totalPrice, currentPrice)

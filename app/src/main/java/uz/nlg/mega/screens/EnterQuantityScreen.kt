@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
@@ -124,281 +125,288 @@ fun EnterQuantityScreen(
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PADDING_VALUE)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(vertical = 10.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_name_of_product),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        color = Color_BD
-                    )
-
-                    Text(
-                        text = product.name,
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_enter_price),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        color = Color_BD
-                    )
-
-                    Text(
-                        text = product.price.moneyType(),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(vertical = 10.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_left),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        color = Color_BD
-                    )
-
-                    Text(
-                        text = "${product.quantity} ta",
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PADDING_VALUE)
-                    .clip(RoundedCornerShape(9.dp))
-                    .background(Color.White),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.Start
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = productType == product.firstQuantityType,
-                            onClick = {
-                                productType = product.firstQuantityType
-                            },
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = MainColor,
-                                unselectedColor = RadioButtonColor,
-                                disabledSelectedColor = MainColor,
-                                disabledUnselectedColor = RadioButtonColor
-                            )
-                        )
-
-                        Text(
-                            text = product.firstQuantityType,
-                            fontFamily = MainFont,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 14.sp,
-                            color = Color_66
-                        )
-
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = productType == product.secondQuantityType,
-                            onClick = {
-                                productType = product.secondQuantityType
-                            },
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = MainColor,
-                                unselectedColor = RadioButtonColor,
-                                disabledSelectedColor = MainColor,
-                                disabledUnselectedColor = RadioButtonColor
-                            )
-                        )
-
-                        Text(
-                            text = product.secondQuantityType,
-                            fontFamily = MainFont,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 14.sp,
-                            color = Color_66
-                        )
-
-                    }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_quantity_item),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    AmountTextField(
+            LazyColumn{
+                item {
+                    Column(
                         modifier = Modifier
-                            .height(50.dp),
-                        hint = "0",
-                        text = "",
-                        backgroundColor = TextFieldFillColor,
-                        strokeColor = Color_E8,
-                        textColor = ItemTextColor,
-                        textSize = 14.sp,
-                        textLimit = 4,
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ) {
-                        quantity = it
-                        totalPrice = quantity * productPrice
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_price),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    AmountTextField(
-                        modifier = Modifier
-                            .height(50.dp),
-                        hint = "0",
-                        text = "",
-                        backgroundColor = TextFieldFillColor,
-                        strokeColor = Color_E8,
-                        textColor = ItemTextColor,
-                        textSize = 14.sp,
-                        textLimit = 25,
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ) {
-                        productPrice = it
-                        totalPrice = quantity * productPrice
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_t_price),
-                        fontFamily = MainFont,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 14.sp,
-                        color = Color_66
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    TextField(
-                        modifier = Modifier
-                            .height(50.dp)
                             .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = Color_E8,
-                                shape = RoundedCornerShape(8.dp)
-                            ),
-                        value = if (totalPrice == 0L) "" else totalPrice.moneyType(),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = TextFieldFillColor,
-                            cursorColor = ItemTextColor,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        readOnly = true,
-                        textStyle = TextStyle(
-                            color = ItemTextColor,
-                            fontSize = 14.sp,
-                            fontFamily = MainFont,
-                            fontWeight = FontWeight.Normal
-                        ),
-                        onValueChange = {},
-                        shape = RoundedCornerShape(8.dp),
-                        singleLine = true,
-                        placeholder = {
+                            .padding(PADDING_VALUE)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
                             Text(
-                                text = "0",
-                                fontSize = 14.sp,
+                                text = stringResource(id = R.string.str_name_of_product),
                                 fontFamily = MainFont,
                                 fontWeight = FontWeight.Normal,
-                                color = TextFieldHintColor
+                                fontSize = 12.sp,
+                                color = Color_BD
+                            )
+
+                            Text(
+                                text = product.name,
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color_66
                             )
                         }
-                    )
+
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_enter_price),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp,
+                                color = Color_BD
+                            )
+
+                            Text(
+                                text = product.price.moneyType(),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color_66
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_left),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp,
+                                color = Color_BD
+                            )
+
+                            Text(
+                                text = "${product.quantity} ta",
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color_66
+                            )
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(PADDING_VALUE)
+                            .clip(RoundedCornerShape(9.dp))
+                            .background(Color.White),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = productType == product.firstQuantityType,
+                                    onClick = {
+                                        productType = product.firstQuantityType
+                                    },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = MainColor,
+                                        unselectedColor = RadioButtonColor,
+                                        disabledSelectedColor = MainColor,
+                                        disabledUnselectedColor = RadioButtonColor
+                                    )
+                                )
+
+                                Text(
+                                    text = product.firstQuantityType,
+                                    fontFamily = MainFont,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = Color_66
+                                )
+
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = productType == product.secondQuantityType,
+                                    onClick = {
+                                        productType = product.secondQuantityType
+                                    },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = MainColor,
+                                        unselectedColor = RadioButtonColor,
+                                        disabledSelectedColor = MainColor,
+                                        disabledUnselectedColor = RadioButtonColor
+                                    )
+                                )
+
+                                Text(
+                                    text = product.secondQuantityType,
+                                    fontFamily = MainFont,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = Color_66
+                                )
+
+                            }
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_quantity_item),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                                color = Color_66
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            AmountTextField(
+                                modifier = Modifier
+                                    .height(50.dp),
+                                hint = "0",
+                                text = "",
+                                backgroundColor = TextFieldFillColor,
+                                strokeColor = Color_E8,
+                                textColor = ItemTextColor,
+                                textSize = 14.sp,
+                                textLimit = 4,
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next
+                            ) {
+                                quantity = it
+                                totalPrice = quantity * productPrice
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_price),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                                color = Color_66
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            AmountTextField(
+                                modifier = Modifier
+                                    .height(50.dp),
+                                hint = "0",
+                                text = "",
+                                backgroundColor = TextFieldFillColor,
+                                strokeColor = Color_E8,
+                                textColor = ItemTextColor,
+                                textSize = 14.sp,
+                                textLimit = 25,
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            ) {
+                                productPrice = it
+                                totalPrice = quantity * productPrice
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_t_price),
+                                fontFamily = MainFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                                color = Color_66
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            TextField(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .fillMaxWidth()
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color_E8,
+                                        shape = RoundedCornerShape(8.dp)
+                                    ),
+                                value = if (totalPrice == 0L) "" else totalPrice.moneyType(),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = TextFieldFillColor,
+                                    cursorColor = ItemTextColor,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent
+                                ),
+                                readOnly = true,
+                                textStyle = TextStyle(
+                                    color = ItemTextColor,
+                                    fontSize = 14.sp,
+                                    fontFamily = MainFont,
+                                    fontWeight = FontWeight.Normal
+                                ),
+                                onValueChange = {},
+                                shape = RoundedCornerShape(8.dp),
+                                singleLine = true,
+                                placeholder = {
+                                    Text(
+                                        text = "0",
+                                        fontSize = 14.sp,
+                                        fontFamily = MainFont,
+                                        fontWeight = FontWeight.Normal,
+                                        color = TextFieldHintColor
+                                    )
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                    }
+
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
+                item{
+                    Spacer(modifier = Modifier.height(250.dp))
+                }
             }
-
         }
     }
 }
