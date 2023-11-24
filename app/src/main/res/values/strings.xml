@@ -95,4 +95,5 @@
     <string name="str_payment_done">Sizning to\'lovingiz amalga oshirildi.</string>
     <string name="str_close">Yopish</string>
     <string name="str_more_info">Batafsil...</string>
+    <string name="str_enter_product_name">Tavor nomini kiriting</string>
 </resources>

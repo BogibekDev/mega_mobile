@@ -208,6 +208,7 @@ fun SearchAndFilterTopSection(
     onFilterClick: (() -> Unit)? = null,
     onEditTextBackClick: (() -> Unit)? = null,
     onEditTextClearClick: (() -> Unit)? = null,
+    searchHint:String=stringResource(id = R.string.str_enter_customer_name),
     searchFunction: (text: String) -> Unit
 ) {
 
@@ -301,7 +302,7 @@ fun SearchAndFilterTopSection(
             ) {
                 SearchTextField(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    hint = stringResource(id = R.string.str_enter_customer_name),
+                    hint = searchHint,
                     text = "",
                     onBackClick = {
                         onEditTextBackClick?.invoke()

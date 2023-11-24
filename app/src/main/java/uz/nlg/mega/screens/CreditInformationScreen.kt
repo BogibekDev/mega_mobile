@@ -95,6 +95,7 @@ fun CreditInformationScreen(
                 } else {
                     stringResource(id = R.string.str_credit_in_a_month)
                 },
+                searchHint = stringResource(R.string.str_enter_customer_name),
                 onBackClick = {
                     navigator!!.navigateUp()
                 }

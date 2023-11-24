@@ -105,6 +105,7 @@ fun CustomersScreen(
                 isBack = false,
                 isFilter = true,
                 title = stringResource(id = R.string.str_customers),
+                searchHint = stringResource(R.string.str_enter_customer_name),
                 onBackClick = {
                 },
                 onFilterClick = {

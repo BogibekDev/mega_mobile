@@ -126,6 +126,7 @@ fun AddCustomerScreen(
                 onBackClick = {
                     navigator!!.navigateUp()
                 },
+                searchHint = stringResource(R.string.str_enter_customer_name),
                 onFilterClick = {
                     isFilterOpen = !isFilterOpen
                 }

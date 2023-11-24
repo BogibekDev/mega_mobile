@@ -97,6 +97,7 @@ fun AddProductScreen(
                 onBackClick = {
                     navigator.navigateUp()
                 },
+                searchHint = stringResource(R.string.str_enter_product_name),
                 onEditTextBackClick = {
                     searchText = ""
                 },

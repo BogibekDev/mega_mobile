@@ -119,6 +119,7 @@ fun ProductsScreen(
                 onEditTextBackClick = {
                     searchText = ""
                 },
+                searchHint = stringResource(R.string.str_enter_product_name),
                 onEditTextClearClick = {
                     searchText = ""
                     isSearching = false
