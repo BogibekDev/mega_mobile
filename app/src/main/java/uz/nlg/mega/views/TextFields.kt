@@ -85,11 +85,13 @@ fun SimpleTextField(
             ),
         enabled = isEditable,
         value = textState,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = backgroundColor,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = backgroundColor,
+            unfocusedContainerColor = backgroundColor,
+            disabledContainerColor = backgroundColor,
             cursorColor = textColor,
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         ),
         textStyle = TextStyle(
             color = textColor,
@@ -152,11 +154,13 @@ fun AmountTextField(
             text = textState,
             selection = TextRange(textState.length)
         ),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = backgroundColor,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = backgroundColor,
+            unfocusedContainerColor = backgroundColor,
+            disabledContainerColor = backgroundColor,
             cursorColor = textColor,
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         ),
 
         readOnly = isReadOnly,
@@ -224,11 +228,13 @@ fun PasswordTextField(
                 shape = RoundedCornerShape(8.dp)
             ),
         value = textState,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = backgroundColor,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = backgroundColor,
+            unfocusedContainerColor = backgroundColor,
+            disabledContainerColor = backgroundColor,
             cursorColor = textColor,
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         ),
         textStyle = TextStyle(
             color = textColor,
@@ -293,11 +299,13 @@ fun SearchTextField(
                 shape = RoundedCornerShape(13.dp)
             ),
         value = textState,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color_F6,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color_F6,
+            unfocusedContainerColor = Color_F6,
+            disabledContainerColor = Color_F6,
             cursorColor = MainColor,
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         ),
         textStyle = TextStyle(
             color = Color_66,
@@ -385,11 +393,13 @@ fun PriceTextField(
                 text = textState,
                 selection = TextRange(textState.length)
             ),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = backgroundColor,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = backgroundColor,
+                unfocusedContainerColor = backgroundColor,
+                disabledContainerColor = backgroundColor,
                 cursorColor = textColor,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
             ),
             textStyle = TextStyle(
                 color = textColor,
@@ -507,11 +517,13 @@ fun CustomerInfoTextField(
             modifier = modifier
                 .weight(1f),
             value = textState,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = backgroundColor,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = backgroundColor,
+                unfocusedContainerColor = backgroundColor,
+                disabledContainerColor = backgroundColor,
                 cursorColor = textColor,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
             ),
 
             textStyle = TextStyle(
