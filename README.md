@@ -1,0 +1,17 @@
+# Mega Mobile
+Mega Mobile - CRM Sytem for Building materials store. It has customer management, money management, product income and outcome.
+
+### Screenshots
+![image]()
+
+### Used Tech
+* [Kotlin](https://kotlinlang.org/)
+* [MVVM](https://developer.android.com/jetpack/docs/guide)
+* [Compose](https://developer.android.com/jetpack/compose)
+* [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - Provide sophisticated tools to handle concurrency.
+* [Dagger Hilt](https://dagger.dev/hilt/) - Runtime framework for dependency injection.
+* [Lifecycles](https://developer.android.com/topic/libraries/architecture/lifecycle) - Create a UI that automatically responds to lifecycle events.
+* [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Build data objects that notify views when the underlying database changes.
+* [Room](https://developer.android.com/topic/libraries/architecture/room) - Access your app's SQLite database with in-app objects and compile-time checks.
+* [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Store UI-related data that isn't destroyed on app rotations. Easily schedule asynchronous tasks.
+* 
